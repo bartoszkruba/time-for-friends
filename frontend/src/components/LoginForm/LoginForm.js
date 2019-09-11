@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
-import {Button, Form, FormGroup, Input, Label} from "reactstrap";
+import {Alert, Button, Form, FormGroup, Input, Label} from "reactstrap";
+import validator from 'validator';
 
 export default class LoginForm extends Component {
 
   state = {
     email: "",
-    password: ""
+    password: "",
+    validation: {
+      errorMessage: ""
+    }
   };
 
   inputChangeHandler = e => {
@@ -14,23 +18,59 @@ export default class LoginForm extends Component {
     this.setState(state)
   };
 
+  keyDownHandler = e => {
+    if (e.key === 'Enter') {
+      this.submitHandler()
+    }
+  };
+
+  submitHandler = e => {
+    if (this.validateData()) {
+      this.setState({email: "", password: ""});
+      alert("Data is correct")
+    }
+  };
+
+  validateData = e => {
+    const state = this.state;
+    if (!validator.isEmail(state.email)) {
+      this.setState({validation: {errorMessage: "Invalid email"}});
+      return false;
+    } else if (validator.isEmpty(state.password) ||
+      !validator.isLength(state.password, {min: 5} ||
+        !validator.isAlphanumeric(this.state.password))) {
+      this.setState({validation: {errorMessage: "Invalid password"}})
+      return false;
+    }
+    this.setState({validation: {errorMessage: ""}});
+    return true;
+  };
+
   render() {
     const state = this.state;
+
+    const redColorStyle = {
+      color: "red"
+    };
 
     return <div className="container">
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8">
-
           <h1>Log In</h1>
+          {state.validation.errorMessage !== "" ? <Alert color="danger">
+            <div>{state.validation.errorMessage}</div>
+          </Alert> : null}
           <Form>
             <FormGroup>
               <Label>Email </Label>
+              <span style={redColorStyle}> *</span>
               <Input value={state.email} onChange={this.inputChangeHandler} type="email" name="email"
                      placeholder="Email" onKeyDown={this.keyDownHandler}/>
             </FormGroup>
             <FormGroup>
               <Label>Password </Label>
+              <span style={redColorStyle}> *</span>
               <Input value={state.password} onChange={this.inputChangeHandler} type="password" name="password"
                      placeholder="Password" onKeyDown={this.keyDownHandler}/>
             </FormGroup>
