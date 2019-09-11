@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = "secretsdfiifdsijdsfijfdsijfdsjfdsjfdsi";
 
+module.exports.JWT_SECRET = JWT_SECRET;
+
 const User = require('../../models/User');
 
 module.exports.register = async ({userInput}) => {

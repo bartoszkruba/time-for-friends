@@ -6,6 +6,7 @@ const graphqlHttp = require('express-graphql');
 
 const graphqlSchema = require('./graphql/schema');
 const graphqlRootResolver = require('./graphql/resolvers/resolversRoot');
+const isAuth = require('./middleware/is-auth');
 
 const app = express();
 
@@ -17,6 +18,9 @@ app.use(cors());
 
 // Body parser for JSON
 app.use(bodyParser.json());
+
+// Checking if user is authenticated before passing request to graphql
+app.use(isAuth);
 
 // GraphlQL
 app.use('/graphql', graphqlHttp({
