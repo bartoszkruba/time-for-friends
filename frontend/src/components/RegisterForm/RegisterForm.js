@@ -108,7 +108,7 @@ export default class RegisterForm extends Component {
               <Input value={state.repeatPassword} onChange={this.inputChangeHandler} type="password"
                      name="repeatPassword" placeholder="Repeat Password" onKeyDown={this.keyDownHandler}/>
             </FormGroup>
-            <Button onClick={this.submitHandler} type="button" color="info">Submit</Button>
+            <Button onClick={this.submitHandler} type="button" color="info">Register</Button>
           </Form>
         </div>
         <div className="col-md-2"/>
