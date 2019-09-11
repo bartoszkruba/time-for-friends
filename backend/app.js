@@ -23,8 +23,13 @@ app.use('/graphql', graphqlHttp({
   schema: graphqlSchema,
   rootValue: graphqlRootResolver,
   graphiql: true,
+  // Handling GraphQL errors
   formatError(err) {
-    console.log(err);
+    if (!err.originalError) return err;
+    const message = err.message || 'An error occurred.';
+    const code = err.originalError.code || 500;
+    const data = err.originalError.data;
+    return {message, status: code, data}
   }
 }));
 
