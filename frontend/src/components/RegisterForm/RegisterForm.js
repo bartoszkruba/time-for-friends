@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Alert, Button, Form, FormGroup, Input, Label} from 'reactstrap';
 import validator from 'validator';
 
+import graphqlService from "../graphql/graphqlService";
+
 export default class RegisterForm extends Component {
   state = {
     email: "",
@@ -14,14 +16,31 @@ export default class RegisterForm extends Component {
     }
   };
 
+  keyDownHandler = e => {
+    if (e.key === 'Enter') {
+      this.submitHandler()
+    }
+  };
+
   inputChangeHandler = e => {
     const state = {...this.state};
     state[e.target.name] = e.target.value;
     this.setState(state)
   };
 
-  submitHandler = e => {
-    this.validateInputs();
+  submitHandler = async e => {
+    if (this.validateInputs()) {
+      try {
+        const response = await graphqlService.register(this.state.email, this.state.password);
+        this.setState({email: "", password: "", repeatPassword: ""});
+        this.props.registerSuccessfull(response.data._id, response.data.email)
+      } catch (e) {
+        if (e.networkError.result.errors.length !== 0) {
+          const validation = {email: e.networkError.result.errors[0].data[0], password: "", repeatPassword: ""};
+          this.setState({validation})
+        }
+      }
+    }
   };
 
   validateInputs = () => {
@@ -75,19 +94,19 @@ export default class RegisterForm extends Component {
               <Label>Email </Label>
               <span style={redColorStyle}> *</span>
               <Input value={state.email} onChange={this.inputChangeHandler} type="email" name="email"
-                     placeholder="Email"/>
+                     placeholder="Email" onKeyDown={this.keyDownHandler}/>
             </FormGroup>
             <FormGroup>
               <Label>Password </Label>
               <span style={redColorStyle}> *</span>
               <Input value={state.password} onChange={this.inputChangeHandler} type="password" name="password"
-                     placeholder="Password"/>
+                     placeholder="Password" onKeyDown={this.keyDownHandler}/>
             </FormGroup>
             <FormGroup>
               <Label>Repeat Password</Label>
               <span style={redColorStyle}> *</span>
               <Input value={state.repeatPassword} onChange={this.inputChangeHandler} type="password"
-                     name="repeatPassword" placeholder="Repeat Password"/>
+                     name="repeatPassword" placeholder="Repeat Password" onKeyDown={this.keyDownHandler}/>
             </FormGroup>
             <Button onClick={this.submitHandler} type="button" color="info">Submit</Button>
           </Form>

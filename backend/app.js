@@ -24,7 +24,8 @@ app.use('/graphql', graphqlHttp({
   rootValue: graphqlRootResolver,
   graphiql: true,
   // Handling GraphQL errors
-  formatError(err) {
+  customFormatErrorFn(err) {
+    console.log(err);
     if (!err.originalError) return err;
     const message = err.message || 'An error occurred.';
     const code = err.originalError.code || 500;
