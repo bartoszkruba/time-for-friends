@@ -1,10 +1,9 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink,} from 'reactstrap';
 
 export default class Navigation extends Component {
   constructor(props) {
     super(props);
-
     this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false
@@ -31,12 +30,16 @@ export default class Navigation extends Component {
           <NavbarToggler onClick={this.toggle}/>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <NavItem>
-                <NavLink onClick={props.showLoginForm} style={style} className="text-white">Log in</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink onClick={props.showRegisterForm} style={style} className="text-white">Register</NavLink>
-              </NavItem>
+              {!this.props.loggedIn ? <Fragment>
+                <NavItem>
+                  <NavLink onClick={props.showLoginForm} style={style} className="text-white">Log in</NavLink>
+                </NavItem>
+                <NavItem>
+                  <NavLink onClick={props.showRegisterForm} style={style} className="text-white">Register</NavLink>
+                </NavItem>
+              </Fragment> : <NavItem>
+                <NavLink onClick={props.showLoginForm} style={style} className="text-white">Log out</NavLink>
+              </NavItem>}
             </Nav>
           </Collapse>
         </Navbar>
