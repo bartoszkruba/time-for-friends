@@ -12,7 +12,12 @@ export default class App extends Component {
   };
 
   successfullRegisterHandler = (_id, email) => {
-    console.log('success')
+    this.setState({page: "login"})
+  };
+
+  successfullLoginHandler = token => {
+    localStorage.setItem('token', token);
+    this.setState({loggedIn: true})
   };
 
   changeToRegisterHandler = () => {
@@ -32,7 +37,7 @@ export default class App extends Component {
         content = <RegisterForm registerSuccessfull={this.successfullRegisterHandler}/>
         break;
       case 'login':
-        content = < LoginForm/>;
+        content = < LoginForm loginSuccessfull={this.successfullLoginHandler}/>;
         break;
       default:
         content = null;

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Alert, Button, Form, FormGroup, Input, Label} from 'reactstrap';
 import validator from 'validator';
 
-import graphqlService from "../graphql/graphqlService";
+import graphqlService from "../../graphql/graphqlService";
 
 export default class RegisterForm extends Component {
   state = {
@@ -33,7 +33,7 @@ export default class RegisterForm extends Component {
       try {
         const response = await graphqlService.register(this.state.email, this.state.password);
         this.setState({email: "", password: "", repeatPassword: ""});
-        this.props.registerSuccessfull(response.data._id, response.data.email)
+        this.props.registerSuccessfull(response.data._id, response.data.email);
       } catch (e) {
         if (e.networkError.result.errors.length !== 0) {
           const validation = {email: e.networkError.result.errors[0].data[0], password: "", repeatPassword: ""};

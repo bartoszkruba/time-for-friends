@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Alert, Button, Form, FormGroup, Input, Label} from "reactstrap";
 import validator from 'validator';
+import graphqlService from "../../graphql/graphqlService";
 
 export default class LoginForm extends Component {
 
@@ -24,10 +25,21 @@ export default class LoginForm extends Component {
     }
   };
 
-  submitHandler = e => {
+  submitHandler = async e => {
+    const state = this.state;
+
     if (this.validateData()) {
-      this.setState({email: "", password: ""});
-      alert("Data is correct")
+      try {
+        const response = await graphqlService.login(state.email, state.password);
+        this.setState({email: "", password: ""});
+        if (response.errors) {
+          this.setState({validation: {errorMessage: state.validation.errorMessage = response.errors[0].message}});
+        } else {
+          this.props.loginSuccessfull(response.data.login.token)
+        }
+      } catch (e) {
+        this.setState({validation: {errorMessage: e.networkError.result.errors[0].message}})
+      }
     }
   };
 
@@ -39,7 +51,7 @@ export default class LoginForm extends Component {
     } else if (validator.isEmpty(state.password) ||
       !validator.isLength(state.password, {min: 5} ||
         !validator.isAlphanumeric(this.state.password))) {
-      this.setState({validation: {errorMessage: "Invalid password"}})
+      this.setState({validation: {errorMessage: "Invalid password"}});
       return false;
     }
     this.setState({validation: {errorMessage: ""}});
