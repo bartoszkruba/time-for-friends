@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Alert, Button, Form, FormGroup, Input, Label} from 'reactstrap';
 import validator from 'validator';
-
+import '../../App.css'
 import graphqlService from "../../graphql/graphqlService";
 
 export default class RegisterForm extends Component {
@@ -76,17 +76,17 @@ export default class RegisterForm extends Component {
       color: "red"
     };
 
-    return <div className="container">
+    return <div className="container Card align-self-center">
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8">
 
           <h1>Register</h1>
           {(state.validation.email !== "" || state.validation.password !== "" ||
-            this.state.validation.repeatPassword !== "") ? <Alert color="danger">
-            {this.state.validation.email !== "" ? <div>- {state.validation.email}</div> : null}
-            {this.state.validation.password !== "" ? <div>- {state.validation.password}</div> : null}
-            {this.state.validation.repeatPassword !== "" ? <div>- {state.validation.repeatPassword}</div> : null}
+            this.state.validation.repeatPassword !== "") ? <Alert color="info">
+              {this.state.validation.email !== "" ? <div>- {state.validation.email}</div> : null}
+              {this.state.validation.password !== "" ? <div>- {state.validation.password}</div> : null}
+              {this.state.validation.repeatPassword !== "" ? <div>-{state.validation.repeatPassword}</div> : null}
           </Alert> : null
           }
           <Form>
