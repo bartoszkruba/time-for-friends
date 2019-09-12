@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
+import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
 import './App.css';
+
 import Navbar from "./components/Navbar/Navbar";
 import RegisterForm from "./components/RegisterForm/RegisterForm";
 import LoginForm from "./components/LoginForm/LoginForm";
 import Index from './components/Index/Index';
-import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
+import NewFriendForm from "./components/NewFriendForm/NewFriendForm";
 
 export default class App extends Component {
 
@@ -38,6 +40,7 @@ export default class App extends Component {
     const register = () => <RegisterForm registerSuccessfull={this.successfullRegisterHandler}/>;
     const login = () => <LoginForm loginSuccessfull={this.successfullLoginHandler}/>;
     const index = () => <Index classname="card"/>;
+    const newFriend = () => <NewFriendForm/>
 
     return (
       <Router>
@@ -50,6 +53,7 @@ export default class App extends Component {
             <Route path="/" exact component={index}/>
             <Route path="/register/" exact component={register}/>
             <Route path="/login/" exact component={login}/>
+            <Route path="/friend/new" exact component={newFriend}/>
           </div>
         </div>
       </Router>
