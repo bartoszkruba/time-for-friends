@@ -4,69 +4,55 @@ import Navbar from "./components/Navbar/Navbar";
 import RegisterForm from "./components/RegisterForm/RegisterForm";
 import LoginForm from "./components/LoginForm/LoginForm";
 import Index from './components/Index/Index';
+import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
 
 export default class App extends Component {
 
   state = {
     loggedIn: false,
-    page: "index"
+    redirect: ""
   };
 
   successfullRegisterHandler = (_id, email) => {
-    this.setState({page: "login"})
+    this.redirect("/login")
   };
 
   successfullLoginHandler = token => {
     localStorage.setItem('token', token);
-    this.setState({loggedIn: true, page: "index"})
-  };
-
-  changeToRegisterHandler = () => {
-    this.setState({page: "register"})
-  };
-
-  changeToLoginHandler = () => {
-    this.setState({page: "login"})
-  };
-
-  changeToIndexHandler = () => {
-    this.setState({page: "index"})
+    this.redirect("/")
   };
 
   logoutHandler = () => {
     localStorage.removeItem('token');
-    this.setState({loggedIn: false, page: "index"})
+    this.redirect("/")
+  };
+
+  redirect = page => {
+    this.setState({redirect: page});
+    this.setState({redirect: ""});
   };
 
   render() {
     const state = this.state;
-    let content;
 
-    switch (state.page) {
-      case "register":
-        content = <RegisterForm registerSuccessfull={this.successfullRegisterHandler}/>
-        break;
-      case 'login':
-        content = < LoginForm loginSuccessfull={this.successfullLoginHandler}/>;
-        break;
-      case 'index':
-        content = <Index classname="card"/>;
-        break;
-      default:
-        content = null;
-        break;
-    }
+    const register = () => <RegisterForm registerSuccessfull={this.successfullRegisterHandler}/>;
+    const login = () => <LoginForm loginSuccessfull={this.successfullLoginHandler}/>;
+    const index = () => <Index classname="card"/>;
 
     return (
-      <div className="App">
-        <Navbar showIndex={this.changeToIndexHandler} logout={this.logoutHandler}
-                showLoginForm={this.changeToLoginHandler}
-                showRegisterForm={this.changeToRegisterHandler}
-                loggedIn={state.loggedIn}/>
-        <div className="container mb-5 mt-5">
-          {content}
+      <Router>
+
+        {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
+
+        <div className="App">
+          <Navbar loggedIn={state.loggedIn} logout={this.logoutHandler}/>
+          <div className="container mb-5 mt-5">
+            <Route path="/" exact component={index}/>
+            <Route path="/register/" exact component={register}/>
+            <Route path="/login/" exact component={login}/>
+          </div>
         </div>
-      </div>
+      </Router>
 
     );
   }

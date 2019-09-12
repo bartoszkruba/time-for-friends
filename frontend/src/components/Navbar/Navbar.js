@@ -1,5 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import {Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink,} from 'reactstrap';
+import {Link} from "react-router-dom";
+
 
 export default class Navigation extends Component {
   constructor(props) {
@@ -26,17 +28,23 @@ export default class Navigation extends Component {
     return (
       <div>
         <Navbar color="info" light expand="md">
-          <NavbarBrand className="text-white" style={style} onClick={props.showIndex}>Time For Friends</NavbarBrand>
+          <Link to="/" style={{"text-decoration": "none"}}>
+            <NavbarBrand className="text-white" style={style}><b>Time For Friends</b></NavbarBrand>
+          </Link>
           <NavbarToggler onClick={this.toggle}/>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               {!this.props.loggedIn ? <Fragment>
                 <NavItem>
-                  <NavLink onClick={props.showLoginForm} style={style} className="text-white">Log in</NavLink>
+                  <Link to="/login">
+                    <NavLink style={style} className="text-white">Log in</NavLink>
+                  </Link>
                 </NavItem>
-                <NavItem>
-                  <NavLink onClick={props.showRegisterForm} style={style} className="text-white">Register</NavLink>
-                </NavItem>
+                <Link to="/register">
+                  <NavItem>
+                    <NavLink style={style} className="text-white">Register</NavLink>
+                  </NavItem>
+                </Link>
               </Fragment> : <NavItem>
                 <NavLink onClick={props.logout} style={style} className="text-white">Log out</NavLink>
               </NavItem>}

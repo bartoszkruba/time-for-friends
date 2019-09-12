@@ -1,5 +1,7 @@
 .App {
-    color: white;
+    font-family: 'Zilla Slab', serif;
+    font-size: 110%;
+    color: gainsboro;
     background-color: black;
     background-image: url("https://spacenews.com/wp-content/uploads/2018/05/24359364107_152b0152ff_k-879x485.jpg");
     background-position: center;
@@ -10,6 +12,9 @@
 }
 
 .Card {
-    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #222;
+    background-color: rgba(0, 0, 0, 0.7);
     padding: 50px;
+    margin-top: 100px;
+    border-radius: 2.5%;
 }

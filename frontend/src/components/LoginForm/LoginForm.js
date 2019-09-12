@@ -70,8 +70,8 @@ export default class LoginForm extends Component {
         <div className="col-md-2"/>
         <div className="col-md-8">
           <h1>Log In</h1>
-          {state.validation.errorMessage !== "" ? <Alert color="danger">
-            <div>{state.validation.errorMessage}</div>
+          {state.validation.errorMessage !== "" ? <Alert color="info">
+            <div>- {state.validation.errorMessage}</div>
           </Alert> : null}
           <Form>
             <FormGroup>
