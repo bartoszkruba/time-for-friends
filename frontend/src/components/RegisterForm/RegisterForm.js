@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Alert, Button, Form, FormGroup, Input, Label} from 'reactstrap';
 import validator from 'validator';
-
+import '../../App.css'
 import graphqlService from "../../graphql/graphqlService";
 
 export default class RegisterForm extends Component {
@@ -76,7 +76,7 @@ export default class RegisterForm extends Component {
       color: "red"
     };
 
-    return <div className="container">
+    return <div className="container Card">
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8">

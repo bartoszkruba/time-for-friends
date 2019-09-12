@@ -65,7 +65,7 @@ export default class LoginForm extends Component {
       color: "red"
     };
 
-    return <div className="container">
+    return <div className="container Card">
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8">

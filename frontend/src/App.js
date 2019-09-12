@@ -1,4 +1,4 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import './App.css';
 import Navbar from "./components/Navbar/Navbar";
 import RegisterForm from "./components/RegisterForm/RegisterForm";
@@ -50,7 +50,7 @@ export default class App extends Component {
         content = < LoginForm loginSuccessfull={this.successfullLoginHandler}/>;
         break;
       case 'index':
-        content = <Index/>;
+        content = <Index classname="card"/>;
         break;
       default:
         content = null;
@@ -58,15 +58,15 @@ export default class App extends Component {
     }
 
     return (
-      <Fragment>
+      <div className="App">
         <Navbar showIndex={this.changeToIndexHandler} logout={this.logoutHandler}
                 showLoginForm={this.changeToLoginHandler}
                 showRegisterForm={this.changeToRegisterHandler}
                 loggedIn={state.loggedIn}/>
-        <div className="container mt-5">
+        <div className="container mb-5 mt-5">
           {content}
         </div>
-      </Fragment>
+      </div>
 
     );
   }
