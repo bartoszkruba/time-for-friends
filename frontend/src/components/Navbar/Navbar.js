@@ -26,7 +26,7 @@ export default class Navigation extends Component {
     return (
       <div>
         <Navbar color="info" light expand="md">
-          <NavbarBrand className="text-white" href="/">Time For Friends</NavbarBrand>
+          <NavbarBrand className="text-white" style={style} onClick={props.showIndex}>Time For Friends</NavbarBrand>
           <NavbarToggler onClick={this.toggle}/>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
@@ -38,7 +38,7 @@ export default class Navigation extends Component {
                   <NavLink onClick={props.showRegisterForm} style={style} className="text-white">Register</NavLink>
                 </NavItem>
               </Fragment> : <NavItem>
-                <NavLink onClick={props.showLoginForm} style={style} className="text-white">Log out</NavLink>
+                <NavLink onClick={props.logout} style={style} className="text-white">Log out</NavLink>
               </NavItem>}
             </Nav>
           </Collapse>

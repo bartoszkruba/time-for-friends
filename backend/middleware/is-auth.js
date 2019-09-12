@@ -1,4 +1,5 @@
 const {JWT_SECRET} = require('../graphql/resolvers/auth');
+const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
   req.isAuth = false;

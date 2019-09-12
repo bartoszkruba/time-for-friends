@@ -3,12 +3,13 @@ import './App.css';
 import Navbar from "./components/Navbar/Navbar";
 import RegisterForm from "./components/RegisterForm/RegisterForm";
 import LoginForm from "./components/LoginForm/LoginForm";
+import Index from './components/Index/Index';
 
 export default class App extends Component {
 
   state = {
     loggedIn: false,
-    page: "register"
+    page: "index"
   };
 
   successfullRegisterHandler = (_id, email) => {
@@ -17,7 +18,7 @@ export default class App extends Component {
 
   successfullLoginHandler = token => {
     localStorage.setItem('token', token);
-    this.setState({loggedIn: true})
+    this.setState({loggedIn: true, page: "index"})
   };
 
   changeToRegisterHandler = () => {
@@ -26,6 +27,15 @@ export default class App extends Component {
 
   changeToLoginHandler = () => {
     this.setState({page: "login"})
+  };
+
+  changeToIndexHandler = () => {
+    this.setState({page: "index"})
+  };
+
+  logoutHandler = () => {
+    localStorage.removeItem('token');
+    this.setState({loggedIn: false, page: "index"})
   };
 
   render() {
@@ -39,6 +49,9 @@ export default class App extends Component {
       case 'login':
         content = < LoginForm loginSuccessfull={this.successfullLoginHandler}/>;
         break;
+      case 'index':
+        content = <Index/>;
+        break;
       default:
         content = null;
         break;
@@ -46,7 +59,9 @@ export default class App extends Component {
 
     return (
       <Fragment>
-        <Navbar showLoginForm={this.changeToLoginHandler} showRegisterForm={this.changeToRegisterHandler}
+        <Navbar showIndex={this.changeToIndexHandler} logout={this.logoutHandler}
+                showLoginForm={this.changeToLoginHandler}
+                showRegisterForm={this.changeToRegisterHandler}
                 loggedIn={state.loggedIn}/>
         <div className="container mt-5">
           {content}
