@@ -45,6 +45,7 @@ app.use('/graphql', graphqlHttp({
     await mongoose.connect(MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true});
 
     await app.listen(PORT);
+
     console.log(`Listening on ${PORT}`);
   } catch (e) {
     console.log(e);
