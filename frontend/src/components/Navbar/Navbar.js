@@ -31,6 +31,10 @@ export default class Navigation extends Component {
           <Link to="/" style={{"text-decoration": "none"}}>
             <NavbarBrand className="text-white" style={style}><b>Time For Friends</b></NavbarBrand>
           </Link>
+          <Collapse isOpen={this.state.isOpen} navbar>
+            <Nav className="ml-auto" navbar>
+            </Nav>
+          </Collapse>
           <NavbarToggler onClick={this.toggle}/>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
@@ -45,9 +49,16 @@ export default class Navigation extends Component {
                     <NavLink style={style} className="text-white">Register</NavLink>
                   </NavItem>
                 </Link>
-              </Fragment> : <NavItem>
-                <NavLink onClick={props.logout} style={style} className="text-white">Log out</NavLink>
-              </NavItem>}
+              </Fragment> : <Fragment>
+                <NavItem>
+                  <Link to="/friend/new">
+                    <NavLink style={style} className="text-white">Add New Friend</NavLink>
+                  </Link>
+                </NavItem>
+                <NavItem>
+                  <NavLink onClick={props.logout} style={style} className="text-white">Log out</NavLink>
+                </NavItem>
+              </Fragment>}
             </Nav>
           </Collapse>
         </Navbar>
