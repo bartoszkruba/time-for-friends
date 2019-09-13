@@ -31,5 +31,18 @@ export default {
       `,
       errorPolicy: "all"
     })
+  },
+  timezones: async () => {
+    const client = await new ApolloClient({uri: URI});
+
+    return await client.query({
+      query: gql`
+          query {
+              timezones {
+                  name
+              }
+          }
+      `
+    })
   }
 }

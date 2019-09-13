@@ -28,7 +28,7 @@ export default class Navigation extends Component {
     return (
       <div>
         <Navbar color="info" light expand="md">
-          <Link to="/" style={{"text-decoration": "none"}}>
+          <Link to="/" style={{"textDecoration": "none"}}>
             <NavbarBrand className="text-white" style={style}><b>Time For Friends</b></NavbarBrand>
           </Link>
           <Collapse isOpen={this.state.isOpen} navbar>
@@ -41,7 +41,7 @@ export default class Navigation extends Component {
               {!this.props.loggedIn ? <Fragment>
                 <NavItem>
                   <Link to="/login">
-                    <NavLink style={style} className="text-white">Log in</NavLink>
+                    <NavLink to="/login" style={style} className="text-white">Log in</NavLink>
                   </Link>
                 </NavItem>
                 <Link to="/register">

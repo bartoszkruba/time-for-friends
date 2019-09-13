@@ -1,11 +1,15 @@
 import React, {Component} from 'react'
 import {Button, Form, FormGroup, Input, Label} from "reactstrap";
 import validator from 'validator';
+import countries from './countries'
+
+
+import graphqlService from "../../graphql/graphqlService";
 
 export default class NewFriendForm extends Component {
 
   state = {
-    countries: ["Sweden", "USA"],
+    countries,
     timezones: [],
     form: {
       firstName: "",
@@ -21,8 +25,14 @@ export default class NewFriendForm extends Component {
   };
 
   // load timezones on mount
-  componentDidMount() {
-    this.setState({timezones: ["Kingston/Jamaica", "Moscow/Russia"]})
+  async componentDidMount() {
+    try {
+      const response = await graphqlService.timezones();
+      console.log(response.data.timezones);
+      this.setState({timezones: response.data.timezones})
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   emailEnteredHandler = e => {
@@ -58,8 +68,8 @@ export default class NewFriendForm extends Component {
 
     const enteredEmails = state.form.enteredEmails.map(e => <div key={e}>{e} - delete</div>);
     const enteredPhoneNumbers = state.form.enteredPhoneNumbers.map(p => <div key={p}>{p} - delete</div>);
-    const countries = state.countries.map(c => <option>{c}</option>);
-    const timezones = state.timezones.map(t => <option>{t}</option>);
+    const countries = state.countries.map(c => <option key={c.name}>{c.name}</option>);
+    const timezones = state.timezones.map(t => <option key={t.name}>{t.name}</option>);
 
     return <div className="container Card">
       <div className="row">
