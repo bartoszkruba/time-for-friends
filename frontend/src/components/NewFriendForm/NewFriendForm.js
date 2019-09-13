@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react'
-import {Button, Form, FormGroup, Input, Label} from "reactstrap";
+import {Alert, Button, Form, FormGroup, Input, Label} from "reactstrap";
 import validator from 'validator';
 import countries from './countries'
 
@@ -21,6 +21,9 @@ export default class NewFriendForm extends PureComponent {
       enteredEmails: [],
       phoneNumber: "",
       enteredPhoneNumbers: []
+    },
+    validation: {
+      errorMessage: ""
     }
   };
 
@@ -72,6 +75,18 @@ export default class NewFriendForm extends PureComponent {
     this.setState({form})
   };
 
+  submitHandler = e => {
+    const form = {...this.state.form};
+    form.firstName = form.firstName.trim();
+    form.lastName = form.lastName.trim();
+    form.city = form.city.trim();
+    if (validator.isEmpty(form.firstName)) return this.setState({validation: {errorMessage: "Enter First Name"}});
+    if (validator.isEmpty(form.lastName)) return this.setState({validation: {errorMessage: "Enter Last Name"}});
+    if (validator.isEmpty(form.city)) return this.setState({validation: {errorMessage: "Enter City"}});
+
+
+  };
+
   render() {
     const state = this.state;
 
@@ -95,6 +110,9 @@ export default class NewFriendForm extends PureComponent {
         <div className="col-md-2"/>
         <div className="col-md-8">
           <h1>Add New Friend</h1>
+          {state.validation.errorMessage !== "" ? <Alert color="info">
+            <div>- {state.validation.errorMessage}</div>
+          </Alert> : null}
         </div>
         <div className="col-md-2"/>
       </div>
