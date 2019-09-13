@@ -8,6 +8,17 @@ module.exports = buildSchema(`
       password: String
    }
    
+   type Friend {
+      _id: ID!
+      firsName: String!
+      lastName: String!
+      city: String!
+      country: String!
+      emails: [String]
+      phoneNumbers: [String]
+      timezone: Timezone
+   }
+   
    type Timezone {
       _id: ID!
       name: String!
@@ -24,6 +35,16 @@ module.exports = buildSchema(`
       password: String!
    }
    
+   input FriendInputData {
+      firstName: String!
+      lastName: String!
+      city: String!
+      country: String!
+      emails: [String]
+      phoneNumber: [String]
+      timezone: String!
+   }
+   
    type RootQuery {
      login(email: String! password: String!): AuthData
      timezones: [Timezone]
@@ -31,6 +52,7 @@ module.exports = buildSchema(`
 
    type RootMutation {
       register(userInput: UserInputData): User!
+      addFriend(friendInput: FriendInputData): Friend!
    }
 
    schema {
