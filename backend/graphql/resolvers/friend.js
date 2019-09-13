@@ -46,7 +46,25 @@ validateNewFriend = (newFriend) => {
   if (validator.isEmpty(newFriend.firstName)) errors.push("Invalid First Name");
   if (validator.isEmpty(newFriend.lastName)) errors.push("Invalid Last Name");
   if (validator.isEmpty(newFriend.city)) errors.push("Invalid City");
-  if (validtor.isEmpty(newFriend.country)) errors.push("Invalid Country");
+  if (validator.isEmpty(newFriend.country)) errors.push("Invalid Country");
+
+  if (newFriend.emails) {
+    for (email in newFriend.emails) {
+      if (!validator.isEmail(email)) {
+        errors.push("Invalid Email");
+        break;
+      }
+    }
+  }
+
+  if (newFriend.phoneNumbers) {
+    for (number in newFriend.phoneNumbers) {
+      if (validator.isEmpty(number)) {
+        errors.push("Invalid Number");
+        break;
+      }
+    }
+  }
 
   if (errors.length !== 0) {
     const err = new Error("invalid Data.");
