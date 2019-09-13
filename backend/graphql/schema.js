@@ -8,6 +8,12 @@ module.exports = buildSchema(`
       password: String
    }
    
+   type Timezone {
+      _id: ID!
+      name: String!
+      currentTime: String!
+   }
+   
    type AuthData {
       token: String!
       userId: String!
@@ -20,6 +26,7 @@ module.exports = buildSchema(`
    
    type RootQuery {
      login(email: String! password: String!): AuthData
+     timezones: [Timezone]
    }
 
    type RootMutation {
