@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import {Button, Form, FormGroup, Input, Label} from "reactstrap";
 import validator from 'validator';
 import countries from './countries'
@@ -6,7 +6,7 @@ import countries from './countries'
 
 import graphqlService from "../../graphql/graphqlService";
 
-export default class NewFriendForm extends Component {
+export default class NewFriendForm extends PureComponent {
 
   state = {
     countries,
@@ -28,7 +28,6 @@ export default class NewFriendForm extends Component {
   async componentDidMount() {
     try {
       const response = await graphqlService.timezones();
-      console.log(response.data.timezones);
       this.setState({timezones: response.data.timezones})
     } catch (e) {
       console.log(e);
@@ -37,6 +36,7 @@ export default class NewFriendForm extends Component {
 
   emailEnteredHandler = e => {
     const form = {...this.state.form};
+    form.email = form.email.trim();
     if (validator.isEmail(form.email) && form.enteredEmails.findIndex(e => e === form.email) === -1) {
       form.enteredEmails.push(this.state.form.email);
       form.email = "";
@@ -44,13 +44,26 @@ export default class NewFriendForm extends Component {
     }
   };
 
+  removeEmailHandler = email => {
+    const form = {...this.state.form};
+    form.enteredEmails.splice(form.enteredEmails.indexOf(email), 1);
+    this.setState({form});
+  };
+
   phoneNumberEnteredHandler = e => {
     const form = {...this.state.form};
-    if (form.enteredPhoneNumbers.findIndex(p => p === form.phoneNumber) === -1) {
+    form.phoneNumber = form.phoneNumber.trim();
+    if (form.phoneNumber !== "" && form.enteredPhoneNumbers.findIndex(p => p === form.phoneNumber) === -1) {
       form.enteredPhoneNumbers.push(form.phoneNumber);
       form.phoneNumber = "";
       this.setState({form})
     }
+  };
+
+  removePhoneNumberHandler = number => {
+    const form = {...this.state.form};
+    form.enteredPhoneNumbers.splice(form.enteredPhoneNumbers.indexOf(number), 1);
+    this.setState({form});
   };
 
   inputChangeHandler = e => {
@@ -66,8 +79,14 @@ export default class NewFriendForm extends Component {
       color: "red"
     };
 
-    const enteredEmails = state.form.enteredEmails.map(e => <div key={e}>{e} - delete</div>);
-    const enteredPhoneNumbers = state.form.enteredPhoneNumbers.map(p => <div key={p}>{p} - delete</div>);
+    const enteredEmails = state.form.enteredEmails.map(e => <div key={e}>
+      {e} - <span onClick={event => this.removeEmailHandler(e)} style={{cursor: "pointer", color: "red"}}>delete</span>
+    </div>);
+
+    const enteredPhoneNumbers = state.form.enteredPhoneNumbers.map(p => <div key={p}>
+      {p} - <span onClick={event => this.removePhoneNumberHandler(p)}
+                  style={{color: "red", cursor: "pointer"}}>delete</span>
+    </div>);
     const countries = state.countries.map(c => <option key={c.name}>{c.name}</option>);
     const timezones = state.timezones.map(t => <option key={t.name}>{t.name}</option>);
 
