@@ -21,12 +21,14 @@ export default class App extends Component {
 
   successfullLoginHandler = token => {
     localStorage.setItem('token', token);
-    this.redirect("/")
+    this.setState({loggedIn: true});
+    this.redirect("/friend/new")
   };
 
-  logoutHandler = () => {
+  logoutHandler = async () => {
     localStorage.removeItem('token');
-    this.redirect("/")
+    await this.setState({loggedIn: false});
+    this.redirect("/login/")
   };
 
   redirect = page => {
@@ -40,7 +42,7 @@ export default class App extends Component {
     const register = () => <RegisterForm registerSuccessfull={this.successfullRegisterHandler}/>;
     const login = () => <LoginForm loginSuccessfull={this.successfullLoginHandler}/>;
     const index = () => <Index classname="card"/>;
-    const newFriend = () => <NewFriendForm/>
+    const newFriend = () => <NewFriendForm loggedIn={state.loggedIn}/>;
 
     return (
       <Router>
