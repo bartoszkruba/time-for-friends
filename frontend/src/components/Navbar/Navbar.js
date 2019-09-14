@@ -51,6 +51,11 @@ export default class Navigation extends Component {
                 </Link>
               </Fragment> : <Fragment>
                 <NavItem>
+                  <Link to="/friend">
+                    <NavLink style={style} className="text-white">My Friends</NavLink>
+                  </Link>
+                </NavItem>
+                <NavItem>
                   <Link to="/friend/new">
                     <NavLink style={style} className="text-white">Add New Friend</NavLink>
                   </Link>
