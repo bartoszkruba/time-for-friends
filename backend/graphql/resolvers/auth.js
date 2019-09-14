@@ -44,6 +44,8 @@ module.exports.login = async ({email, password}) => {
   return {token, userId: user._id.toString()}
 };
 
+module.exports.isAuthenticated = (props, req) => req.isAuth;
+
 const validateRegister = async (email, password) => {
   const errors = [];
 

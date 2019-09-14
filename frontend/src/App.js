@@ -7,13 +7,25 @@ import RegisterForm from "./components/RegisterForm/RegisterForm";
 import LoginForm from "./components/LoginForm/LoginForm";
 import Index from './components/Index/Index';
 import NewFriendForm from "./components/NewFriendForm/NewFriendForm";
+import FriendList from "./components/FriendList/FriendList";
+import graphqlService from "./graphql/graphqlService";
 
 export default class App extends Component {
 
   state = {
-    loggedIn: false,
+    loggedIn: true,
     redirect: ""
   };
+
+  async componentDidMount() {
+    try {
+      const response = await graphqlService.isAuthenticated();
+      this.setState({loggedIn: response.data.isAuthenticated})
+    } catch (e) {
+      console.log(e);
+      this.setState({loggedIn: false});
+    }
+  }
 
   successfullRegisterHandler = (_id, email) => {
     this.redirect("/login")
@@ -47,6 +59,7 @@ export default class App extends Component {
     const login = () => <LoginForm loginSuccessfull={this.successfullLoginHandler}/>;
     const index = () => <Index classname="card"/>;
     const newFriend = () => <NewFriendForm loggedIn={state.loggedIn} addedNewFriend={this.createdNewFriendHandler}/>;
+    const friendList = () => <FriendList loggedIn={state.loggedIn}/>;
 
     return (
       <Router>
@@ -60,6 +73,7 @@ export default class App extends Component {
             <Route path="/register/" exact component={register}/>
             <Route path="/login/" exact component={login}/>
             <Route path="/friend/new" exact component={newFriend}/>
+            <Route path="/friend" exact component={friendList}/>
           </div>
         </div>
       </Router>

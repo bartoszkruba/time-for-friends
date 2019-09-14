@@ -48,6 +48,8 @@ module.exports = buildSchema(`
    type RootQuery {
      login(email: String! password: String!): AuthData
      timezones: [Timezone]
+     friends: [Friend]
+     isAuthenticated: Boolean!
    }
 
    type RootMutation {
