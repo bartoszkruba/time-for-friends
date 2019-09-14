@@ -9,6 +9,10 @@ import graphqlService from "../../graphql/graphqlService";
 export default class FriendList extends Component {
 
   state = {
+    searchBar: {
+      firstName: "",
+      lastName: ""
+    },
     redirect: "",
     friends: []
   };
@@ -21,7 +25,11 @@ export default class FriendList extends Component {
     }
 
     try {
-      const response = await graphqlService.friends();
+      const query = {
+        firstName: `^${this.state.searchBar.firstName}`,
+        lastName: `^${this.state.searchBar.lastName}`
+      };
+      const response = await graphqlService.friends(query);
       this.setState({friends: response.data.friends})
     } catch (e) {
       console.log(e);

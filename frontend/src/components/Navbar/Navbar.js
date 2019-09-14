@@ -40,25 +40,17 @@ export default class Navigation extends Component {
             <Nav className="ml-auto" navbar>
               {!this.props.loggedIn ? <Fragment>
                 <NavItem>
-                  <Link to="/login">
-                    <NavLink to="/login" style={style} className="text-white">Log in</NavLink>
-                  </Link>
+                  <Link to="/login" className="nav-link text-white">Log in</Link>
                 </NavItem>
-                <Link to="/register">
-                  <NavItem>
-                    <NavLink style={style} className="text-white">Register</NavLink>
-                  </NavItem>
-                </Link>
+                <NavItem>
+                  <Link to="/register" className="nav-link text-white">Register</Link>
+                </NavItem>
               </Fragment> : <Fragment>
                 <NavItem>
-                  <Link to="/friend">
-                    <NavLink style={style} className="text-white">My Friends</NavLink>
-                  </Link>
+                  <Link to="/friend" className="nav-link text-white">My Friends</Link>
                 </NavItem>
                 <NavItem>
-                  <Link to="/friend/new">
-                    <NavLink style={style} className="text-white">Add New Friend</NavLink>
-                  </Link>
+                  <Link to="/friend/new" className="nav-link text-white">Add New Friend</Link>
                 </NavItem>
                 <NavItem>
                   <NavLink onClick={props.logout} style={style} className="text-white">Log out</NavLink>
