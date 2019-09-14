@@ -31,6 +31,10 @@ export default class App extends Component {
     this.redirect("/login/")
   };
 
+  createdNewFriendHandler = () => {
+    this.redirect("/")
+  };
+
   redirect = page => {
     this.setState({redirect: page});
     this.setState({redirect: ""});
@@ -42,7 +46,7 @@ export default class App extends Component {
     const register = () => <RegisterForm registerSuccessfull={this.successfullRegisterHandler}/>;
     const login = () => <LoginForm loginSuccessfull={this.successfullLoginHandler}/>;
     const index = () => <Index classname="card"/>;
-    const newFriend = () => <NewFriendForm loggedIn={state.loggedIn}/>;
+    const newFriend = () => <NewFriendForm loggedIn={state.loggedIn} addedNewFriend={this.createdNewFriendHandler}/>;
 
     return (
       <Router>

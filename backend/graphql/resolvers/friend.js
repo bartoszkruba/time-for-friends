@@ -5,13 +5,14 @@ const Timezone = require('../../models/Timezone');
 const User = require('../../models/User');
 
 module.exports.addFriend = async ({friendInput}, req) => {
+
   if (!req.isAuth) {
     const err = new Error('Not authenticated!');
     err.code = 401;
     throw err;
   }
 
-  const timezone = Timezone.find({name: friendInput.timezone});
+  const timezone = await Timezone.findOne({name: friendInput.timezone});
 
   if (!timezone) {
     const err = new Error('Invalid timezone');
@@ -30,9 +31,13 @@ module.exports.addFriend = async ({friendInput}, req) => {
   }
 
   const friend = new Friend(friendInput);
-  friend.timezone = timezone;
+  friend.timezone = timezone._id;
 
-  return await friend.save();
+  savedFriend = await friend.save();
+  user.friends.push(savedFriend);
+  await user.save();
+
+  return {...savedFriend._doc, _id: savedFriend._id.toString(), timezone: timezone}
 };
 
 validateNewFriend = (newFriend) => {
@@ -40,7 +45,7 @@ validateNewFriend = (newFriend) => {
 
   newFriend.firstName = newFriend.firstName.trim();
   newFriend.lastName = newFriend.firstName.trim();
-  newFriend.city = newFrined.firstName.trim();
+  newFriend.city = newFriend.firstName.trim();
   newFriend.country = newFriend.firstName.trim();
 
   if (validator.isEmpty(newFriend.firstName)) errors.push("Invalid First Name");
@@ -49,7 +54,7 @@ validateNewFriend = (newFriend) => {
   if (validator.isEmpty(newFriend.country)) errors.push("Invalid Country");
 
   if (newFriend.emails) {
-    for (email in newFriend.emails) {
+    for (email of newFriend.emails) {
       if (!validator.isEmail(email)) {
         errors.push("Invalid Email");
         break;
@@ -67,7 +72,7 @@ validateNewFriend = (newFriend) => {
   }
 
   if (errors.length !== 0) {
-    const err = new Error("invalid Data.");
+    const err = new Error("Invalid Data.");
     err.data = errors;
     err.code = 400;
     throw err;

@@ -1,4 +1,5 @@
 import React, {PureComponent} from 'react'
+import {Redirect} from "react-router-dom";
 import {Alert, Button, Form, FormGroup, Input, Label} from "reactstrap";
 import validator from 'validator';
 import countries from './countries'
@@ -9,6 +10,7 @@ import graphqlService from "../../graphql/graphqlService";
 export default class NewFriendForm extends PureComponent {
 
   state = {
+    redirect: "",
     countries,
     timezones: [],
     form: {
@@ -29,9 +31,14 @@ export default class NewFriendForm extends PureComponent {
 
   // load timezones on mount
   async componentDidMount() {
+    if (!this.props.loggedIn) {
+      return this.setState({redirect: "/login"});
+    }
     try {
       const response = await graphqlService.timezones();
-      this.setState({timezones: response.data.timezones})
+      const form = {...this.state.form};
+      form.timezone = response.data.timezones[0].name;
+      this.setState({timezones: response.data.timezones, form})
     } catch (e) {
       console.log(e);
     }
@@ -75,7 +82,7 @@ export default class NewFriendForm extends PureComponent {
     this.setState({form})
   };
 
-  submitHandler = e => {
+  submitHandler = async e => {
     const form = {...this.state.form};
     form.firstName = form.firstName.trim();
     form.lastName = form.lastName.trim();
@@ -84,7 +91,16 @@ export default class NewFriendForm extends PureComponent {
     if (validator.isEmpty(form.lastName)) return this.setState({validation: {errorMessage: "Enter Last Name"}});
     if (validator.isEmpty(form.city)) return this.setState({validation: {errorMessage: "Enter City"}});
 
-
+    try {
+      await graphqlService.addNewFriend({
+        ...form,
+        emails: form.enteredEmails,
+        phoneNumbers: form.enteredPhoneNumbers
+      });
+      this.props.addedNewFriend()
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   render() {
@@ -106,6 +122,7 @@ export default class NewFriendForm extends PureComponent {
     const timezones = state.timezones.map(t => <option key={t.name}>{t.name}</option>);
 
     return <div className="container Card">
+      {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8">

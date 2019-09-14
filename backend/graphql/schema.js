@@ -10,7 +10,7 @@ module.exports = buildSchema(`
    
    type Friend {
       _id: ID!
-      firsName: String!
+      firstName: String!
       lastName: String!
       city: String!
       country: String!
@@ -41,7 +41,7 @@ module.exports = buildSchema(`
       city: String!
       country: String!
       emails: [String]
-      phoneNumber: [String]
+      phoneNumbers: [String]
       timezone: String!
    }
    
