@@ -12,15 +12,6 @@ module.exports.addFriend = async ({friendInput}, req) => {
     throw err;
   }
 
-  const timezone = await Timezone.findOne({name: friendInput.timezone});
-
-  if (!timezone) {
-    const err = new Error('Invalid timezone');
-    err.code = 400;
-    throw err;
-  }
-  validateNewFriend(friendInput);
-
   const user = await User.findById(req.userId);
 
   if (!user) {
@@ -30,6 +21,16 @@ module.exports.addFriend = async ({friendInput}, req) => {
     throw err;
   }
 
+  const timezone = await Timezone.findOne({name: friendInput.timezone});
+
+  if (!timezone) {
+    const err = new Error('Invalid timezone');
+    err.code = 400;
+    throw err;
+  }
+  validateNewFriend(friendInput);
+
+
   const friend = new Friend(friendInput);
   friend.timezone = timezone._id;
 
@@ -38,6 +39,26 @@ module.exports.addFriend = async ({friendInput}, req) => {
   await user.save();
 
   return {...savedFriend._doc, _id: savedFriend._id.toString(), timezone: timezone}
+};
+
+module.exports.friends = async () => {
+  if (!req.isAuth) {
+    const err = new Error('Not authenticated!');
+    err.code = 401;
+    throw err;
+  }
+
+  const user = await User.findById(req.userId).populate('friends').populate('timezones').exec();
+
+  if (!user) {
+    const err = new Error("Invalid user.");
+    err.data = errors;
+    err.code = 401;
+    throw err;
+  }
+
+  return user.friends;
+
 };
 
 validateNewFriend = (newFriend) => {
