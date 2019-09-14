@@ -12,7 +12,7 @@ import FriendList from "./components/FriendList/FriendList";
 export default class App extends Component {
 
   state = {
-    loggedIn: false,
+    loggedIn: true,
     redirect: ""
   };
 
