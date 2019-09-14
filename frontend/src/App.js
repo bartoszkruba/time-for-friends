@@ -8,13 +8,23 @@ import LoginForm from "./components/LoginForm/LoginForm";
 import Index from './components/Index/Index';
 import NewFriendForm from "./components/NewFriendForm/NewFriendForm";
 import FriendList from "./components/FriendList/FriendList";
+import graphqlService from "./graphql/graphqlService";
 
 export default class App extends Component {
 
   state = {
-    loggedIn: true,
+    loggedIn: false,
     redirect: ""
   };
+
+  async componentDidMount() {
+    try {
+      const response = await graphqlService.isAuthenticated();
+      this.setState({loggedIn: response.data.isAuthenticated})
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   successfullRegisterHandler = (_id, email) => {
     this.redirect("/login")

@@ -54,8 +54,7 @@ export default {
       errorPolicy: "all"
     })
   },
-  login:
-  async (email, password) => {
+  login: async (email, password) => {
     const client = await new ApolloClient({uri: URI});
 
     return await client.query({
@@ -67,6 +66,28 @@ export default {
           }
       `,
       errorPolicy: "all"
+    })
+  },
+
+  isAuthenticated: async () => {
+    const client = new ApolloClient({
+      uri: URI,
+      request: async operation => {
+        const token = localStorage.getItem('token');
+        operation.setContext({
+          headers: {
+            authorization: token ? `Bearer ${token}` : ''
+          }
+        });
+      }
+    });
+
+    return await client.query({
+      query: gql`
+          query{
+              isAuthenticated
+          }
+      `
     })
   },
   timezones: async () => {
@@ -82,7 +103,8 @@ export default {
       `
     })
   },
-  friends: async () => {
+  friends:
+  async () => {
     const client = new ApolloClient({
       uri: URI,
       request: async operation => {
