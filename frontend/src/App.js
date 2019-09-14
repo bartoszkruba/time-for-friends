@@ -13,7 +13,7 @@ import graphqlService from "./graphql/graphqlService";
 export default class App extends Component {
 
   state = {
-    loggedIn: false,
+    loggedIn: true,
     redirect: ""
   };
 
@@ -23,6 +23,7 @@ export default class App extends Component {
       this.setState({loggedIn: response.data.isAuthenticated})
     } catch (e) {
       console.log(e);
+      this.setState({loggedIn: false});
     }
   }
 

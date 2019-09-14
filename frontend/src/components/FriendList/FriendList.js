@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Redirect} from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
 import {Table} from 'reactstrap';
+import Clock from './Clock/Clock';
 
 import graphqlService from "../../graphql/graphqlService";
 
@@ -31,17 +32,13 @@ export default class FriendList extends Component {
   render() {
     const state = this.state;
 
-    state.friends.forEach(f => {
-      console.log(f);
-    });
-
     const rows = state.friends.map(f => <tr key={f._id}>
       <td>{f.firstName}</td>
       <td>{f.lastName}</td>
       <td>{f.city}</td>
       <td>{f.country}</td>
       <td>{f.timezone.name}</td>
-      <td>12:00</td>
+      <td><Clock timezone={f.timezone.name}/></td>
     </tr>);
 
     return <div className="container Card">
