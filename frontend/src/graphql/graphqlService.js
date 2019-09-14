@@ -3,6 +3,45 @@ import ApolloClient, {gql} from 'apollo-boost';
 const URI = "http://localhost:8080/graphql";
 
 export default {
+
+  addNewFriend: async (friend) => {
+
+    console.log(friend.timezone);
+
+    const client = new ApolloClient({
+      uri: URI,
+      request: async operation => {
+        const token = localStorage.getItem('token');
+        operation.setContext({
+          headers: {
+            authorization: token ? `Bearer ${token}` : ''
+          }
+        });
+      }
+    });
+
+    return await client.mutate({
+      mutation: gql`
+          mutation addFriend($emails: [String], $phoneNumbers: [String]){
+              addFriend(friendInput: {
+                  firstName: "${friend.firstName}",
+                  lastName: "${friend.lastName}",
+                  city: "${friend.city}",
+                  country: "${friend.country}",
+                  timezone: "${friend.timezone}",
+                  emails: $emails,
+                  phoneNumbers: $phoneNumbers
+              }){
+                  firstName
+              }
+          }
+      `, variables: {
+        emails: friend.emails,
+        phoneNumbers: friend.phoneNumbers
+      }
+    });
+  },
+
   register: async (email, password) => {
     const client = await new ApolloClient({uri: URI});
 
@@ -18,7 +57,8 @@ export default {
       errorPolicy: "all"
     })
   },
-  login: async (email, password) => {
+  login:
+  async (email, password) => {
     const client = await new ApolloClient({uri: URI});
 
     return await client.query({
@@ -30,6 +70,20 @@ export default {
           }
       `,
       errorPolicy: "all"
+    })
+  },
+  timezones:
+  async () => {
+    const client = await new ApolloClient({uri: URI});
+
+    return await client.query({
+      query: gql`
+          query {
+              timezones {
+                  name
+              }
+          }
+      `
     })
   }
 }
