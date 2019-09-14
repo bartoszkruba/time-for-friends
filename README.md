@@ -6,6 +6,10 @@ School project
 
 ### Running backend
 
+Cleanup database and generate test data:  
+`
+npm run init`
+
 Start server in development setup (with nodemon):
   
 `
