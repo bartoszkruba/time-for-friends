@@ -6,6 +6,8 @@ const User = require('../../models/User');
 
 module.exports.addFriend = async ({friendInput}, req) => {
 
+  console.log(friendInput);
+
   if (!req.isAuth) {
     const err = new Error('Not authenticated!');
     err.code = 401;
@@ -34,6 +36,8 @@ module.exports.addFriend = async ({friendInput}, req) => {
   const friend = new Friend(friendInput);
   friend.timezone = timezone._id;
 
+  console.log(friend);
+
   savedFriend = await friend.save();
   user.friends.push(savedFriend);
   await user.save();
@@ -41,14 +45,18 @@ module.exports.addFriend = async ({friendInput}, req) => {
   return {...savedFriend._doc, _id: savedFriend._id.toString(), timezone: timezone}
 };
 
-module.exports.friends = async () => {
+module.exports.friends = async (props, req) => {
   if (!req.isAuth) {
     const err = new Error('Not authenticated!');
     err.code = 401;
     throw err;
   }
 
-  const user = await User.findById(req.userId).populate('friends').populate('timezones').exec();
+  const user = await User.findById(req.userId).populate('friends').exec();
+
+  for (friend of user.friends) {
+    friend.timezone = await Timezone.findById(friend.timezone);
+  }
 
   if (!user) {
     const err = new Error("Invalid user.");
@@ -65,9 +73,9 @@ validateNewFriend = (newFriend) => {
   const errors = [];
 
   newFriend.firstName = newFriend.firstName.trim();
-  newFriend.lastName = newFriend.firstName.trim();
-  newFriend.city = newFriend.firstName.trim();
-  newFriend.country = newFriend.firstName.trim();
+  newFriend.lastName = newFriend.lastName.trim();
+  newFriend.city = newFriend.city.trim();
+  newFriend.country = newFriend.country.trim();
 
   if (validator.isEmpty(newFriend.firstName)) errors.push("Invalid First Name");
   if (validator.isEmpty(newFriend.lastName)) errors.push("Invalid Last Name");

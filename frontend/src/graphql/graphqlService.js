@@ -5,9 +5,6 @@ const URI = "http://localhost:8080/graphql";
 export default {
 
   addNewFriend: async (friend) => {
-
-    console.log(friend.timezone);
-
     const client = new ApolloClient({
       uri: URI,
       request: async operation => {
@@ -72,8 +69,7 @@ export default {
       errorPolicy: "all"
     })
   },
-  timezones:
-  async () => {
+  timezones: async () => {
     const client = await new ApolloClient({uri: URI});
 
     return await client.query({
@@ -85,5 +81,35 @@ export default {
           }
       `
     })
+  },
+  friends: async () => {
+    const client = new ApolloClient({
+      uri: URI,
+      request: async operation => {
+        const token = localStorage.getItem('token');
+        operation.setContext({
+          headers: {
+            authorization: token ? `Bearer ${token}` : ''
+          }
+        });
+      }
+    });
+
+    return await client.query({
+      query: gql`
+          query {
+              friends {
+                  _id
+                  firstName
+                  lastName
+                  city
+                  country
+                  timezone {
+                      name
+                  }
+              }
+          }
+      `
+    });
   }
 }

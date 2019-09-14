@@ -5,7 +5,6 @@ module.exports = (req, res, next) => {
   req.isAuth = false;
 
   const authHeader = req.get('Authorization');
-  console.log('header - ' + authHeader);
   if (!authHeader) return next();
   let decodedToken;
 

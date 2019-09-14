@@ -3,22 +3,46 @@ import {Redirect} from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
 import {Table} from 'reactstrap';
 
+import graphqlService from "../../graphql/graphqlService";
+
 export default class FriendList extends Component {
 
   state = {
-    redirect: ""
+    redirect: "",
+    friends: []
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     if (!this.props.isLoggedIn) {
       if (!this.props.loggedIn) {
         return this.setState({redirect: "/login"});
       }
     }
+
+    try {
+      const response = await graphqlService.friends();
+      this.setState({friends: response.data.friends})
+    } catch (e) {
+      console.log(e);
+    }
+
   }
 
   render() {
     const state = this.state;
+
+    state.friends.forEach(f => {
+      console.log(f);
+    });
+
+    const rows = state.friends.map(f => <tr key={f._id}>
+      <td>{f.firstName}</td>
+      <td>{f.lastName}</td>
+      <td>{f.city}</td>
+      <td>{f.country}</td>
+      <td>{f.timezone.name}</td>
+      <td>12:00</td>
+    </tr>);
 
     return <div className="container Card">
       {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
@@ -44,6 +68,9 @@ export default class FriendList extends Component {
               <th>Current Time</th>
             </tr>
             </thead>
+            <tbody>
+            {rows}
+            </tbody>
           </Table>
         </div>
         <div className="col-md-1"/>
