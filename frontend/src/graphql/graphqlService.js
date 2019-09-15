@@ -120,7 +120,11 @@ export default {
     return await client.query({
       query: gql`
           query {
-              friends(friendQuery: {firstName: "${query.firstName}", lastName: "${query.lastName}"}) {
+              friends(friendQuery: {
+                  firstName: "${query.firstName}",
+                  lastName: "${query.lastName}"
+              ${(query.from && query.to) ? `, from: "${query.from}", to: "${query.to}"`: ''}
+              }) {
                   _id
                   firstName
                   lastName
