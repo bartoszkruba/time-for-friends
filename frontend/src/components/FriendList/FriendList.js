@@ -3,6 +3,7 @@ import {Redirect} from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
 import {Table} from 'reactstrap';
 import Clock from './Clock/Clock';
+import Date from './Date/Date'
 
 import graphqlService from "../../graphql/graphqlService";
 
@@ -55,7 +56,7 @@ export default class FriendList extends Component {
       <td>{f.lastName}</td>
       <td>{f.city}</td>
       <td>{f.country}</td>
-      <td>{f.timezone.name}</td>
+      <td><Date timezone={f.timezone.name}/></td>
       <td><Clock timezone={f.timezone.name}/></td>
     </tr>);
 
@@ -80,7 +81,7 @@ export default class FriendList extends Component {
               <th>Last Name</th>
               <th>City</th>
               <th>Country</th>
-              <th>Timezone</th>
+              <th>Current Date</th>
               <th>Current Time</th>
             </tr>
             </thead>
