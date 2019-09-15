@@ -56,8 +56,8 @@ module.exports.friends = async ({friendQuery}, req) => {
   }
 
   return await Friend.find({
-    firstName: new RegExp(friendQuery.firstName),
-    lastName: new RegExp(friendQuery.lastName),
+    firstName: new RegExp(friendQuery.firstName, "i"),
+    lastName: new RegExp(friendQuery.lastName, "i"),
     user: user._id
   }).populate('timezone');
 };

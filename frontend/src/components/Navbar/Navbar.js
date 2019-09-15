@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink,} from 'reactstrap';
+import {Collapse, Nav, Navbar, NavbarToggler, NavItem, NavLink,} from 'reactstrap';
 import {Link} from "react-router-dom";
 
 
@@ -28,8 +28,8 @@ export default class Navigation extends Component {
     return (
       <div>
         <Navbar color="info" light expand="md">
-          <Link to="/" style={{"textDecoration": "none"}}>
-            <NavbarBrand className="text-white" style={style}><b>Time For Friends</b></NavbarBrand>
+          <Link to="/" className="nav-link text-white">
+            <b>Time For Friends</b>
           </Link>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
