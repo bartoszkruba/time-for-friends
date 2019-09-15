@@ -135,7 +135,8 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
         lastName: persons[i].lastName,
         city: cities[i],
         country: countries[i],
-        timezone: timezone._id
+        timezone: timezone._id,
+        user: user._id
       }).save();
       user.friends.push(friend._id);
     }

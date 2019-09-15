@@ -31,6 +31,11 @@ const FriendSchema = Schema({
     type: ObjectId,
     ref: "Timezone",
     required: true
+  },
+  user: {
+    type: ObjectId,
+    ref: "User",
+    required: true
   }
 });
 

@@ -104,7 +104,7 @@ export default {
     })
   },
   friends:
-  async () => {
+  async query => {
     const client = new ApolloClient({
       uri: URI,
       request: async operation => {
@@ -120,7 +120,7 @@ export default {
     return await client.query({
       query: gql`
           query {
-              friends {
+              friends(friendQuery: {firstName: "${query.firstName}", lastName: "${query.lastName}"}) {
                   _id
                   firstName
                   lastName

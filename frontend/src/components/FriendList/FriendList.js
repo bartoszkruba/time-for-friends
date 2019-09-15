@@ -9,25 +9,43 @@ import graphqlService from "../../graphql/graphqlService";
 export default class FriendList extends Component {
 
   state = {
+    searchBar: {
+      firstName: "",
+      lastName: ""
+    },
     redirect: "",
     friends: []
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     if (!this.props.isLoggedIn) {
       if (!this.props.loggedIn) {
         return this.setState({redirect: "/login"});
       }
     }
 
+    this.requestFriends(this.state.searchBar.firstName, this.state.searchBar.lastName);
+  }
+
+  requestFriends = async (firstName, lastName) => {
     try {
-      const response = await graphqlService.friends();
+      const query = {
+        firstName: `^${firstName}`,
+        lastName: `^${lastName}`
+      };
+      const response = await graphqlService.friends(query);
       this.setState({friends: response.data.friends})
     } catch (e) {
       console.log(e);
     }
+  };
 
-  }
+  searchBarChangedHandler = e => {
+    const searchBar = {...this.state.searchBar};
+    searchBar[e.target.name] = e.target.value;
+    this.setState({searchBar});
+    this.requestFriends(searchBar.firstName, searchBar.lastName)
+  };
 
   render() {
     const state = this.state;
@@ -50,7 +68,8 @@ export default class FriendList extends Component {
         </div>
         <div className="col-md-1"/>
       </div>
-      <SearchBar/>
+      <SearchBar formChanged={this.searchBarChangedHandler} firstName={state.searchBar.firstName}
+                 lastName={state.searchBar.lastName}/>
       <div className="row mt-4">
         <div className="col-md-1"/>
         <div className="col-md-10">
