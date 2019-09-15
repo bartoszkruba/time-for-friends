@@ -13,7 +13,7 @@ export default class Clock extends Component {
   async componentDidMount() {
     this.setState({_isMounted: true});
     do {
-      const time = moment.tz(this.props.timezone).format('YYYY.MM.DD - HH:mm:ss');
+      const time = moment.tz(this.props.timezone).format('HH:mm:ss');
       this.setState({time});
       await this.sleep(500);
     } while (this.state._isMounted)

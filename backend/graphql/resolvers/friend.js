@@ -30,10 +30,8 @@ module.exports.addFriend = async ({friendInput}, req) => {
   validateNewFriend(friendInput);
 
 
-  const friend = new Friend(friendInput);
+  const friend = new Friend({...friendInput, user: user._id});
   friend.timezone = timezone._id;
-
-  console.log(friend);
 
   savedFriend = await friend.save();
   user.friends.push(savedFriend);
@@ -42,28 +40,35 @@ module.exports.addFriend = async ({friendInput}, req) => {
   return {...savedFriend._doc, _id: savedFriend._id.toString(), timezone: timezone}
 };
 
-module.exports.friends = async (props, req) => {
+module.exports.friends = async ({friendQuery}, req) => {
   if (!req.isAuth) {
     const err = new Error('Not authenticated!');
     err.code = 401;
     throw err;
   }
 
-  const user = await User.findById(req.userId).populate('friends').exec();
-
-  for (friend of user.friends) {
-    friend.timezone = await Timezone.findById(friend.timezone);
-  }
+  const user = await User.findById(req.userId);
 
   if (!user) {
     const err = new Error("Invalid user.");
-    err.data = errors;
     err.code = 401;
     throw err;
   }
 
-  return user.friends;
+  const query = {
+    firstName: new RegExp(friendQuery.firstName, "i"),
+    lastName: new RegExp(friendQuery.lastName, "i"),
+    user: user._id
+  };
 
+
+  let friends = await Friend.find(query).populate('timezone');
+
+  if (friendQuery.from && friendQuery.to) {
+    friends = friends.filter(f => f.timezone.currentTime >= friendQuery.from && f.timezone.currentTime <= friendQuery.to)
+  }
+
+  return friends;
 };
 
 validateNewFriend = (newFriend) => {

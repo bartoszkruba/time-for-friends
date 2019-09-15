@@ -45,10 +45,17 @@ module.exports = buildSchema(`
       timezone: String!
    }
    
+   input FriendQuery {
+      firstName: String!
+      lastName: String!
+      from: String
+      to: String
+   }
+   
    type RootQuery {
      login(email: String! password: String!): AuthData
      timezones: [Timezone]
-     friends: [Friend]
+     friends(friendQuery: FriendQuery): [Friend]
      isAuthenticated: Boolean!
    }
 
