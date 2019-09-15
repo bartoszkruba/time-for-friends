@@ -3,10 +3,12 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
+const moment = require('moment-timezone');
 
 const graphqlSchema = require('./graphql/schema');
 const graphqlRootResolver = require('./graphql/resolvers/resolversRoot');
 const isAuth = require('./middleware/is-auth');
+const Timezone = require('./models/Timezone');
 
 const app = express();
 
@@ -45,6 +47,15 @@ app.use('/graphql', graphqlHttp({
     await mongoose.connect(MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true});
 
     await app.listen(PORT);
+
+    // Calculating current time for all timezones on 30 sec interval
+    setInterval(async () => {
+      const timezones = await Timezone.find({});
+      timezones.forEach(t => {
+        t.currentTime = moment.tz(t.name).format('YYYYMMDDHHmmss');
+        t.save();
+      });
+    }, 1000 * 30);
 
     console.log(`Listening on ${PORT}`);
   } catch (e) {
