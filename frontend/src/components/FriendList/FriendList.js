@@ -3,7 +3,8 @@ import {Redirect} from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
 import {Table} from 'reactstrap';
 import Clock from './Clock/Clock';
-import Date from './Date/Date'
+import DateCounter from './Date/Date'
+import moment from 'moment-timezone'
 
 import graphqlService from "../../graphql/graphqlService";
 
@@ -12,7 +13,9 @@ export default class FriendList extends Component {
   state = {
     searchBar: {
       firstName: "",
-      lastName: ""
+      lastName: "",
+      range: [new Date(), new Date()],
+      betweenSwitch: false
     },
     redirect: "",
     friends: []
@@ -28,12 +31,19 @@ export default class FriendList extends Component {
     this.requestFriends(this.state.searchBar.firstName, this.state.searchBar.lastName);
   }
 
-  requestFriends = async (firstName, lastName) => {
+  requestFriends = async () => {
+    const state = this.state.searchBar;
     try {
       const query = {
-        firstName: `^${firstName}`,
-        lastName: `^${lastName}`
+        firstName: `^${state.firstName}`,
+        lastName: `^${state.lastName}`
       };
+
+      if (state.range && state.range[0] && state.range[1] && state.betweenSwitch) {
+        query.from = moment(state.range[0]).format("YYYYMMDDHHmmss");
+        query.to = moment(state.range[1]).format("YYYYMMDDHHmmss")
+      }
+
       const response = await graphqlService.friends(query);
       this.setState({friends: response.data.friends})
     } catch (e) {
@@ -48,15 +58,21 @@ export default class FriendList extends Component {
     this.requestFriends(searchBar.firstName, searchBar.lastName)
   };
 
+  rangeChangedHandler = range => {
+    const searchBar = {...this.state.searchBar};
+    searchBar.range = range;
+    this.setState({searchBar});
+    this.requestFriends()
+  };
+
   render() {
     const state = this.state;
-
     const rows = state.friends.map(f => <tr key={f._id}>
       <td>{f.firstName}</td>
       <td>{f.lastName}</td>
       <td>{f.city}</td>
       <td>{f.country}</td>
-      <td><Date timezone={f.timezone.name}/></td>
+      <td><DateCounter timezone={f.timezone.name}/></td>
       <td><Clock timezone={f.timezone.name}/></td>
     </tr>);
 
@@ -69,7 +85,10 @@ export default class FriendList extends Component {
         </div>
         <div className="col-md-1"/>
       </div>
-      <SearchBar formChanged={this.searchBarChangedHandler} firstName={state.searchBar.firstName}
+      <SearchBar rangeChanged={this.rangeChangedHandler} formChanged={this.searchBarChangedHandler}
+                 betweenSwtich={state.searchBar.betweenSwitch}
+                 range={state.searchBar.range}
+                 firstName={state.searchBar.firstName}
                  lastName={state.searchBar.lastName}/>
       <div className="row mt-4">
         <div className="col-md-1"/>
