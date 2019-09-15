@@ -28,7 +28,7 @@ export default class SearchBar extends Component {
       <div className="row">
         <div className="col-md-1"/>
         <div className="col-md-8">
-          <Input value={props.betweenSwitch} onChange={props.formChanged} type="checkbox"/>
+          <Input value={props.betweenSwitch} onChange={props.formChanged} type="checkbox" name="betweenSwitch"/>
           <h3 className="mr-4" style={{display: "inline"}}> Time Between: </h3>
           <span style={{backgroundColor: "white", color: "black", innerHeight: "100%"}}>
           <DateTimeRangePicker

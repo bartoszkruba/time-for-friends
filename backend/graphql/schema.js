@@ -48,6 +48,8 @@ module.exports = buildSchema(`
    input FriendQuery {
       firstName: String!
       lastName: String!
+      from: String
+      to: String
    }
    
    type RootQuery {

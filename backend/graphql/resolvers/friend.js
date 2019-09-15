@@ -55,11 +55,19 @@ module.exports.friends = async ({friendQuery}, req) => {
     throw err;
   }
 
-  return await Friend.find({
+  const query = {
     firstName: new RegExp(friendQuery.firstName, "i"),
     lastName: new RegExp(friendQuery.lastName, "i"),
     user: user._id
-  }).populate('timezone');
+  };
+
+  console.log(query);
+
+  if (friendQuery.from && friendQuery.to) {
+    query.currentTime = {$gt: friendQuery.from, $lt: friendQuery.to}
+  }
+
+  return await Friend.find(query).populate('timezone');
 };
 
 validateNewFriend = (newFriend) => {

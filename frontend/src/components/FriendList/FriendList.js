@@ -51,18 +51,18 @@ export default class FriendList extends Component {
     }
   };
 
-  searchBarChangedHandler = e => {
+   searchBarChangedHandler = async e => {
     const searchBar = {...this.state.searchBar};
     searchBar[e.target.name] = e.target.value;
-    this.setState({searchBar});
-    this.requestFriends(searchBar.firstName, searchBar.lastName)
+    await this.setState({searchBar});
+    this.requestFriends()
   };
 
-  rangeChangedHandler = range => {
+  rangeChangedHandler = async range => {
     const searchBar = {...this.state.searchBar};
     searchBar.range = range;
-    this.setState({searchBar});
-    this.requestFriends()
+    await this.setState({searchBar});
+    this.requestFriends();
   };
 
   render() {
