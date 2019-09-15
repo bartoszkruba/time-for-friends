@@ -38,10 +38,9 @@ export default class FriendList extends Component {
         firstName: `^${state.firstName}`,
         lastName: `^${state.lastName}`
       };
-
       if (state.range && state.range[0] && state.range[1] && state.betweenSwitch) {
         query.from = moment(state.range[0]).format("YYYYMMDDHHmmss");
-        query.to = moment(state.range[1]).format("YYYYMMDDHHmmss")
+        query.to = moment(state.range[1]).format("YYYYMMDDHHmmss");
       }
 
       const response = await graphqlService.friends(query);
@@ -51,9 +50,14 @@ export default class FriendList extends Component {
     }
   };
 
-   searchBarChangedHandler = async e => {
+  searchBarChangedHandler = async e => {
     const searchBar = {...this.state.searchBar};
-    searchBar[e.target.name] = e.target.value;
+    if (e.target.name === "betweenSwitch") {
+      searchBar.betweenSwitch = !searchBar.betweenSwitch;
+    } else {
+      searchBar[e.target.name] = e.target.value;
+    }
+
     await this.setState({searchBar});
     this.requestFriends()
   };
