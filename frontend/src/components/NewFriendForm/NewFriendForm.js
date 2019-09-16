@@ -82,6 +82,12 @@ export default class NewFriendForm extends PureComponent {
     this.setState({form})
   };
 
+  keyDownHandler = e => {
+    if (e.key === 'Enter') {
+      this.submitHandler()
+    }
+  };
+
   submitHandler = async e => {
     const form = {...this.state.form};
     form.firstName = form.firstName.trim();
