@@ -232,8 +232,10 @@ export default class NewFriendForm extends PureComponent {
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-7">
-          <Input value={state.form.phoneNumber} onChange={this.inputChangeHandler} type="text"
-                 placeholder="Phone Number" name="phoneNumber"/>
+          <FormGroup>
+            <Input value={state.form.phoneNumber} onChange={this.inputChangeHandler} type="text"
+                   placeholder="Phone Number" name="phoneNumber"/>
+          </FormGroup>
         </div>
         <div className="col-md-1">
           <FormGroup>
