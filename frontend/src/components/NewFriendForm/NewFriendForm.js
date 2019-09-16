@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react'
 import {Redirect} from "react-router-dom";
-import {Alert, Button, Form, FormGroup, Input, Label} from "reactstrap";
+import {Alert, Button, FormGroup, Input, Label} from "reactstrap";
 import validator from 'validator';
 import countries from './countries'
 
@@ -136,14 +136,12 @@ export default class NewFriendForm extends PureComponent {
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-4">
-          <Form>
-            <FormGroup>
-              <Label>First Name </Label>
-              <span style={redColorStyle}> *</span>
-              <Input value={state.form.firstName} onChange={this.inputChangeHandler} type="text" name="firstName"
-                     placeholder="First Name" onKeyDown={this.keyDownHandler}/>
-            </FormGroup>
-          </Form>
+          <FormGroup>
+            <Label>First Name </Label>
+            <span style={redColorStyle}> *</span>
+            <Input value={state.form.firstName} onChange={this.inputChangeHandler} type="text" name="firstName"
+                   placeholder="First Name" onKeyDown={this.keyDownHandler}/>
+          </FormGroup>
         </div>
         <div className="col-md-4">
           <FormGroup>
@@ -158,14 +156,12 @@ export default class NewFriendForm extends PureComponent {
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-4">
-          <Form>
             <FormGroup>
               <Label>City </Label>
               <span style={redColorStyle}> *</span>
               <Input value={state.form.city} onChange={this.inputChangeHandler} type="text" name="city"
                      placeholder="City" onKeyDown={this.keyDownHandler}/>
             </FormGroup>
-          </Form>
         </div>
         <div className="col-md-4">
           <FormGroup>
