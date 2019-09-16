@@ -24,3 +24,17 @@
     font-family: 'Ubuntu Mono', monospace;
     font-size: 105%;
 }
+
+.react-datetimerange-picker {
+    padding: 5px;
+    background-color: white;
+    color: black;
+}
+
+.react-datetimerange-picker__wrapper {
+    border: none
+}
+
+.react-datetimerange-picker__inputGroup {
+    margin: 0 3px;
+}

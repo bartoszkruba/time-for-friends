@@ -31,12 +31,12 @@ export default class SearchBar extends Component {
           <h4 className="mr-4" style={{display: "inline"}}> Show Only Time Between: </h4>
           <CustomInput inline checked={props.betweenSwtich} type="switch" id="betweenSwitch" name="betweenSwitch"
                        label={props.betweenSwtichLabel} onChange={props.formChanged}/>
-          {props.betweenSwtich ? <span className="Time mt-4" style={{
-            display: "block",
-            backgroundColor: "white",
-            color: "black",
-          }}>
+          {props.betweenSwtich ? <span className="Time mt-4" style={{display: "block"}}>
           <DateTimeRangePicker
+            disableClock={true}
+            calendarIcon={null}
+            clearIcon={null}
+            format="yyyy.MM.dd | HH:mm"
             onChange={props.rangeChanged}
             value={props.range}
           />
