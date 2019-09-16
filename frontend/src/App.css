@@ -19,3 +19,8 @@
     margin-top: 100px;
     border-radius: 2.5%;
 }
+
+.Time {
+    font-family: 'Ubuntu Mono', monospace;
+    font-size: 105%;
+}

@@ -23,6 +23,6 @@ export default class Date extends Component {
   }
 
   render() {
-    return <span>{this.state.date}</span>
+    return <span className="Time">{this.state.date}</span>
   }
 };

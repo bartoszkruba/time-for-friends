@@ -26,7 +26,7 @@ export default class Clock extends Component {
   render() {
     const state = this.state;
 
-    return <span>{state.time}</span>;
+    return <span className="Time">{state.time}</span>;
   }
 
 }
