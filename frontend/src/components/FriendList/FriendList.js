@@ -41,7 +41,7 @@ export default class FriendList extends Component {
         lastName: `^${state.lastName}`
       };
 
-      query.sort = state.sortingSwitch ? "firstName" : "country";
+      query.sort = state.sortingSwitch ? "country" : "firstName";
 
       if (state.range && state.range[0] && state.range[1] && state.betweenSwitch) {
         query.from = moment(state.range[0]).format("YYYYMMDDHHmmss");

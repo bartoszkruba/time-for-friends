@@ -61,8 +61,13 @@ module.exports.friends = async ({friendQuery}, req) => {
     user: user._id
   };
 
+  let friends;
 
-  let friends = await Friend.find(query).populate('timezone').sort('firstName');
+  if (friendQuery.sort === "firstName") {
+    friends = await Friend.find(query).populate('timezone').sort("firstName").sort("country");
+  }else{
+    friends = await Friend.find(query).populate('timezone').sort("country").sort("firstName");
+  }
 
   if (friendQuery.from && friendQuery.to) {
     friends = friends.filter(f => f.timezone.currentTime >= friendQuery.from && f.timezone.currentTime <= friendQuery.to)
