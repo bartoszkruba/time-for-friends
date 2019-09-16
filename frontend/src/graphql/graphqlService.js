@@ -122,7 +122,8 @@ export default {
           query {
               friends(friendQuery: {
                   firstName: "${query.firstName}",
-                  lastName: "${query.lastName}"
+                  lastName: "${query.lastName}",
+                  sort: "${query.sort}"
               ${(query.from && query.to) ? `, from: "${query.from}", to: "${query.to}"`: ''}
               }) {
                   _id

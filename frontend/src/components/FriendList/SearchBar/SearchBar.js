@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {FormGroup, Input} from "reactstrap";
+import {CustomInput, FormGroup, Input} from "reactstrap";
 import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker'
 
 
@@ -22,6 +22,15 @@ export default class SearchBar extends Component {
             <Input onChange={props.formChanged} value={props.lastName} type="text" name="lastName"
                    placeholder="Last Name"/>
           </FormGroup>
+        </div>
+        <div className="col-md-3"/>
+      </div>
+      <div className="row">
+        <div className="col-md-1"/>
+        <div className="col-md-8">
+          <h3 className="mr-4" style={{display: "inline"}}> Sort After: </h3>
+          <CustomInput inline checked={props.sortingSwitch} type="switch" id="sortingSwitch" name="sortingSwitch"
+                       onChange={props.sortingChanged} label={props.sortingSwitchLabel}/>
         </div>
         <div className="col-md-3"/>
       </div>

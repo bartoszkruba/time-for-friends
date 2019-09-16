@@ -48,6 +48,7 @@ module.exports = buildSchema(`
    input FriendQuery {
       firstName: String!
       lastName: String!
+      sort: String!
       from: String
       to: String
    }
