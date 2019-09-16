@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Redirect} from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
 import {Table} from 'reactstrap';
-import Clock from './Clock/Clock';
 import DateCounter from './Date/Date'
 import moment from 'moment-timezone'
 
@@ -24,7 +23,7 @@ export default class FriendList extends Component {
     friends: []
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     if (!this.props.isLoggedIn) {
       if (!this.props.loggedIn) {
         return this.setState({redirect: "/login"});
@@ -32,7 +31,26 @@ export default class FriendList extends Component {
     }
 
     this.requestFriends(this.state.searchBar.firstName, this.state.searchBar.lastName);
+    await this.setState({_isMounted: true});
+    this.calculateTimes();
   }
+
+  componentWillUnmount() {
+    this.setState({_isMounted: false})
+  }
+
+  sleep = ms => new Promise((resolve => setTimeout(resolve, ms)));
+
+  calculateTimes = async () => {
+    while (this.state._isMounted) {
+      const friends = [...this.state.friends].map(f => {
+        f.currentTime = moment.tz(f.timezone.name).format('HH:mm:ss');
+        return f;
+      });
+      this.setState(friends);
+      await this.sleep(500);
+    }
+  };
 
   requestFriends = async () => {
     const state = this.state.searchBar;
@@ -92,7 +110,7 @@ export default class FriendList extends Component {
       <td>{f.city}</td>
       <td>{f.country}</td>
       <td><DateCounter timezone={f.timezone.name}/></td>
-      <td><Clock timezone={f.timezone.name}/></td>
+      <td><span className="Time">{f.currentTime ? f.currentTime : "--:--:--"}</span></td>
     </tr>);
 
     return <div className="container Card">
