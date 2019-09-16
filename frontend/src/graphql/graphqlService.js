@@ -16,68 +16,69 @@ const getClient = () => {
   return client;
 };
 
-export default {
+const mutations = {
+  addNewFriend: gql`
+      mutation addFriend($emails: [String], $phoneNumbers: [String], $firstName: String!, $lastName: String!,
+          $city: String!, $country: String!, $timezone: String!){
+          addFriend(friendInput: {firstName: $firstName, lastName: $lastName,city: $city,country: $country,
+              timezone: $timezone, emails: $emails,phoneNumbers: $phoneNumbers
+          }){
+              firstName
+          }
+      }
+  `,
+  register: gql`
+      mutation register($email: String!, $password: String! ){
+          register(userInput: {email: $email, password: $password }){
+              _id
+              email
+          }
+      }
+  `
+};
 
+const queries = {
+  login: gql`
+      query login($email: String!, $password: String!){
+          login(email: $email, password: $password ){
+              token
+          }
+      }
+  `,
+  isAuthenticated: gql`
+      query{
+          isAuthenticated
+      }
+  `,
+  timezones: gql`
+      query {
+          timezones {
+              name
+          }
+      }
+  `
+};
+
+
+export default {
   addNewFriend: async friend => await getClient().mutate({
-    mutation: gql`
-        mutation addFriend($emails: [String], $phoneNumbers: [String]){
-            addFriend(friendInput: {
-                firstName: "${friend.firstName}",
-                lastName: "${friend.lastName}",
-                city: "${friend.city}",
-                country: "${friend.country}",
-                timezone: "${friend.timezone}",
-                emails: $emails,
-                phoneNumbers: $phoneNumbers
-            }){
-                firstName
-            }
-        }
-    `, variables: {
-      emails: friend.emails,
-      phoneNumbers: friend.phoneNumbers
-    }
+    mutation: mutations.addNewFriend, errorPolicy: "all", variables: {...friend}
   }),
 
   register: async (email, password) => await getClient().mutate({
-    mutation: gql`
-        mutation {
-            register(userInput: {email: "${email}", password: "${password}" }){
-                _id
-                email
-            }
-        }
-    `,
-    errorPolicy: "all"
+    mutation: mutations.register, errorPolicy: "all", variables: {email, password}
   }),
 
   login: async (email, password) => await getClient().query({
-    query: gql`
-        query {
-            login(email: "${email}", password: "${password}" ){
-                token
-            }
-        }
-    `,
-    errorPolicy: "all"
+    query: queries.login, errorPolicy: "all", variables: {email, password}
   }),
 
   isAuthenticated: async () => await getClient().query({
-    query: gql`
-        query{
-            isAuthenticated
-        }
-    `
+    query: queries.isAuthenticated
   }),
 
   timezones: async () => await getClient().query({
-    query: gql`
-        query {
-            timezones {
-                name
-            }
-        }
-    `
+    query: queries.timezones
   }),
 
   friends: async query => await getClient().query({

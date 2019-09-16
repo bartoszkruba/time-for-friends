@@ -5,6 +5,7 @@ const Timezone = require('../../models/Timezone');
 const User = require('../../models/User');
 
 module.exports.addFriend = async ({friendInput}, req) => {
+
   if (!req.isAuth) {
     const err = new Error('Not authenticated!');
     err.code = 401;
