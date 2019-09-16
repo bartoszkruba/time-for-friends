@@ -16,6 +16,7 @@ export default class FriendList extends Component {
       lastName: "",
       range: [new Date(), new Date()],
       betweenSwitch: false,
+      betweenSwitchLabel: "Off",
       sortingSwitch: false,
       sortingSwitchLabel: "First Name"
     },
@@ -58,6 +59,7 @@ export default class FriendList extends Component {
   searchBarChangedHandler = async e => {
     const searchBar = {...this.state.searchBar};
     if (e.target.name === "betweenSwitch") {
+      searchBar.betweenSwitchLabel = searchBar.betweenSwitch ? "Off" : "On";
       searchBar.betweenSwitch = !searchBar.betweenSwitch;
     } else {
       searchBar[e.target.name] = e.target.value;
@@ -105,6 +107,7 @@ export default class FriendList extends Component {
       <SearchBar rangeChanged={this.rangeChangedHandler} formChanged={this.searchBarChangedHandler}
                  sortingChanged={this.sortingChangeHandler}
                  betweenSwtich={state.searchBar.betweenSwitch}
+                 betweenSwtichLabel={state.searchBar.betweenSwitchLabel}
                  sortingSwitch={state.searchBar.sortingSwitch}
                  sortingSwitchLabel={state.searchBar.sortingSwitchLabel}
                  range={state.searchBar.range}
