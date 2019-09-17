@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Redirect} from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
 import {Table} from 'reactstrap';
-import DateCounter from './Date/Date'
 import moment from 'moment-timezone'
 
 import graphqlService from "../../graphql/graphqlService";
@@ -63,6 +62,7 @@ export default class FriendList extends Component {
           }
         }
         friend.currentTime = m.format('HH:mm:ss');
+        friend.currentDate = m.format('YYYY.MM.DD');
         newFriends.push(friend);
       }
       this.setState({friends: newFriends});
@@ -126,7 +126,7 @@ export default class FriendList extends Component {
       <td>{f.lastName}</td>
       <td>{f.city}</td>
       <td>{f.country}</td>
-      <td><DateCounter timezone={f.timezone.name}/></td>
+      <td><span className="Time">{f.currentDate ? f.currentDate : "----.--.--"}</span></td>
       <td><span className="Time">{f.currentTime ? f.currentTime : "--:--:--"}</span></td>
     </tr>);
 
