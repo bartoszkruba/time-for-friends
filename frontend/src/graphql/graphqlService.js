@@ -40,7 +40,6 @@ export default {
   }),
 
   friends: async query => {
-    console.log('sending request');
     return await getClient().query({
       query: queries.friends, errorPolicy: "all", variables: {...query}, fetchPolicy: "no-cache"
     })

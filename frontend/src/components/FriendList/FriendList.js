@@ -43,11 +43,29 @@ export default class FriendList extends Component {
 
   calculateTimes = async () => {
     while (this.state._isMounted) {
-      const friends = [...this.state.friends].map(f => {
-        f.currentTime = moment.tz(f.timezone.name).format('HH:mm:ss');
-        return f;
-      });
-      this.setState(friends);
+      const state = this.state;
+      const searchBar = state.searchBar;
+      const newFriends = [];
+
+      const format = "YYYYMMDDHHmmss";
+      let from, to;
+      if (searchBar.range && searchBar.range[0] && searchBar.range[1] && searchBar.betweenSwitch) {
+        from = moment(searchBar.range[0]).format(format);
+        to = moment(searchBar.range[1]).format(format);
+      }
+
+      for (let friend of this.state.friends) {
+        const m = moment.tz(friend.timezone.name);
+        if (from && to) {
+          const timestamp = m.format(format);
+          if (!(timestamp >= from && timestamp <= to)) {
+            continue;
+          }
+        }
+        friend.currentTime = m.format('HH:mm:ss');
+        newFriends.push(friend);
+      }
+      this.setState({friends: newFriends});
       await this.sleep(500);
     }
   };
