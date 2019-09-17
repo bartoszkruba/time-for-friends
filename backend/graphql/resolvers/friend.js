@@ -20,7 +20,6 @@ module.exports.addFriend = async ({friendInput}, req) => {
 
 module.exports.friends = async ({friendQuery}, req) => {
   const user = await checkIfAuthenticated(req);
-
   const query = {
     firstName: new RegExp(friendQuery.firstName, "i"),
     lastName: new RegExp(friendQuery.lastName, "i"),
@@ -36,9 +35,10 @@ module.exports.friends = async ({friendQuery}, req) => {
     friends = friends.filter(f => (f.timezone.currentTime >= friendQuery.from && f.timezone.currentTime <= friendQuery.to))
   }
 
-  console.log("Length: " + friends.length);
+  const count = friends.length;
+  friends = friends.splice((friendQuery.page - 1) * PAGE_SIZE, PAGE_SIZE);
 
-  return {friends, count: friends.length};
+  return {friends, count};
 };
 
 checkIfAuthenticated = async req => {

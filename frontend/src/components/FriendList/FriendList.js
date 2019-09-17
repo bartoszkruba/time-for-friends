@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Redirect} from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
-import {Table} from 'reactstrap';
+import {Pagination, PaginationItem, PaginationLink, Table} from 'reactstrap';
 import moment from 'moment-timezone'
 
 import graphqlService from "../../graphql/graphqlService";
@@ -9,6 +9,7 @@ import graphqlService from "../../graphql/graphqlService";
 export default class FriendList extends Component {
 
   state = {
+    count: 0,
     page: 1,
     searchBar: {
       firstName: "",
@@ -88,7 +89,7 @@ export default class FriendList extends Component {
       }
 
       const response = await graphqlService.friends(query);
-      this.setState({friends: response.data.friends.friends, page: page})
+      this.setState({friends: response.data.friends.friends, page: page, count: response.data.friends.count})
     } catch (e) {
       console.log(e);
     }
@@ -122,6 +123,20 @@ export default class FriendList extends Component {
     this.requestFriends(1);
   };
 
+  renderPaginationSites = () => {
+    const pages = [];
+    if (this.state.count === 0) this.state.count = 1;
+    for (let i = 1; i <= Math.ceil(this.state.count / 10); i++) {
+      pages.push(
+        <PaginationItem key={i} active={i === this.state.page}>
+          <PaginationLink onClick={e => this.requestFriends(i)}>
+            {i}
+          </PaginationLink>
+        </PaginationItem>)
+    }
+    return pages;
+  };
+
   render() {
     const state = this.state;
     const rows = state.friends.map(f => <tr key={f._id}>
@@ -132,6 +147,24 @@ export default class FriendList extends Component {
       <td><span className="Time">{f.currentDate ? f.currentDate : "----.--.--"}</span></td>
       <td><span className="Time">{f.currentTime ? f.currentTime : "--:--:--"}</span></td>
     </tr>);
+
+    const pagination = <div className="row">
+      <Pagination className="m-auto" aria-label="Page navigation example">
+        <PaginationItem>
+          <PaginationLink first/>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink previous/>
+        </PaginationItem>
+        {this.renderPaginationSites()}
+        <PaginationItem>
+          <PaginationLink next/>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink last/>
+        </PaginationItem>
+      </Pagination>
+    </div>;
 
     return <div className="container Card">
       {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
@@ -169,6 +202,7 @@ export default class FriendList extends Component {
             {rows}
             </tbody>
           </Table>
+          {pagination}
         </div>
         <div className="col-md-1"/>
       </div>
