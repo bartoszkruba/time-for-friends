@@ -30,8 +30,8 @@ export default class FriendList extends Component {
       }
     }
 
-    this.requestFriends(this.state.searchBar.firstName, this.state.searchBar.lastName);
     await this.setState({_isMounted: true});
+    this.requestFriends(this.state.searchBar.firstName, this.state.searchBar.lastName);
     this.calculateTimes();
   }
 
