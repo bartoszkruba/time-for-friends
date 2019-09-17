@@ -9,6 +9,7 @@ import graphqlService from "../../graphql/graphqlService";
 export default class FriendList extends Component {
 
   state = {
+    page: 1,
     searchBar: {
       firstName: "",
       lastName: "",
@@ -75,7 +76,8 @@ export default class FriendList extends Component {
     try {
       const query = {
         firstName: `^${state.firstName}`,
-        lastName: `^${state.lastName}`
+        lastName: `^${state.lastName}`,
+        page: this.state.page
       };
 
       query.sort = state.sortingSwitch ? "country" : "firstName";
@@ -84,6 +86,7 @@ export default class FriendList extends Component {
         query.from = moment(state.range[0]).format("YYYYMMDDHHmmss");
         query.to = moment(state.range[1]).format("YYYYMMDDHHmmss");
       }
+
       const response = await graphqlService.friends(query);
       this.setState({friends: response.data.friends.friends})
     } catch (e) {

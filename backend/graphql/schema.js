@@ -56,6 +56,7 @@ module.exports = buildSchema(`
       sort: String!
       from: String
       to: String
+      page: Int!
    }
    
    type RootQuery {

@@ -4,6 +4,8 @@ const Friend = require('../../models/Friend');
 const Timezone = require('../../models/Timezone');
 const User = require('../../models/User');
 
+const PAGE_SIZE = 10;
+
 module.exports.addFriend = async ({friendInput}, req) => {
   const user = await checkIfAuthenticated(req);
   validateNewFriend(friendInput);
@@ -27,13 +29,15 @@ module.exports.friends = async ({friendQuery}, req) => {
 
   let friends = await Friend.find(query).populate('timezone')
     .sort(friendQuery.sort)
-    .sort(friendQuery.sort === "firstName" ? "country" : "firstName");
+    .sort(friendQuery.sort === "firstName" ? "country" : "firstName")
+    .skip((friendQuery.page - 1) * PAGE_SIZE)
+    .limit(PAGE_SIZE);
 
   if (friendQuery.from && friendQuery.to) {
     friends = friends.filter(f => (f.timezone.currentTime >= friendQuery.from && f.timezone.currentTime <= friendQuery.to))
   }
 
-  const count = await Friend.count();
+  const count = await Friend.countDocuments();
 
   return {friends, count};
 };
