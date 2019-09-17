@@ -30,8 +30,7 @@ module.exports.friends = async ({friendQuery}, req) => {
     .sort(friendQuery.sort === "firstName" ? "country" : "firstName");
 
   if (friendQuery.from && friendQuery.to) {
-    friends.filter(f => parseInt(f.timezone.currentTime) >= parseInt(friendQuery.from)
-      && parseInt(f.timezone.currentTime) <= parseInt(friendQuery.to))
+    friends = friends.filter(f => (f.timezone.currentTime >= friendQuery.from && f.timezone.currentTime <= friendQuery.to))
   }
 
   const count = await Friend.count();
