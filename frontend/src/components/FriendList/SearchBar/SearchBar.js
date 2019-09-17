@@ -11,43 +11,43 @@ export default class SearchBar extends Component {
     return <Fragment>
       <div className="row">
         <div className="col-md-1"/>
-        <div className="col-md-4">
+        <div className="col-md-5">
           <FormGroup>
             <Input onChange={props.formChanged} value={props.firstName} type="text" name="firstName"
                    placeholder="First Name"/>
           </FormGroup>
         </div>
-        <div className="col-md-4">
+        <div className="col-md-5">
           <FormGroup>
             <Input onChange={props.formChanged} value={props.lastName} type="text" name="lastName"
                    placeholder="Last Name"/>
           </FormGroup>
         </div>
-        <div className="col-md-3"/>
-      </div>
-      <div className="row">
         <div className="col-md-1"/>
-        <div className="col-md-8">
-          <h3 className="mr-4" style={{display: "inline"}}> Sort After: </h3>
-          <CustomInput inline checked={props.sortingSwitch} type="switch" id="sortingSwitch" name="sortingSwitch"
-                       onChange={props.sortingChanged} label={props.sortingSwitchLabel}/>
-        </div>
-        <div className="col-md-3"/>
       </div>
-      <div className="row">
+      <div className="row mt-2">
         <div className="col-md-1"/>
-        <div className="col-md-8">
-          <Input value={props.betweenSwitch} defaultChecked={props.betweenSwitch} onChange={props.formChanged}
-                 type="checkbox" name="betweenSwitch"/>
-          <h3 className="mr-4" style={{display: "inline"}}> Time Between: </h3>
-          <span style={{backgroundColor: "white", color: "black", innerHeight: "100%"}}>
+        <div className="col-md-5">
+          <h4 className="mr-4" style={{display: "inline"}}> Show Only Time Between: </h4>
+          <CustomInput inline checked={props.betweenSwtich} type="switch" id="betweenSwitch" name="betweenSwitch"
+                       label={props.betweenSwtichLabel} onChange={props.formChanged}/>
+          {props.betweenSwtich ? <span className="Time mt-4" style={{display: "block"}}>
           <DateTimeRangePicker
+            disableClock={true}
+            calendarIcon={null}
+            clearIcon={null}
+            format="yyyy.MM.dd | HH:mm"
             onChange={props.rangeChanged}
             value={props.range}
           />
-          </span>
+          </span> : null}
         </div>
-        <div className="col-md-3"/>
+        <div className="col-md-5">
+          <h4 className="mr-4" style={{display: "inline"}}> Sorting: </h4>
+          <CustomInput inline checked={props.sortingSwitch} type="switch" id="sortingSwitch" name="sortingSwitch"
+                       onChange={props.sortingChanged} label={props.sortingSwitchLabel}/>
+        </div>
+        <div className="col-md-1"/>
       </div>
     </Fragment>
   }

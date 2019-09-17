@@ -35,8 +35,13 @@ export default class RegisterForm extends Component {
         this.setState({email: "", password: "", repeatPassword: ""});
         this.props.registerSuccessfull(response.data._id, response.data.email);
       } catch (e) {
-        if (e.networkError.result.errors.length !== 0) {
-          const validation = {email: e.networkError.result.errors[0].data[0], password: "", repeatPassword: ""};
+        if (e.networkError.result) {
+          if (e.networkError.result.errors.length !== 0) {
+            const validation = {email: e.networkError.result.errors[0].data[0], password: "", repeatPassword: ""};
+            this.setState({validation})
+          }
+        } else {
+          const validation = {email: "Something went wrong, please try again", password: "", repeatPassword: ""};
           this.setState({validation})
         }
       }
@@ -84,9 +89,9 @@ export default class RegisterForm extends Component {
           <h1>Register</h1>
           {(state.validation.email !== "" || state.validation.password !== "" ||
             this.state.validation.repeatPassword !== "") ? <Alert color="info">
-              {this.state.validation.email !== "" ? <div>- {state.validation.email}</div> : null}
-              {this.state.validation.password !== "" ? <div>- {state.validation.password}</div> : null}
-              {this.state.validation.repeatPassword !== "" ? <div>-{state.validation.repeatPassword}</div> : null}
+            {this.state.validation.email !== "" ? <div>- {state.validation.email}</div> : null}
+            {this.state.validation.password !== "" ? <div>- {state.validation.password}</div> : null}
+            {this.state.validation.repeatPassword !== "" ? <div>-{state.validation.repeatPassword}</div> : null}
           </Alert> : null
           }
           <Form>

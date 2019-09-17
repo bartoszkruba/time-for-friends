@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import {Redirect} from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
 import {Table} from 'reactstrap';
-import Clock from './Clock/Clock';
-import DateCounter from './Date/Date'
 import moment from 'moment-timezone'
 
 import graphqlService from "../../graphql/graphqlService";
@@ -16,6 +14,7 @@ export default class FriendList extends Component {
       lastName: "",
       range: [new Date(), new Date()],
       betweenSwitch: false,
+      betweenSwitchLabel: "Off",
       sortingSwitch: false,
       sortingSwitchLabel: "First Name"
     },
@@ -23,15 +22,53 @@ export default class FriendList extends Component {
     friends: []
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     if (!this.props.isLoggedIn) {
       if (!this.props.loggedIn) {
         return this.setState({redirect: "/login"});
       }
     }
 
+    await this.setState({_isMounted: true});
     this.requestFriends(this.state.searchBar.firstName, this.state.searchBar.lastName);
+    this.calculateTimes();
   }
+
+  componentWillUnmount() {
+    this.setState({_isMounted: false})
+  }
+
+  sleep = ms => new Promise((resolve => setTimeout(resolve, ms)));
+
+  calculateTimes = async () => {
+    while (this.state._isMounted) {
+      const state = this.state;
+      const searchBar = state.searchBar;
+      const newFriends = [];
+
+      const format = "YYYYMMDDHHmmss";
+      let from, to;
+      if (searchBar.range && searchBar.range[0] && searchBar.range[1] && searchBar.betweenSwitch) {
+        from = moment(searchBar.range[0]).format(format);
+        to = moment(searchBar.range[1]).format(format);
+      }
+
+      for (let friend of this.state.friends) {
+        const m = moment.tz(friend.timezone.name);
+        if (from && to) {
+          const timestamp = m.format(format);
+          if (!(timestamp >= from && timestamp <= to)) {
+            continue;
+          }
+        }
+        friend.currentTime = m.format('HH:mm:ss');
+        friend.currentDate = m.format('YYYY.MM.DD');
+        newFriends.push(friend);
+      }
+      this.setState({friends: newFriends});
+      await this.sleep(500);
+    }
+  };
 
   requestFriends = async () => {
     const state = this.state.searchBar;
@@ -47,7 +84,6 @@ export default class FriendList extends Component {
         query.from = moment(state.range[0]).format("YYYYMMDDHHmmss");
         query.to = moment(state.range[1]).format("YYYYMMDDHHmmss");
       }
-
       const response = await graphqlService.friends(query);
       this.setState({friends: response.data.friends})
     } catch (e) {
@@ -58,6 +94,7 @@ export default class FriendList extends Component {
   searchBarChangedHandler = async e => {
     const searchBar = {...this.state.searchBar};
     if (e.target.name === "betweenSwitch") {
+      searchBar.betweenSwitchLabel = searchBar.betweenSwitch ? "Off" : "On";
       searchBar.betweenSwitch = !searchBar.betweenSwitch;
     } else {
       searchBar[e.target.name] = e.target.value;
@@ -89,8 +126,8 @@ export default class FriendList extends Component {
       <td>{f.lastName}</td>
       <td>{f.city}</td>
       <td>{f.country}</td>
-      <td><DateCounter timezone={f.timezone.name}/></td>
-      <td><Clock timezone={f.timezone.name}/></td>
+      <td><span className="Time">{f.currentDate ? f.currentDate : "----.--.--"}</span></td>
+      <td><span className="Time">{f.currentTime ? f.currentTime : "--:--:--"}</span></td>
     </tr>);
 
     return <div className="container Card">
@@ -105,6 +142,7 @@ export default class FriendList extends Component {
       <SearchBar rangeChanged={this.rangeChangedHandler} formChanged={this.searchBarChangedHandler}
                  sortingChanged={this.sortingChangeHandler}
                  betweenSwtich={state.searchBar.betweenSwitch}
+                 betweenSwtichLabel={state.searchBar.betweenSwitchLabel}
                  sortingSwitch={state.searchBar.sortingSwitch}
                  sortingSwitchLabel={state.searchBar.sortingSwitchLabel}
                  range={state.searchBar.range}

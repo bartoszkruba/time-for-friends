@@ -38,7 +38,11 @@ export default class LoginForm extends Component {
           this.props.loginSuccessfull(response.data.login.token)
         }
       } catch (e) {
-        this.setState({validation: {errorMessage: e.networkError.result.errors[0].message}})
+        if (e.networkError.result) {
+          this.setState({validation: {errorMessage: e.networkError.result.errors[0].message}})
+        } else {
+          this.setState({validation: {errorMessage: "Something went wrong, please try again"}})
+        }
       }
     }
   };
@@ -46,12 +50,12 @@ export default class LoginForm extends Component {
   validateData = e => {
     const state = this.state;
     if (!validator.isEmail(state.email)) {
-      this.setState({validation: {errorMessage: "Invalid email"}});
+      this.setState({validation: {errorMessage: "Invalid Email"}});
       return false;
     } else if (validator.isEmpty(state.password) ||
       !validator.isLength(state.password, {min: 5} ||
         !validator.isAlphanumeric(this.state.password))) {
-      this.setState({validation: {errorMessage: "Invalid password"}});
+      this.setState({validation: {errorMessage: "Invalid Password"}});
       return false;
     }
     this.setState({validation: {errorMessage: ""}});
