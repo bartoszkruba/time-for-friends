@@ -123,10 +123,19 @@ export default class FriendList extends Component {
     this.requestFriends(1);
   };
 
+  requestLastPage = () => {
+    const count = (this.state.count === 0) ? this.state.count = 1 : this.state.count;
+    this.requestFriends(Math.ceil(count / 10))
+  };
+
+  requestNextPage = () => {
+    this.requestFriends(this.state.page + 1)
+  };
+
   renderPaginationSites = () => {
     const pages = [];
-    if (this.state.count === 0) this.state.count = 1;
-    for (let i = 1; i <= Math.ceil(this.state.count / 10); i++) {
+    const count = (this.state.count === 0) ? 1 : this.state.count;
+    for (let i = 1; i <= Math.ceil(count / 10); i++) {
       pages.push(
         <PaginationItem key={i} active={i === this.state.page}>
           <PaginationLink onClick={e => this.requestFriends(i)}>
@@ -135,6 +144,11 @@ export default class FriendList extends Component {
         </PaginationItem>)
     }
     return pages;
+  };
+
+  nextPageDisabled = () => {
+    const pages = Math.ceil(((this.state.count === 0) ? 1 : this.state.count) / 10);
+    return this.state.page >= pages;
   };
 
   render() {
@@ -151,17 +165,18 @@ export default class FriendList extends Component {
     const pagination = <div className="row">
       <Pagination className="m-auto" aria-label="Page navigation example">
         <PaginationItem>
-          <PaginationLink first/>
+          <PaginationLink first onClick={e => this.requestFriends(1)}/>
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink previous/>
+          <PaginationLink disabled={this.state.page === 1} onClick={e => this.requestFriends(this.state.page - 1)}
+                          previous/>
         </PaginationItem>
         {this.renderPaginationSites()}
         <PaginationItem>
-          <PaginationLink next/>
+          <PaginationLink disabled={this.nextPageDisabled()} onClick={this.requestNextPage} next/>
         </PaginationItem>
         <PaginationItem>
-          <PaginationLink last/>
+          <PaginationLink last onClick={this.requestLastPage}/>
         </PaginationItem>
       </Pagination>
     </div>;
