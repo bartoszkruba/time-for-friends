@@ -25,17 +25,18 @@ module.exports.friends = async ({friendQuery}, req) => {
     user: user._id
   };
 
-  const friends = await Friend.find(query).populate('timezone')
+  let friends = await Friend.find(query).populate('timezone')
     .sort(friendQuery.sort)
     .sort(friendQuery.sort === "firstName" ? "country" : "firstName");
 
   if (friendQuery.from && friendQuery.to) {
-
-    return friends.filter(f => parseInt(f.timezone.currentTime) >= parseInt(friendQuery.from)
+    friends.filter(f => parseInt(f.timezone.currentTime) >= parseInt(friendQuery.from)
       && parseInt(f.timezone.currentTime) <= parseInt(friendQuery.to))
   }
 
-  return friends;
+  const count = await Friend.count();
+
+  return {friends, count};
 };
 
 checkIfAuthenticated = async req => {

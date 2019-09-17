@@ -19,6 +19,11 @@ module.exports = buildSchema(`
       timezone: Timezone
    }
    
+   type FriendList {
+      friends: [Friend]!
+      count: Int!
+   }
+   
    type Timezone {
       _id: ID!
       name: String!
@@ -56,7 +61,7 @@ module.exports = buildSchema(`
    type RootQuery {
      login(email: String! password: String!): AuthData
      timezones: [Timezone]
-     friends(friendQuery: FriendQuery): [Friend]
+     friends(friendQuery: FriendQuery): FriendList
      isAuthenticated: Boolean!
    }
 
