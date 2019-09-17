@@ -31,7 +31,7 @@ export default class FriendList extends Component {
     }
 
     await this.setState({_isMounted: true});
-    this.requestFriends(this.state.searchBar.firstName, this.state.searchBar.lastName);
+    this.requestFriends(1);
     this.calculateTimes();
   }
 
@@ -71,13 +71,13 @@ export default class FriendList extends Component {
     }
   };
 
-  requestFriends = async () => {
+  requestFriends = async page => {
     const state = this.state.searchBar;
     try {
       const query = {
         firstName: `^${state.firstName}`,
         lastName: `^${state.lastName}`,
-        page: this.state.page
+        page: page
       };
 
       query.sort = state.sortingSwitch ? "country" : "firstName";
@@ -88,7 +88,7 @@ export default class FriendList extends Component {
       }
 
       const response = await graphqlService.friends(query);
-      this.setState({friends: response.data.friends.friends})
+      this.setState({friends: response.data.friends.friends, page: page})
     } catch (e) {
       console.log(e);
     }
@@ -104,14 +104,14 @@ export default class FriendList extends Component {
     }
 
     await this.setState({searchBar});
-    this.requestFriends()
+    this.requestFriends(1)
   };
 
   rangeChangedHandler = async range => {
     const searchBar = {...this.state.searchBar};
     searchBar.range = range;
     await this.setState({searchBar});
-    this.requestFriends();
+    this.requestFriends(1);
   };
 
   sortingChangeHandler = async e => {
@@ -119,7 +119,7 @@ export default class FriendList extends Component {
     searchBar.sortingSwitch = !searchBar.sortingSwitch;
     searchBar.sortingSwitchLabel = searchBar.sortingSwitch ? "Country" : "First Name";
     await this.setState({searchBar});
-    this.requestFriends();
+    this.requestFriends(1);
   };
 
   render() {
