@@ -137,7 +137,7 @@ export default class FriendList extends Component {
     const count = (this.state.count === 0) ? 1 : this.state.count;
     for (let i = 1; i <= Math.ceil(count / 10); i++) {
       pages.push(
-        <PaginationItem key={i} active={i === this.state.page}>
+        <PaginationItem className="ml-1 mr-1" key={i} active={i === this.state.page}>
           <PaginationLink onClick={e => this.requestFriends(i)}>
             {i}
           </PaginationLink>
@@ -163,19 +163,19 @@ export default class FriendList extends Component {
     </tr>);
 
     const pagination = <div className="row">
-      <Pagination className="m-auto" aria-label="Page navigation example">
-        <PaginationItem>
+      <Pagination className="m-auto" aria-label="Page navigation example" style={{fontSize: "110%"}}>
+        <PaginationItem className="ml-1 mr-1">
           <PaginationLink first onClick={e => this.requestFriends(1)}/>
         </PaginationItem>
-        <PaginationItem>
+        <PaginationItem className="ml-1 mr-1">
           <PaginationLink disabled={this.state.page === 1} onClick={e => this.requestFriends(this.state.page - 1)}
                           previous/>
         </PaginationItem>
         {this.renderPaginationSites()}
-        <PaginationItem>
+        <PaginationItem className="ml-1 mr-1">
           <PaginationLink disabled={this.nextPageDisabled()} onClick={this.requestNextPage} next/>
         </PaginationItem>
-        <PaginationItem>
+        <PaginationItem className="ml-1 mr-1">
           <PaginationLink last onClick={this.requestLastPage}/>
         </PaginationItem>
       </Pagination>
