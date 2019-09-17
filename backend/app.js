@@ -55,7 +55,7 @@ app.use('/graphql', graphqlHttp({
         t.currentTime = moment.tz(t.name).format('YYYYMMDDHHmmss');
         t.save();
       });
-    }, 1000 * 30);
+    }, 1000);
 
     console.log(`Listening on ${PORT}`);
   } catch (e) {

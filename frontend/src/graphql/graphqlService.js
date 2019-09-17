@@ -20,26 +20,29 @@ const getClient = () => {
 
 export default {
   addNewFriend: async friend => await getClient().mutate({
-    mutation: mutations.addNewFriend, errorPolicy: "all", variables: {...friend}
+    mutation: mutations.addNewFriend, errorPolicy: "all", variables: {...friend}, fetchPolicy: "no-cache"
   }),
 
   register: async (email, password) => await getClient().mutate({
-    mutation: mutations.register, errorPolicy: "all", variables: {email, password}
+    mutation: mutations.register, errorPolicy: "all", variables: {email, password}, fetchPolicy: "no-cache"
   }),
 
   login: async (email, password) => await getClient().query({
-    query: queries.login, errorPolicy: "all", variables: {email, password}
+    query: queries.login, errorPolicy: "all", variables: {email, password}, fetchPolicy: "no-cache"
   }),
 
   isAuthenticated: async () => await getClient().query({
-    query: queries.isAuthenticated, errorPolicy: "all"
+    query: queries.isAuthenticated, errorPolicy: "all", fetchPolicy: "no-cache"
   }),
 
   timezones: async () => await getClient().query({
     query: queries.timezones, errorPolicy: "all"
   }),
 
-  friends: async query => await getClient().query({
-    query: queries.friends, errorPolicy: "all", variables: {...query}
-  })
+  friends: async query => {
+    console.log('sending request');
+    return await getClient().query({
+      query: queries.friends, errorPolicy: "all", variables: {...query}, fetchPolicy: "no-cache"
+    })
+  }
 }

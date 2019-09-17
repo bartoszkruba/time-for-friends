@@ -66,7 +66,6 @@ export default class FriendList extends Component {
         query.from = moment(state.range[0]).format("YYYYMMDDHHmmss");
         query.to = moment(state.range[1]).format("YYYYMMDDHHmmss");
       }
-
       const response = await graphqlService.friends(query);
       this.setState({friends: response.data.friends})
     } catch (e) {
