@@ -222,10 +222,10 @@ export default class FriendList extends Component {
                  firstName={state.searchBar.firstName}
                  lastName={state.searchBar.lastName}/>
       {(state.count > 0) ?
-        <div className="row mt-4">
+        <div className="row mt-5">
           <div className="col-md-1"/>
           <div className="col-md-10">
-            {pagination}
+            {/*{pagination}*/}
             <Table dark>
               <thead>
               <tr>
@@ -244,7 +244,7 @@ export default class FriendList extends Component {
             {pagination}
           </div>
           <div className="col-md-1"/>
-        </div> : <div className="container mt-4">
+        </div> : <div className="container mt-5">
           <div className="row">
             <div className="col-md-1"/>
             <div className="col-md-10">
