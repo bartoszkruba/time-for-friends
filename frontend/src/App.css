@@ -53,9 +53,15 @@ li.active-link button.page-link {
     font-size: 105%;
 }
 
+.Nav-Item {
+    padding-bottom: 5px;
+}
+
 .Nav-Item:hover,
 .Nav-Item:active {
+    transition: color 0.2s;
     border-bottom: 1px solid;
+    color: #CFD8DC;
 }
 
 .Delete-Icon:hover,

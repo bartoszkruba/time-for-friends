@@ -73,7 +73,7 @@ export default class LoginForm extends Component {
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8">
-          <h1 className="Card-Header">Log In To Your Account</h1>
+          <h1 className="Card-Header">Sign In To Your Account</h1>
           {state.validation.errorMessage !== "" ? <Alert className="mt-4" color="info">
             <div>- {state.validation.errorMessage}</div>
           </Alert> : null}
@@ -101,7 +101,7 @@ export default class LoginForm extends Component {
       <div className="row mt-3">
         <div className="col-md-2"/>
         <div className="col-md-8">
-          <Button onClick={this.submitHandler} type="button" size="lg" color="info">Log In</Button>
+          <Button onClick={this.submitHandler} type="button" size="lg" color="info">Sign In</Button>
         </div>
         <div className="col-md-2"/>
       </div>

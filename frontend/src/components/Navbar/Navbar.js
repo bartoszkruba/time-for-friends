@@ -27,9 +27,11 @@ export default class Navigation extends Component {
 
     return (
       <div>
-        <Navbar color="info" light expand="md">
-          <Link to="/" className="nav-link Nav-Item text-white">
-            <b>Time For Friends</b>
+        <Navbar className="App-Navbar" color="info" light expand="md" style={{padding: "15px"}}>
+          <Link to="/" className="nav-link text-white">
+            <span className="Nav-Item">
+              <b>Time For Friends</b>
+            </span>
           </Link>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
@@ -40,20 +42,30 @@ export default class Navigation extends Component {
             <Nav className="ml-auto" navbar>
               {!this.props.loggedIn ? <Fragment>
                 <NavItem>
-                  <Link to="/login" className="Nav-Item nav-link text-white">Log in</Link>
+                  <Link to="/login" className="nav-link text-white">
+                    <span className="Nav-Item">Sign In</span>
+                  </Link>
                 </NavItem>
                 <NavItem>
-                  <Link to="/register" className="Nav-Item nav-link text-white">Sign Up</Link>
+                  <Link to="/register" className=" nav-link text-white">
+                    <span className="Nav-Item">Sign Up</span>
+                  </Link>
                 </NavItem>
               </Fragment> : <Fragment>
                 <NavItem>
-                  <Link to="/friend" className="Nav-Item nav-link text-white">My Contact</Link>
+                  <Link to="/friend" className="nav-link text-white">
+                    <span className="Nav-Item">My Contact</span>
+                  </Link>
                 </NavItem>
                 <NavItem>
-                  <Link to="/friend/new" className="Nav-Item nav-link text-white">Add New Contact</Link>
+                  <Link to="/friend/new" className="nav-link text-white">
+                    <span className="Nav-Item">Add New Contact</span>
+                  </Link>
                 </NavItem>
                 <NavItem>
-                  <NavLink onClick={props.logout} style={style} className="Nav-Item text-white">Log out</NavLink>
+                  <NavLink onClick={props.logout} style={style} className="text-white">
+                    <span className="Nav-Item">Log out</span>
+                  </NavLink>
                 </NavItem>
               </Fragment>}
             </Nav>

@@ -41,7 +41,7 @@ export default class App extends Component {
   logoutHandler = async () => {
     localStorage.removeItem('token');
     await this.setState({loggedIn: false});
-    this.redirect("/login/")
+    this.redirect("/")
   };
 
   createdNewFriendHandler = () => {
