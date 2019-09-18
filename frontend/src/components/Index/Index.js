@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from "react-router-dom";
 import {Button, Jumbotron} from 'reactstrap';
 import '../../App.css'
 
@@ -13,7 +14,9 @@ const index = () => {
     <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
       pariatur.</p>
     <p className="lead">
-      <Button color="info" size="lg" className="m-auto">Join Now!</Button>
+      <Link to="/register">
+        <Button color="info" size="lg" className="m-auto">Sign Up Now!</Button>
+      </Link>
     </p>
   </Jumbotron>
 };

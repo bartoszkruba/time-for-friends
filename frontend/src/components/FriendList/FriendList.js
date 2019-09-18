@@ -180,11 +180,11 @@ export default class FriendList extends Component {
       <td>{f.country}</td>
       <td><span className="Time">{f.currentDate ? f.currentDate : "----.--.--"}</span></td>
       <td><span className="Time">{f.currentTime ? f.currentTime : "--:--:--"}</span></td>
-      <td><i onClick={e => this.deleteFriendHandler(f._id)} className="text-danger fas fa-trash"
+      <td><i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
              style={{cursor: "pointer"}}/></td>
     </tr>);
 
-    const pagination = <div className="row">
+    const pagination = <div className="row mt-4">
       <Pagination className="m-auto" aria-label="Page navigation example" style={{fontSize: "110%"}}>
         <PaginationItem className="ml-1 mr-1">
           <PaginationLink first onClick={e => this.requestFriends(1)}/>

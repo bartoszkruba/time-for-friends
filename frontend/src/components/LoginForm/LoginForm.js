@@ -90,7 +90,7 @@ export default class LoginForm extends Component {
               <Input value={state.password} onChange={this.inputChangeHandler} type="password" name="password"
                      placeholder="Password" onKeyDown={this.keyDownHandler}/>
             </FormGroup>
-            <Button onClick={this.submitHandler} type="button" color="info">Log In</Button>
+            <Button onClick={this.submitHandler} type="button" size="lg" color="info">Log In</Button>
           </Form>
         </div>
         <div className="col-md-2"/>

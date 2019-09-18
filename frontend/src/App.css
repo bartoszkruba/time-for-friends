@@ -1,7 +1,6 @@
 .App {
-    font-family: 'Zilla Slab', serif;
     font-size: 110%;
-    color: gainsboro;
+    color: #f8f9fa;
     background-color: black;
     background-image: url("./24359364107_152b0152ff_k-879x485.jpg");
     background-position: center;
@@ -14,16 +13,26 @@
 }
 
 .Card {
-    border: 1px solid #111;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.85);
     padding: 50px;
     margin-top: 100px;
-    border-radius: 2%;
+    border-radius: 1%;
 }
 
 .Time {
     font-family: 'Ubuntu Mono', monospace;
     font-size: 105%;
+}
+
+.Nav-Item:hover,
+.Nav-Item:active {
+    border-bottom: 1px solid;
+}
+
+.Delete-Icon:hover,
+.Delete-Icon:active {
+    transition: color 0.2s;
+    color: #dc3545;
 }
 
 .react-datetimerange-picker {

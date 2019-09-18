@@ -28,7 +28,7 @@ export default class SearchBar extends Component {
       <div className="row mt-3">
         <div className="col-md-1"/>
         <div className="col-md-5 mt-1">
-          <h4 className="mr-4" style={{display: "inline"}}> Sorting </h4>
+          <h4 className="mr-4" style={{display: "inline"}}> Sort By </h4>
           <CustomInput inline checked={props.sortingSwitch} type="switch" id="sortingSwitch" name="sortingSwitch"
                        onChange={props.sortingChanged} label={props.sortingSwitchLabel}/>
         </div>
