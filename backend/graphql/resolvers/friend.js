@@ -18,6 +18,33 @@ module.exports.addFriend = async ({friendInput}, req) => {
   return {...friend._doc, _id: friend._id.toString(), timezone: timezone}
 };
 
+module.exports.deleteFriend = async ({_id}, req) => {
+  const user = await checkIfAuthenticated(req);
+  const friend = Friend.findById(_id);
+
+  if (!friend) {
+    const err = new Error("Friend not found");
+    err.data = errors;
+    err.code = 404;
+    throw err;
+  }
+
+  const index = user.findIndex(f => f.toString() === _id);
+
+  if (index === -1) {
+    const err = new Error("Not authenticated");
+    err.data = errors;
+    err.code = 401;
+    throw err;
+  }
+
+  user.friends.splice(index, 1);
+  await friend.remove();
+  await user.save();
+
+  return true;
+};
+
 module.exports.friends = async ({friendQuery}, req) => {
   const user = await checkIfAuthenticated(req);
   const query = {

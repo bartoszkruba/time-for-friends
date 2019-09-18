@@ -69,6 +69,7 @@ module.exports = buildSchema(`
    type RootMutation {
       register(userInput: UserInputData): User!
       addFriend(friendInput: FriendInputData): Friend!
+      deleteFriend(_id: ID!): Boolean!
    }
 
    schema {

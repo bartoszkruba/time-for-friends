@@ -23,6 +23,10 @@ export default {
     mutation: mutations.addNewFriend, errorPolicy: "all", variables: {...friend}, fetchPolicy: "no-cache"
   }),
 
+  deleteFriend: async _id => await getClient().mutate({
+    mutation: mutations.deleteFriend, errorPolicy: "all", variables: {_id}, fetchPolicy: "no-cache"
+  }),
+
   register: async (email, password) => await getClient().mutate({
     mutation: mutations.register, errorPolicy: "all", variables: {email, password}, fetchPolicy: "no-cache"
   }),
