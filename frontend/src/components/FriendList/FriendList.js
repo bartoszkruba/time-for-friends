@@ -221,31 +221,38 @@ export default class FriendList extends Component {
                  range={state.searchBar.range}
                  firstName={state.searchBar.firstName}
                  lastName={state.searchBar.lastName}/>
-      <div className="row mt-4">
-        <div className="col-md-1"/>
-        <div className="col-md-10">
-          {pagination}
-          <Table dark>
-            <thead>
-            <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>City</th>
-              <th>Country</th>
-              <th>Current Date</th>
-              <th>Current Time</th>
-            </tr>
-            </thead>
-            <tbody>
-            {rows}
-            </tbody>
-          </Table>
-          {pagination}
-        </div>
-        <div className="col-md-1"/>
-      </div>
+      {(state.count > 0) ?
+        <div className="row mt-4">
+          <div className="col-md-1"/>
+          <div className="col-md-10">
+            {pagination}
+            <Table dark>
+              <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Current Date</th>
+                <th>Current Time</th>
+              </tr>
+              </thead>
+              <tbody>
+              {rows}
+              </tbody>
+            </Table>
+            {pagination}
+          </div>
+          <div className="col-md-1"/>
+        </div> : <div className="container mt-4">
+          <div className="row">
+            <div className="col-md-1"/>
+            <div className="col-md-10">
+              <h2 className="text-center">No Data</h2>
+            </div>
+            <div className="col-md-1"/>
+          </div>
+        </div>}
     </div>
   }
-
-
 };
