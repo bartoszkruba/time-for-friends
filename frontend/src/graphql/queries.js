@@ -21,17 +21,20 @@ export default {
       }
   `,
   friends: gql`
-      query friends($firstName: String!, $lastName: String!, $sort: String!, $from: String, $to: String){
+      query friends($firstName: String!, $lastName: String!, $sort: String!, $from: String, $to: String, $page: Int!){
           friends(friendQuery: {
-              firstName: $firstName, lastName: $lastName, sort: $sort, from: $from, to: $to}) {
-              _id
-              firstName
-              lastName
-              city
-              country
-              timezone {
-                  name
+              firstName: $firstName, lastName: $lastName, sort: $sort, from: $from, to: $to, page: $page}) {
+              friends{
+                  _id
+                  firstName
+                  lastName
+                  city
+                  country
+                  timezone {
+                      name
+                  }
               }
+              count
           }
       }
   `

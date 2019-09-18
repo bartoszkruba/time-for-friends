@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Redirect} from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
-import {Table} from 'reactstrap';
+import {Pagination, PaginationItem, PaginationLink, Table} from 'reactstrap';
 import moment from 'moment-timezone'
 
 import graphqlService from "../../graphql/graphqlService";
@@ -9,6 +9,8 @@ import graphqlService from "../../graphql/graphqlService";
 export default class FriendList extends Component {
 
   state = {
+    count: 0,
+    page: 1,
     searchBar: {
       firstName: "",
       lastName: "",
@@ -30,7 +32,7 @@ export default class FriendList extends Component {
     }
 
     await this.setState({_isMounted: true});
-    this.requestFriends(this.state.searchBar.firstName, this.state.searchBar.lastName);
+    this.requestFriends(1);
     this.calculateTimes();
   }
 
@@ -53,7 +55,8 @@ export default class FriendList extends Component {
         to = moment(searchBar.range[1]).format(format);
       }
 
-      for (let friend of this.state.friends) {
+      // eslint-disable-next-line
+      for (const friend of this.state.friends) {
         const m = moment.tz(friend.timezone.name);
         if (from && to) {
           const timestamp = m.format(format);
@@ -70,12 +73,13 @@ export default class FriendList extends Component {
     }
   };
 
-  requestFriends = async () => {
+  requestFriends = async page => {
     const state = this.state.searchBar;
     try {
       const query = {
         firstName: `^${state.firstName}`,
-        lastName: `^${state.lastName}`
+        lastName: `^${state.lastName}`,
+        page: page
       };
 
       query.sort = state.sortingSwitch ? "country" : "firstName";
@@ -84,8 +88,9 @@ export default class FriendList extends Component {
         query.from = moment(state.range[0]).format("YYYYMMDDHHmmss");
         query.to = moment(state.range[1]).format("YYYYMMDDHHmmss");
       }
+
       const response = await graphqlService.friends(query);
-      this.setState({friends: response.data.friends})
+      this.setState({friends: response.data.friends.friends, page: page, count: response.data.friends.count})
     } catch (e) {
       console.log(e);
     }
@@ -101,14 +106,14 @@ export default class FriendList extends Component {
     }
 
     await this.setState({searchBar});
-    this.requestFriends()
+    this.requestFriends(1)
   };
 
   rangeChangedHandler = async range => {
     const searchBar = {...this.state.searchBar};
     searchBar.range = range;
     await this.setState({searchBar});
-    this.requestFriends();
+    this.requestFriends(1);
   };
 
   sortingChangeHandler = async e => {
@@ -116,7 +121,37 @@ export default class FriendList extends Component {
     searchBar.sortingSwitch = !searchBar.sortingSwitch;
     searchBar.sortingSwitchLabel = searchBar.sortingSwitch ? "Country" : "First Name";
     await this.setState({searchBar});
-    this.requestFriends();
+    this.requestFriends(1);
+  };
+
+  requestLastPage = () => {
+    const count = (this.state.count === 0) ? 1 : this.state.count;
+    this.requestFriends(Math.ceil(count / 10))
+  };
+
+  requestNextPage = () => {
+    this.requestFriends(this.state.page + 1)
+  };
+
+  renderPaginationSites = () => {
+    const pages = [];
+    const currentPage = this.state.page;
+    const maxPage = Math.ceil(((this.state.count === 0) ? 1 : this.state.count) / 10);
+    for (let i = currentPage - 3; i <= (currentPage + 3); i++) {
+      if (i < 1 || i > maxPage) continue;
+      pages.push(
+        <PaginationItem className="ml-1 mr-1" key={i} active={i === this.state.page}>
+          <PaginationLink onClick={e => this.requestFriends(i)}>
+            {i}
+          </PaginationLink>
+        </PaginationItem>)
+    }
+    return pages;
+  };
+
+  nextPageDisabled = () => {
+    const pages = Math.ceil(((this.state.count === 0) ? 1 : this.state.count) / 10);
+    return this.state.page >= pages;
   };
 
   render() {
@@ -129,6 +164,25 @@ export default class FriendList extends Component {
       <td><span className="Time">{f.currentDate ? f.currentDate : "----.--.--"}</span></td>
       <td><span className="Time">{f.currentTime ? f.currentTime : "--:--:--"}</span></td>
     </tr>);
+
+    const pagination = <div className="row">
+      <Pagination className="m-auto" aria-label="Page navigation example" style={{fontSize: "110%"}}>
+        <PaginationItem className="ml-1 mr-1">
+          <PaginationLink first onClick={e => this.requestFriends(1)}/>
+        </PaginationItem>
+        <PaginationItem className="ml-1 mr-1">
+          <PaginationLink disabled={this.state.page === 1} onClick={e => this.requestFriends(this.state.page - 1)}
+                          previous/>
+        </PaginationItem>
+        {this.renderPaginationSites()}
+        <PaginationItem className="ml-1 mr-1">
+          <PaginationLink disabled={this.nextPageDisabled()} onClick={this.requestNextPage} next/>
+        </PaginationItem>
+        <PaginationItem className="ml-1 mr-1">
+          <PaginationLink last onClick={this.requestLastPage}/>
+        </PaginationItem>
+      </Pagination>
+    </div>;
 
     return <div className="container Card">
       {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
@@ -151,6 +205,7 @@ export default class FriendList extends Component {
       <div className="row mt-4">
         <div className="col-md-1"/>
         <div className="col-md-10">
+          {pagination}
           <Table dark>
             <thead>
             <tr>
@@ -166,6 +221,7 @@ export default class FriendList extends Component {
             {rows}
             </tbody>
           </Table>
+          {pagination}
         </div>
         <div className="col-md-1"/>
       </div>

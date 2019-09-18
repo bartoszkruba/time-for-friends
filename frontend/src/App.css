@@ -39,3 +39,28 @@
 .react-datetimerange-picker__inputGroup {
     margin: 0 3px;
 }
+
+.pagination > li > a {
+    background-color: white;
+    color: #5A4181;
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover {
+    color: #5a5a5a;
+    background-color: #eee;
+    border-color: #ddd;
+}
+
+button.page-link {
+    background-color: #343a40;
+    border: 1px solid #555;
+    color: white;
+}
+
+
+.page-item.active {
+
+}

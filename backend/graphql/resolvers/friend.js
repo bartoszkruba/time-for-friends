@@ -4,6 +4,8 @@ const Friend = require('../../models/Friend');
 const Timezone = require('../../models/Timezone');
 const User = require('../../models/User');
 
+const PAGE_SIZE = 10;
+
 module.exports.addFriend = async ({friendInput}, req) => {
   const user = await checkIfAuthenticated(req);
   validateNewFriend(friendInput);
@@ -18,24 +20,25 @@ module.exports.addFriend = async ({friendInput}, req) => {
 
 module.exports.friends = async ({friendQuery}, req) => {
   const user = await checkIfAuthenticated(req);
-
   const query = {
     firstName: new RegExp(friendQuery.firstName, "i"),
     lastName: new RegExp(friendQuery.lastName, "i"),
     user: user._id
   };
 
-  const friends = await Friend.find(query).populate('timezone')
-    .sort(friendQuery.sort)
-    .sort(friendQuery.sort === "firstName" ? "country" : "firstName");
+  let friends = await Friend.find(query)
+    .sort([[friendQuery.sort, 1],
+      [(friendQuery.sort === "firstName" ? "country" : "firstName"), 1]])
+    .populate('timezone');
 
   if (friendQuery.from && friendQuery.to) {
-
-    return friends.filter(f => parseInt(f.timezone.currentTime) >= parseInt(friendQuery.from)
-      && parseInt(f.timezone.currentTime) <= parseInt(friendQuery.to))
+    friends = friends.filter(f => (f.timezone.currentTime >= friendQuery.from && f.timezone.currentTime <= friendQuery.to))
   }
 
-  return friends;
+  const count = friends.length;
+  friends = friends.splice((friendQuery.page - 1) * PAGE_SIZE, PAGE_SIZE);
+
+  return {friends, count};
 };
 
 checkIfAuthenticated = async req => {
