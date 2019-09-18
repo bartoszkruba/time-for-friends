@@ -8,6 +8,7 @@ import LoginForm from "./components/LoginForm/LoginForm";
 import Index from './components/Index/Index';
 import NewFriendForm from "./components/NewFriendForm/NewFriendForm";
 import FriendList from "./components/FriendList/FriendList";
+import Friend from "./components/Friend/Friend";
 import graphqlService from "./graphql/graphqlService";
 
 export default class App extends Component {
@@ -60,6 +61,7 @@ export default class App extends Component {
     const index = () => <Index classname="card"/>;
     const newFriend = () => <NewFriendForm loggedIn={state.loggedIn} addedNewFriend={this.createdNewFriendHandler}/>;
     const friendList = () => <FriendList loggedIn={state.loggedIn}/>;
+    const friend = () => <Friend/>;
 
     return (
       <Router>
@@ -74,6 +76,7 @@ export default class App extends Component {
             <Route path="/login/" exact component={login}/>
             <Route path="/friend/new" exact component={newFriend}/>
             <Route path="/friend" exact component={friendList}/>
+            <Route path="/frieend" exact component={friend}/>
           </div>
         </div>
       </Router>
