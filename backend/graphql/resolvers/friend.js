@@ -29,7 +29,7 @@ module.exports.deleteFriend = async ({_id}, req) => {
     throw err;
   }
 
-  const index = user.findIndex(f => f.toString() === _id);
+  const index = user.friends.findIndex(f => f.toString() === _id);
 
   if (index === -1) {
     const err = new Error("Not authenticated");

@@ -43,9 +43,7 @@ export default {
     query: queries.timezones, errorPolicy: "all"
   }),
 
-  friends: async query => {
-    return await getClient().query({
-      query: queries.friends, errorPolicy: "all", variables: {...query}, fetchPolicy: "no-cache"
-    })
-  }
+  friends: async query => await getClient().query({
+    query: queries.friends, errorPolicy: "all", variables: {...query}, fetchPolicy: "no-cache"
+  })
 }

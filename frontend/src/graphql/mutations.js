@@ -21,7 +21,7 @@ export default {
   `,
   deleteFriend: gql`
       mutation deleteFriend($_id: ID!) {
-          deleteFriend(id: $_id)
+          deleteFriend(_id: $_id)
       }
   `
 }

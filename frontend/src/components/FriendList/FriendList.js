@@ -96,6 +96,23 @@ export default class FriendList extends Component {
     }
   };
 
+  deleteFriendHandler = async _id => {
+    try {
+      await graphqlService.deleteFriend(_id);
+      const currentPage = this.state.page;
+      const maxPage = Math.ceil((((this.state.count - 1) < 1) ? 1 : (this.state.count - 1)) / 10);
+      console.log("maxPage: " + maxPage);
+      console.log('currentPage: ' + currentPage);
+      if (currentPage > maxPage) {
+        this.requestFriends(currentPage - 1)
+      } else {
+        this.requestFriends(currentPage)
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   searchBarChangedHandler = async e => {
     const searchBar = {...this.state.searchBar};
     if (e.target.name === "betweenSwitch") {
@@ -163,6 +180,8 @@ export default class FriendList extends Component {
       <td>{f.country}</td>
       <td><span className="Time">{f.currentDate ? f.currentDate : "----.--.--"}</span></td>
       <td><span className="Time">{f.currentTime ? f.currentTime : "--:--:--"}</span></td>
+      <td><i onClick={e => this.deleteFriendHandler(f._id)} className="text-danger fas fa-trash"
+             style={{cursor: "pointer"}}/></td>
     </tr>);
 
     const pagination = <div className="row">
