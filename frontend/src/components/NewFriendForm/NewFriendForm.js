@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react'
 import {Redirect} from "react-router-dom";
-import {Alert, Button, FormGroup, Input, Label} from "reactstrap";
+import {Button, FormGroup, Input, Label} from "reactstrap";
 import validator from 'validator';
 import countries from './countries'
 
@@ -17,16 +17,14 @@ export default class NewFriendForm extends PureComponent {
       firstName: "",
       lastName: "",
       city: "",
-      country: "",
-      timezone: "",
+      country: "---",
+      timezone: "---",
       email: "",
       enteredEmails: [],
       phoneNumber: "",
       enteredPhoneNumbers: []
     },
-    validation: {
-      errorMessage: ""
-    }
+    validation: false
   };
 
   // load timezones on mount
@@ -36,9 +34,10 @@ export default class NewFriendForm extends PureComponent {
     }
     try {
       const response = await graphqlService.timezones();
+      response.data.timezones.unshift({name: "---"});
       const form = {...this.state.form};
-      form.timezone = response.data.timezones[0].name;
-      form.country = this.state.countries[0].name;
+      form.timezone = "---";
+      form.country = "---";
       this.setState({timezones: response.data.timezones, form})
     } catch (e) {
       console.log(e);
@@ -77,14 +76,15 @@ export default class NewFriendForm extends PureComponent {
     this.setState({form});
   };
 
-  inputChangeHandler = e => {
+  inputChangeHandler = async e => {
     const form = {...this.state.form};
     form[e.target.name] = e.target.value;
-    this.setState({form})
+    await this.setState({form});
+    this.validateForm();
   };
 
   keyDownHandler = e => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && this.validation) {
       this.submitHandler()
     }
   };
@@ -101,15 +101,22 @@ export default class NewFriendForm extends PureComponent {
     }
   };
 
-  submitHandler = async e => {
+  validateForm = () => {
     const form = {...this.state.form};
     form.firstName = form.firstName.trim();
     form.lastName = form.lastName.trim();
     form.city = form.city.trim();
-    if (validator.isEmpty(form.firstName)) return this.setState({validation: {errorMessage: "Enter First Name"}});
-    if (validator.isEmpty(form.lastName)) return this.setState({validation: {errorMessage: "Enter Last Name"}});
-    if (validator.isEmpty(form.city)) return this.setState({validation: {errorMessage: "Enter City"}});
+    if (validator.isEmpty(form.firstName)) return this.setState({validation: false});
+    if (validator.isEmpty(form.lastName)) return this.setState({validation: false});
+    if (validator.isEmpty(form.city)) return this.setState({validation: false});
+    if (form.timezone === "---") return this.setState({validation: false});
+    if (form.country === "---") return this.setState({validation: false});
 
+    this.setState({validation: true});
+  };
+
+  submitHandler = async e => {
+    const form = {...this.state.form};
     try {
       await graphqlService.addNewFriend({
         ...form,
@@ -146,10 +153,7 @@ export default class NewFriendForm extends PureComponent {
       <div className="row mt-3">
         <div className="col-md-1"/>
         <div className="col-md-10">
-          <h1>Add New Friend</h1>
-          {state.validation.errorMessage !== "" ? <Alert className="mt-3" color="info">
-            <div>- {state.validation.errorMessage}</div>
-          </Alert> : null}
+          <h1>Add New Contact</h1>
         </div>
         <div className="col-md-1"/>
       </div>
@@ -226,7 +230,7 @@ export default class NewFriendForm extends PureComponent {
         </div>
         <div className="col-md-1">
           <FormGroup>
-            <Button onClick={this.emailEnteredHandler} color="info">Add</Button>
+            <Button onClick={this.emailEnteredHandler} outline color="info">Add</Button>
           </FormGroup>
         </div>
         <div className="col-md-4"/>
@@ -257,7 +261,7 @@ export default class NewFriendForm extends PureComponent {
         </div>
         <div className="col-md-1">
           <FormGroup>
-            <Button onClick={this.phoneNumberEnteredHandler} color="info">Add</Button>
+            <Button onClick={this.phoneNumberEnteredHandler} outline color="info">Add</Button>
           </FormGroup>
         </div>
         <div className="col-md-4"/>
@@ -274,7 +278,8 @@ export default class NewFriendForm extends PureComponent {
       <div className="row mt-3">
         <div className="col-md-1"/>
         <div className="col-md-10 text-right">
-          <Button onClick={this.submitHandler} type="button" size="lg" color="info">Create</Button>
+          <Button onClick={this.submitHandler} disabled={!state.validation} type="button" size="lg" color="info">Add
+            Contact</Button>
         </div>
         <div className="col-md-1"/>
       </div>

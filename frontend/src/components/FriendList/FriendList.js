@@ -208,7 +208,7 @@ export default class FriendList extends Component {
       <div className="row mb-2">
         <div className="col-md-1"/>
         <div className="col-md-10">
-          <h1>My Friends</h1>
+          <h1>My Contacts</h1>
         </div>
         <div className="col-md-1"/>
       </div>
