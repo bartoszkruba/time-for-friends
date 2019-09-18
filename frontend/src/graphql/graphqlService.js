@@ -45,5 +45,9 @@ export default {
 
   friends: async query => await getClient().query({
     query: queries.friends, errorPolicy: "all", variables: {...query}, fetchPolicy: "no-cache"
+  }),
+
+  friend: async _id => await getClient().query({
+    query: queries.friend, errorPolicy: "all", variables: {_id}, fetchPolicy: "no-cache"
   })
 }

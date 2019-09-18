@@ -76,7 +76,7 @@ export default class App extends Component {
             <Route path="/login/" exact component={login}/>
             <Route path="/friend/new" exact component={newFriend}/>
             <Route path="/friend" exact component={friendList}/>
-            <Route path="/frieend" exact component={friend}/>
+            <Route path="/friend/:id" exact component={friend}/>
           </div>
         </div>
       </Router>
