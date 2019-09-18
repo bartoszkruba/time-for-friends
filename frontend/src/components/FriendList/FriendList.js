@@ -55,7 +55,8 @@ export default class FriendList extends Component {
         to = moment(searchBar.range[1]).format(format);
       }
 
-      for (let friend of this.state.friends) {
+      // eslint-disable-next-line
+      for (const friend of this.state.friends) {
         const m = moment.tz(friend.timezone.name);
         if (from && to) {
           const timestamp = m.format(format);
@@ -124,7 +125,7 @@ export default class FriendList extends Component {
   };
 
   requestLastPage = () => {
-    const count = (this.state.count === 0) ? this.state.count = 1 : this.state.count;
+    const count = (this.state.count === 0) ? 1 : this.state.count;
     this.requestFriends(Math.ceil(count / 10))
   };
 
@@ -134,8 +135,10 @@ export default class FriendList extends Component {
 
   renderPaginationSites = () => {
     const pages = [];
-    const count = (this.state.count === 0) ? 1 : this.state.count;
-    for (let i = 1; i <= Math.ceil(count / 10); i++) {
+    const currentPage = this.state.page;
+    const maxPage = Math.ceil(((this.state.count === 0) ? 1 : this.state.count) / 10);
+    for (let i = currentPage - 3; i <= (currentPage + 3); i++) {
+      if (i < 1 || i > maxPage) continue;
       pages.push(
         <PaginationItem className="ml-1 mr-1" key={i} active={i === this.state.page}>
           <PaginationLink onClick={e => this.requestFriends(i)}>
@@ -202,6 +205,7 @@ export default class FriendList extends Component {
       <div className="row mt-4">
         <div className="col-md-1"/>
         <div className="col-md-10">
+          {pagination}
           <Table dark>
             <thead>
             <tr>
