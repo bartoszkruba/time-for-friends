@@ -129,12 +129,13 @@ export default class NewFriendForm extends PureComponent {
     };
 
     const enteredEmails = state.form.enteredEmails.map(e => <div key={e}>
-      {e} - <span onClick={event => this.removeEmailHandler(e)} style={{cursor: "pointer", color: "red"}}>delete</span>
+      {e} <span onClick={event => this.removeEmailHandler(e)} className="text-danger" style={{cursor: "pointer"}}><i
+      className="fas fa-trash"/></span>
     </div>);
 
     const enteredPhoneNumbers = state.form.enteredPhoneNumbers.map(p => <div key={p}>
-      {p} - <span onClick={event => this.removePhoneNumberHandler(p)}
-                  style={{color: "red", cursor: "pointer"}}>delete</span>
+      {p} <span onClick={event => this.removePhoneNumberHandler(p)} className="text-danger"
+                  style={{cursor: "pointer"}}><i className="fas fa-trash"/></span>
     </div>);
     const countries = state.countries.map(c => <option key={c.name}>{c.name}</option>);
     const timezones = state.timezones.map(t => <option key={t.name}>{t.name}</option>);
