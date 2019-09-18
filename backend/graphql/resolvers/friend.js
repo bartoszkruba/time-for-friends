@@ -7,9 +7,6 @@ const User = require('../../models/User');
 const PAGE_SIZE = 10;
 
 module.exports.addFriend = async ({friendInput}, req) => {
-  console.log("friendInput: ");
-  console.log(friendInput);
-
   const user = await checkIfAuthenticated(req);
   validateNewFriend(friendInput);
 
@@ -63,7 +60,6 @@ checkIfAuthenticated = async req => {
 };
 
 getTimezone = async name => {
-  console.log(name);
   const timezone = await Timezone.findOne({name: name});
   if (!timezone) {
     const err = new Error('Invalid timezone');

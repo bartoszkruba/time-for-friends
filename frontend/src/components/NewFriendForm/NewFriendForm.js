@@ -38,6 +38,7 @@ export default class NewFriendForm extends PureComponent {
       const response = await graphqlService.timezones();
       const form = {...this.state.form};
       form.timezone = response.data.timezones[0].name;
+      form.country = this.state.countries[0].name;
       this.setState({timezones: response.data.timezones, form})
     } catch (e) {
       console.log(e);
@@ -135,7 +136,7 @@ export default class NewFriendForm extends PureComponent {
 
     const enteredPhoneNumbers = state.form.enteredPhoneNumbers.map(p => <div key={p}>
       {p} <span onClick={event => this.removePhoneNumberHandler(p)} className="text-danger"
-                  style={{cursor: "pointer"}}><i className="fas fa-trash"/></span>
+                style={{cursor: "pointer"}}><i className="fas fa-trash"/></span>
     </div>);
     const countries = state.countries.map(c => <option key={c.name}>{c.name}</option>);
     const timezones = state.timezones.map(t => <option key={t.name}>{t.name}</option>);
