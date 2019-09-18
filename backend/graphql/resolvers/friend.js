@@ -6,6 +6,19 @@ const User = require('../../models/User');
 
 const PAGE_SIZE = 10;
 
+module.exports.friend = async ({_id}) => {
+  const friend = Friend.findById(_id).populate('timezone');
+
+  if (!friend) {
+    const err = new Error("Friend not found");
+    err.data = errors;
+    err.code = 404;
+    throw err;
+  }
+
+  return friend;
+};
+
 module.exports.addFriend = async ({friendInput}, req) => {
   const user = await checkIfAuthenticated(req);
   validateNewFriend(friendInput);
