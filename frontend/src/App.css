@@ -1,3 +1,8 @@
+.Card-Header {
+    font-size: 275%;
+    font-weight: normal;
+}
+
 .App {
     font-size: 110%;
     color: #f8f9fa;
@@ -15,8 +20,12 @@
 .Card {
     background-color: rgba(0, 0, 0, 0.85);
     padding: 50px;
-    margin-top: 75px;
+    margin-top: 8px;
     border-radius: 1%;
+}
+
+.top-margin {
+    margin-top: 110px;
 }
 
 .Lolek {
@@ -32,6 +41,11 @@
     padding-top: 12px;
     margin-top: 8px;
     border-radius: 1%;
+}
+
+li.active-link button.page-link {
+    background-color: #17a2b8 !important;
+    border-color: #17a2b8 !important;
 }
 
 .Time {
@@ -84,7 +98,3 @@ button.page-link {
     color: white;
 }
 
-
-.page-item.active {
-
-}

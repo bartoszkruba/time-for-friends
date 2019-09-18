@@ -150,10 +150,10 @@ export default class NewFriendForm extends PureComponent {
 
     return <div className="container Card">
       {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
-      <div className="row mt-3">
+      <div className="row">
         <div className="col-md-1"/>
         <div className="col-md-10">
-          <h1>Add New Contact</h1>
+          <h1 className="Card-Header">Add New Contact</h1>
         </div>
         <div className="col-md-1"/>
       </div>
@@ -213,7 +213,7 @@ export default class NewFriendForm extends PureComponent {
         </div>
         <div className="col-md-6"/>
       </div>
-      <div className="row mt-3">
+      <div className="row mt-5">
         <div className="col-md-1"/>
         <div className="col-md-10">
           <h4>Emails</h4>
@@ -275,11 +275,12 @@ export default class NewFriendForm extends PureComponent {
         </div>
         <div className="col-md-1"/>
       </div> : null}
-      <div className="row mt-3">
+      <div className="row mt-4">
         <div className="col-md-1"/>
-        <div className="col-md-10 text-right">
-          <Button onClick={this.submitHandler} disabled={!state.validation} type="button" size="lg" color="info">Add
-            Contact</Button>
+        <div className="col-md-10">
+          <Button onClick={this.submitHandler} disabled={!state.validation} type="button" size="lg" color="info">
+            Add Contact
+          </Button>
         </div>
         <div className="col-md-1"/>
       </div>

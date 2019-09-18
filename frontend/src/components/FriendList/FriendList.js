@@ -156,8 +156,9 @@ export default class FriendList extends Component {
     const maxPage = Math.ceil(((this.state.count === 0) ? 1 : this.state.count) / 10);
     for (let i = currentPage - 3; i <= (currentPage + 3); i++) {
       if (i < 1 || i > maxPage) continue;
+      const activeClass = i === this.state.page ? "active-link" : "";
       pages.push(
-        <PaginationItem className="ml-1 mr-1" key={i} active={i === this.state.page}>
+        <PaginationItem className={"ml-1 mr-1 " + activeClass} key={i} active={i === this.state.page}>
           <PaginationLink onClick={e => this.requestFriends(i)}>
             {i}
           </PaginationLink>
@@ -218,7 +219,7 @@ export default class FriendList extends Component {
         <div className="row mb-2">
           <div className="col-md-1"/>
           <div className="col-md-10">
-            <h1>Filter Your Contacts</h1>
+            <h1 className="Card-Header">Filter Your Contacts</h1>
           </div>
           <div className="col-md-1"/>
         </div>

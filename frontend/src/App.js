@@ -70,13 +70,13 @@ export default class App extends Component {
 
         <div className="App">
           <Navbar loggedIn={state.loggedIn} logout={this.logoutHandler}/>
-          <div className="container mt-5">
+          <div className="top-margin">
             <Route path="/" exact component={index}/>
             <Route path="/register/" exact component={register}/>
             <Route path="/login/" exact component={login}/>
             <Route path="/friend/new" exact component={newFriend}/>
             <Route path="/friend" exact component={friendList}/>
-            <Route path="/friend/:id" exact component={friend}/>
+            {/*<Route path="/friend/:id" exact component={friend}/>*/}
           </div>
         </div>
       </Router>
