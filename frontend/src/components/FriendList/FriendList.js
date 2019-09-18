@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {Redirect} from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
 import {Pagination, PaginationItem, PaginationLink, Table} from 'reactstrap';
@@ -203,56 +203,69 @@ export default class FriendList extends Component {
       </Pagination>
     </div>;
 
-    return <div className="container Card">
-      {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
-      <div className="row mb-2">
-        <div className="col-md-1"/>
-        <div className="col-md-10">
-          <h1>My Contacts</h1>
-        </div>
-        <div className="col-md-1"/>
-      </div>
-      <SearchBar rangeChanged={this.rangeChangedHandler} formChanged={this.searchBarChangedHandler}
-                 sortingChanged={this.sortingChangeHandler}
-                 betweenSwtich={state.searchBar.betweenSwitch}
-                 betweenSwtichLabel={state.searchBar.betweenSwitchLabel}
-                 sortingSwitch={state.searchBar.sortingSwitch}
-                 sortingSwitchLabel={state.searchBar.sortingSwitchLabel}
-                 range={state.searchBar.range}
-                 firstName={state.searchBar.firstName}
-                 lastName={state.searchBar.lastName}/>
-      {(state.count > 0) ?
-        <div className="row mt-5">
+    return <Fragment>
+      <div className="container Card">
+        {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
+        <div className="row mb-2">
           <div className="col-md-1"/>
           <div className="col-md-10">
-            {/*{pagination}*/}
-            <Table dark>
-              <thead>
-              <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>City</th>
-                <th>Country</th>
-                <th>Current Date</th>
-                <th>Current Time</th>
-              </tr>
-              </thead>
-              <tbody>
-              {rows}
-              </tbody>
-            </Table>
+            <h1>Filter Your Contacts</h1>
+          </div>
+          <div className="col-md-1"/>
+        </div>
+        <SearchBar rangeChanged={this.rangeChangedHandler} formChanged={this.searchBarChangedHandler}
+                   sortingChanged={this.sortingChangeHandler}
+                   betweenSwtich={state.searchBar.betweenSwitch}
+                   betweenSwtichLabel={state.searchBar.betweenSwitchLabel}
+                   sortingSwitch={state.searchBar.sortingSwitch}
+                   sortingSwitchLabel={state.searchBar.sortingSwitchLabel}
+                   range={state.searchBar.range}
+                   firstName={state.searchBar.firstName}
+                   lastName={state.searchBar.lastName}/>
+      </div>
+      <div className="container Lolek">
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-10 text-center">
             {pagination}
           </div>
           <div className="col-md-1"/>
-        </div> : <div className="container mt-5">
-          <div className="row">
+        </div>
+      </div>
+      {(state.count > 0) ?
+        <div className="container Lolek">
+          <div className="row mt-5">
             <div className="col-md-1"/>
             <div className="col-md-10">
-              <h2 className="text-center">No Data</h2>
+              {/*{pagination}*/}
+              <Table dark>
+                <thead>
+                <tr>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>City</th>
+                  <th>Country</th>
+                  <th>Current Date</th>
+                  <th>Current Time</th>
+                </tr>
+                </thead>
+                <tbody>
+                {rows}
+                </tbody>
+              </Table>
             </div>
             <div className="col-md-1"/>
           </div>
-        </div>}
-    </div>
+        </div> : null}
+      <div className="container Lolek">
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-10 text-center">
+            {pagination}
+          </div>
+          <div className="col-md-1"/>
+        </div>
+      </div>
+    </Fragment>
   }
 };
