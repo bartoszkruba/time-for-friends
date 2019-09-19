@@ -60,15 +60,17 @@ module.exports = buildSchema(`
    }
    
    type RootQuery {
-     login(email: String! password: String!): AuthData
-     timezones: [Timezone]
-     friends(friendQuery: FriendQuery): FriendList
+     login(email: String! password: String!): AuthData!
+     timezones: [Timezone]!
+     friends(friendQuery: FriendQuery): FriendList!
+     friend(_id: ID!): Friend!
      isAuthenticated: Boolean!
    }
 
    type RootMutation {
       register(userInput: UserInputData): User!
       addFriend(friendInput: FriendInputData): Friend!
+      deleteFriend(_id: ID!): Boolean!
    }
 
    schema {

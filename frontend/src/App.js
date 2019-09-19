@@ -8,6 +8,7 @@ import LoginForm from "./components/LoginForm/LoginForm";
 import Index from './components/Index/Index';
 import NewFriendForm from "./components/NewFriendForm/NewFriendForm";
 import FriendList from "./components/FriendList/FriendList";
+import Friend from "./components/Friend/Friend";
 import graphqlService from "./graphql/graphqlService";
 
 export default class App extends Component {
@@ -34,17 +35,17 @@ export default class App extends Component {
   successfullLoginHandler = token => {
     localStorage.setItem('token', token);
     this.setState({loggedIn: true});
-    this.redirect("/friend/new")
+    this.redirect("/friend")
   };
 
   logoutHandler = async () => {
     localStorage.removeItem('token');
     await this.setState({loggedIn: false});
-    this.redirect("/login/")
+    this.redirect("/")
   };
 
   createdNewFriendHandler = () => {
-    this.redirect("/")
+    this.redirect("/friend")
   };
 
   redirect = page => {
@@ -60,6 +61,9 @@ export default class App extends Component {
     const index = () => <Index classname="card"/>;
     const newFriend = () => <NewFriendForm loggedIn={state.loggedIn} addedNewFriend={this.createdNewFriendHandler}/>;
     const friendList = () => <FriendList loggedIn={state.loggedIn}/>;
+    const friend = ({match}) => {
+      return <Friend _id={match.params.id}/>;
+    };
 
     return (
       <Router>
@@ -68,12 +72,13 @@ export default class App extends Component {
 
         <div className="App">
           <Navbar loggedIn={state.loggedIn} logout={this.logoutHandler}/>
-          <div className="container mt-5">
+          <div className="top-margin">
             <Route path="/" exact component={index}/>
             <Route path="/register/" exact component={register}/>
             <Route path="/login/" exact component={login}/>
-            <Route path="/friend/new" exact component={newFriend}/>
-            <Route path="/friend" exact component={friendList}/>
+            <Route path="/new-friend" exact component={newFriend}/>
+            <Route path="/friends" exact component={friendList}/>
+            <Route path="/friend/:id" exact component={friend}/>
           </div>
         </div>
       </Router>

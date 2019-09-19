@@ -20,6 +20,22 @@ export default {
           }
       }
   `,
+  friend: gql`
+      query friend($_id: ID!){
+          friend(_id: $_id) {
+              _id
+              firstName
+              lastName
+              city
+              country
+              timezone {
+                  name
+              }
+              emails
+              phoneNumbers
+          }
+      }
+  `,
   friends: gql`
       query friends($firstName: String!, $lastName: String!, $sort: String!, $from: String, $to: String, $page: Int!){
           friends(friendQuery: {

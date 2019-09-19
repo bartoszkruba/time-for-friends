@@ -23,6 +23,10 @@ export default {
     mutation: mutations.addNewFriend, errorPolicy: "all", variables: {...friend}, fetchPolicy: "no-cache"
   }),
 
+  deleteFriend: async _id => await getClient().mutate({
+    mutation: mutations.deleteFriend, errorPolicy: "all", variables: {_id}, fetchPolicy: "no-cache"
+  }),
+
   register: async (email, password) => await getClient().mutate({
     mutation: mutations.register, errorPolicy: "all", variables: {email, password}, fetchPolicy: "no-cache"
   }),
@@ -39,9 +43,11 @@ export default {
     query: queries.timezones, errorPolicy: "all"
   }),
 
-  friends: async query => {
-    return await getClient().query({
-      query: queries.friends, errorPolicy: "all", variables: {...query}, fetchPolicy: "no-cache"
-    })
-  }
+  friends: async query => await getClient().query({
+    query: queries.friends, errorPolicy: "all", variables: {...query}, fetchPolicy: "no-cache"
+  }),
+
+  friend: async _id => await getClient().query({
+    query: queries.friend, errorPolicy: "all", variables: {_id}, fetchPolicy: "no-cache"
+  })
 }

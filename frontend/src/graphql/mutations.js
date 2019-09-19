@@ -18,5 +18,10 @@ export default {
               email
           }
       }
+  `,
+  deleteFriend: gql`
+      mutation deleteFriend($_id: ID!) {
+          deleteFriend(_id: $_id)
+      }
   `
 }

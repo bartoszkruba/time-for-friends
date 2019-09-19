@@ -6,16 +6,56 @@ const User = require('../../models/User');
 
 const PAGE_SIZE = 10;
 
+module.exports.friend = async ({_id}) => {
+  const friend = Friend.findById(_id).populate('timezone');
+
+  if (!friend) {
+    const err = new Error("Friend not found");
+    err.data = errors;
+    err.code = 404;
+    throw err;
+  }
+
+  return friend;
+};
+
 module.exports.addFriend = async ({friendInput}, req) => {
   const user = await checkIfAuthenticated(req);
   validateNewFriend(friendInput);
 
-  const timezone = await getTimezone(friendInput.name);
+  const timezone = await getTimezone(friendInput.timezone);
   const friend = await Friend({...friendInput, user: user._id, timezone: timezone._id}).save();
   user.friends.push(friend);
   await user.save();
 
-  return {...savedFriend._doc, _id: savedFriend._id.toString(), timezone: timezone}
+  return {...friend._doc, _id: friend._id.toString(), timezone: timezone}
+};
+
+module.exports.deleteFriend = async ({_id}, req) => {
+  const user = await checkIfAuthenticated(req);
+  const friend = Friend.findById(_id);
+
+  if (!friend) {
+    const err = new Error("Friend not found");
+    err.data = errors;
+    err.code = 404;
+    throw err;
+  }
+
+  const index = user.friends.findIndex(f => f.toString() === _id);
+
+  if (index === -1) {
+    const err = new Error("Not authenticated");
+    err.data = errors;
+    err.code = 401;
+    throw err;
+  }
+
+  user.friends.splice(index, 1);
+  await friend.remove();
+  await user.save();
+
+  return true;
 };
 
 module.exports.friends = async ({friendQuery}, req) => {
@@ -60,7 +100,7 @@ checkIfAuthenticated = async req => {
 };
 
 getTimezone = async name => {
-  const timezone = await Timezone.findOne({name: friendInput.timezone});
+  const timezone = await Timezone.findOne({name: name});
   if (!timezone) {
     const err = new Error('Invalid timezone');
     err.code = 400;
