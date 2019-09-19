@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import {Link, Redirect} from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
-import {Pagination, PaginationItem, PaginationLink, Table} from 'reactstrap';
+import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
 import moment from 'moment-timezone'
 
 import graphqlService from "../../graphql/graphqlService";
@@ -174,13 +174,37 @@ export default class FriendList extends Component {
 
   render() {
     const state = this.state;
+
+    const contacts = state.friends.map(f => <div className="container Tile">
+      <div className="row" key={f._id}>
+        <div className="col-md-1"/>
+        <div className="col-md-7">
+          <h1>
+            <Link style={{textDecoration: "none"}} className="text-white" to={"friend/" + f._id}>
+              <span className="Tile-Header">
+              {f.firstName} {f.lastName}
+              </span>
+            </Link>
+          </h1>
+        </div>
+        <div className="col-md-3 text-right">
+          <h2>{f.currentTime}</h2>
+        </div>
+        <div className="col-md-1"/>
+      </div>
+      <div className="row">
+        <div className="col-md-1"/>
+        <div className="col-md-5">
+          <p>{f.city}, {f.country}</p>
+        </div>
+        <div className="col-md-5 text-right">
+          <h5>{f.currentDate}</h5>
+        </div>
+        <div className="col-md-1"/>
+      </div>
+    </div>);
+
     const rows = state.friends.map(f => <tr key={f._id}>
-      <td><Link className="text-white" to={"friend/" + f._id}>{f.firstName}</Link></td>
-      <td><Link className="text-white" to={"friend/" + f._id}>{f.lastName}</Link></td>
-      <td>{f.city}</td>
-      <td>{f.country}</td>
-      <td><span className="Time">{f.currentDate ? f.currentDate : "----.--.--"}</span></td>
-      <td><span className="Time">{f.currentTime ? f.currentTime : "--:--:--"}</span></td>
       <td><i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
              style={{cursor: "pointer"}}/></td>
     </tr>);
@@ -234,31 +258,7 @@ export default class FriendList extends Component {
                    lastName={state.searchBar.lastName}/>
       </div>
       {pagination}
-      {(state.count > 0) ?
-        <div className="container Lolek">
-          <div className="row mt-5">
-            <div className="col-md-1"/>
-            <div className="col-md-10">
-              {/*{pagination}*/}
-              <Table dark>
-                <thead>
-                <tr>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>City</th>
-                  <th>Country</th>
-                  <th>Current Date</th>
-                  <th>Current Time</th>
-                </tr>
-                </thead>
-                <tbody>
-                {rows}
-                </tbody>
-              </Table>
-            </div>
-            <div className="col-md-1"/>
-          </div>
-        </div> : null}
+      {contacts}
       {pagination}
     </Fragment>
   }

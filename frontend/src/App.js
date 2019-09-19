@@ -35,7 +35,7 @@ export default class App extends Component {
   successfullLoginHandler = token => {
     localStorage.setItem('token', token);
     this.setState({loggedIn: true});
-    this.redirect("/friend")
+    this.redirect("/friends")
   };
 
   logoutHandler = async () => {
@@ -45,7 +45,7 @@ export default class App extends Component {
   };
 
   createdNewFriendHandler = () => {
-    this.redirect("/friend")
+    this.redirect("/new-friend")
   };
 
   redirect = page => {
