@@ -43,7 +43,7 @@ export default class SearchBar extends Component {
           <div className="col-md-1"/>
           <div className="col-md-5 mt-1">
             <h4 className="mr-3" style={{display: "inline"}}>From:</h4>
-            <span className="DateTimePicker mt-4">
+            <span className="Time mt-4">
           <DateTimePicker
             calendarIcon={null}
             clearIcon={null}
@@ -55,7 +55,7 @@ export default class SearchBar extends Component {
           </div>
           <div className="col-md-5 mt-1">
             <h4 className="mr-3" style={{display: "inline"}}>To:</h4>
-            <span className="DateTimePicker mt-4">
+            <span className="Time mt-4">
           <DateTimePicker
             calendarIcon={null}
             clearIcon={null}
