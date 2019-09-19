@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import {Link, Redirect} from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
-import {Pagination, PaginationItem, PaginationLink, Table} from 'reactstrap';
+import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
 import moment from 'moment-timezone'
 
 import graphqlService from "../../graphql/graphqlService";
@@ -14,7 +14,7 @@ export default class FriendList extends Component {
     searchBar: {
       firstName: "",
       lastName: "",
-      range: [new Date(), new Date()],
+      range: {from: new Date(), to: new Date()},
       betweenSwitch: false,
       betweenSwitchLabel: "Off",
       sortingSwitch: false,
@@ -50,9 +50,9 @@ export default class FriendList extends Component {
 
       const format = "YYYYMMDDHHmmss";
       let from, to;
-      if (searchBar.range && searchBar.range[0] && searchBar.range[1] && searchBar.betweenSwitch) {
-        from = moment(searchBar.range[0]).format(format);
-        to = moment(searchBar.range[1]).format(format);
+      if (searchBar.range && searchBar.range.from && searchBar.range.to && searchBar.betweenSwitch) {
+        from = moment(searchBar.range.from).format(format);
+        to = moment(searchBar.range.to).format(format);
       }
 
       // eslint-disable-next-line
@@ -84,9 +84,9 @@ export default class FriendList extends Component {
 
       query.sort = state.sortingSwitch ? "country" : "firstName";
 
-      if (state.range && state.range[0] && state.range[1] && state.betweenSwitch) {
-        query.from = moment(state.range[0]).format("YYYYMMDDHHmmss");
-        query.to = moment(state.range[1]).format("YYYYMMDDHHmmss");
+      if (state.range && state.range.from && state.range.to && state.betweenSwitch) {
+        query.from = moment(state.range.from).format("YYYYMMDDHHmmss");
+        query.to = moment(state.range.to).format("YYYYMMDDHHmmss");
       }
 
       const response = await graphqlService.friends(query);
@@ -126,9 +126,16 @@ export default class FriendList extends Component {
     this.requestFriends(1)
   };
 
-  rangeChangedHandler = async range => {
+  fromRangeChangedHandler = async date => {
     const searchBar = {...this.state.searchBar};
-    searchBar.range = range;
+    searchBar.range.from = date;
+    await this.setState({searchBar});
+    this.requestFriends(1);
+  };
+
+  toRangeChangedHandler = async date => {
+    const searchBar = {...this.state.searchBar};
+    searchBar.range.to = date;
     await this.setState({searchBar});
     this.requestFriends(1);
   };
@@ -174,44 +181,89 @@ export default class FriendList extends Component {
 
   render() {
     const state = this.state;
-    const rows = state.friends.map(f => <tr key={f._id}>
-      <td><Link className="text-white" to={"friend/" + f._id}>{f.firstName}</Link></td>
-      <td><Link className="text-white" to={"friend/" + f._id}>{f.lastName}</Link></td>
-      <td>{f.city}</td>
-      <td>{f.country}</td>
-      <td><span className="Time">{f.currentDate ? f.currentDate : "----.--.--"}</span></td>
-      <td><span className="Time">{f.currentTime ? f.currentTime : "--:--:--"}</span></td>
-      <td><i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
-             style={{cursor: "pointer"}}/></td>
-    </tr>);
 
-    const pagination = <div className="container Pagination">
-      <div className="row">
-        <div className="col-md-1"/>
-        <div className="col-md-10 text-center">
-          <div className="row">
-            <Pagination className="m-auto" aria-label="Page navigation example" style={{fontSize: "110%"}}>
-              <PaginationItem className="ml-1 mr-1">
-                <PaginationLink first onClick={e => this.requestFriends(1)}/>
-              </PaginationItem>
-              <PaginationItem className="ml-1 mr-1">
-                <PaginationLink disabled={this.state.page === 1}
-                                onClick={e => this.requestFriends(this.state.page - 1)}
-                                previous/>
-              </PaginationItem>
-              {this.renderPaginationSites()}
-              <PaginationItem className="ml-1 mr-1">
-                <PaginationLink disabled={this.nextPageDisabled()} onClick={this.requestNextPage} next/>
-              </PaginationItem>
-              <PaginationItem className="ml-1 mr-1">
-                <PaginationLink last onClick={this.requestLastPage}/>
-              </PaginationItem>
-            </Pagination>
+    let contacts;
+
+    if (state.count > 0) {
+      contacts = state.friends.map(f => <div key={f._id} className="container Tile">
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-7">
+            <h1>
+              <Link style={{textDecoration: "none"}} className="text-white" to={"friend/" + f._id}>
+              <span className="Tile-Header">
+              {f.firstName} {f.lastName}
+              </span>
+              </Link>
+            </h1>
           </div>
+          <div className="col-md-3 text-right">
+            <h2>{f.currentTime}</h2>
+          </div>
+          <div className="col-md-1"/>
         </div>
-        <div className="col-md-1"/>
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-5">
+            <p>{f.city}, {f.country}</p>
+          </div>
+          <div className="col-md-5 text-right">
+            <h5>{f.currentDate}</h5>
+          </div>
+          <div className="col-md-1"/>
+        </div>
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-10 text-right">
+            <i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
+               style={{cursor: "pointer"}}/>
+          </div>
+          <div className="col-md-1"/>
+        </div>
+      </div>);
+    } else {
+      contacts = <div className="container Tile">
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-10">
+            <h1>No Contacts</h1>
+          </div>
+          <div className="col-md-1"/>
+        </div>
       </div>
-    </div>;
+    }
+
+    let pagination;
+
+    if (state.count > 0) {
+      pagination = <div className="container Pagination">
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-10 text-center">
+            <div className="row">
+              <Pagination className="m-auto" aria-label="Page navigation example" style={{fontSize: "110%"}}>
+                <PaginationItem className="ml-1 mr-1">
+                  <PaginationLink first onClick={e => this.requestFriends(1)}/>
+                </PaginationItem>
+                <PaginationItem className="ml-1 mr-1">
+                  <PaginationLink disabled={this.state.page === 1}
+                                  onClick={e => this.requestFriends(this.state.page - 1)}
+                                  previous/>
+                </PaginationItem>
+                {this.renderPaginationSites()}
+                <PaginationItem className="ml-1 mr-1">
+                  <PaginationLink disabled={this.nextPageDisabled()} onClick={this.requestNextPage} next/>
+                </PaginationItem>
+                <PaginationItem className="ml-1 mr-1">
+                  <PaginationLink last onClick={this.requestLastPage}/>
+                </PaginationItem>
+              </Pagination>
+            </div>
+          </div>
+          <div className="col-md-1"/>
+        </div>
+      </div>;
+    }
 
     return <Fragment>
       <div className="container Card">
@@ -223,7 +275,9 @@ export default class FriendList extends Component {
           </div>
           <div className="col-md-1"/>
         </div>
-        <SearchBar rangeChanged={this.rangeChangedHandler} formChanged={this.searchBarChangedHandler}
+        <SearchBar fromChanged={this.fromRangeChangedHandler}
+                   toChanged={this.toRangeChangedHandler}
+                   formChanged={this.searchBarChangedHandler}
                    sortingChanged={this.sortingChangeHandler}
                    betweenSwtich={state.searchBar.betweenSwitch}
                    betweenSwtichLabel={state.searchBar.betweenSwitchLabel}
@@ -234,31 +288,7 @@ export default class FriendList extends Component {
                    lastName={state.searchBar.lastName}/>
       </div>
       {pagination}
-      {(state.count > 0) ?
-        <div className="container Lolek">
-          <div className="row mt-5">
-            <div className="col-md-1"/>
-            <div className="col-md-10">
-              {/*{pagination}*/}
-              <Table dark>
-                <thead>
-                <tr>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>City</th>
-                  <th>Country</th>
-                  <th>Current Date</th>
-                  <th>Current Time</th>
-                </tr>
-                </thead>
-                <tbody>
-                {rows}
-                </tbody>
-              </Table>
-            </div>
-            <div className="col-md-1"/>
-          </div>
-        </div> : null}
+      {contacts}
       {pagination}
     </Fragment>
   }
