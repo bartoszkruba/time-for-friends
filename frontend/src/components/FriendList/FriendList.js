@@ -226,33 +226,37 @@ export default class FriendList extends Component {
       </div>
     }
 
-    const pagination = <div className="container Pagination">
-      <div className="row">
-        <div className="col-md-1"/>
-        <div className="col-md-10 text-center">
-          <div className="row">
-            <Pagination className="m-auto" aria-label="Page navigation example" style={{fontSize: "110%"}}>
-              <PaginationItem className="ml-1 mr-1">
-                <PaginationLink first onClick={e => this.requestFriends(1)}/>
-              </PaginationItem>
-              <PaginationItem className="ml-1 mr-1">
-                <PaginationLink disabled={this.state.page === 1}
-                                onClick={e => this.requestFriends(this.state.page - 1)}
-                                previous/>
-              </PaginationItem>
-              {this.renderPaginationSites()}
-              <PaginationItem className="ml-1 mr-1">
-                <PaginationLink disabled={this.nextPageDisabled()} onClick={this.requestNextPage} next/>
-              </PaginationItem>
-              <PaginationItem className="ml-1 mr-1">
-                <PaginationLink last onClick={this.requestLastPage}/>
-              </PaginationItem>
-            </Pagination>
+    let pagination;
+
+    if (state.count > 0) {
+      pagination = <div className="container Pagination">
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-10 text-center">
+            <div className="row">
+              <Pagination className="m-auto" aria-label="Page navigation example" style={{fontSize: "110%"}}>
+                <PaginationItem className="ml-1 mr-1">
+                  <PaginationLink first onClick={e => this.requestFriends(1)}/>
+                </PaginationItem>
+                <PaginationItem className="ml-1 mr-1">
+                  <PaginationLink disabled={this.state.page === 1}
+                                  onClick={e => this.requestFriends(this.state.page - 1)}
+                                  previous/>
+                </PaginationItem>
+                {this.renderPaginationSites()}
+                <PaginationItem className="ml-1 mr-1">
+                  <PaginationLink disabled={this.nextPageDisabled()} onClick={this.requestNextPage} next/>
+                </PaginationItem>
+                <PaginationItem className="ml-1 mr-1">
+                  <PaginationLink last onClick={this.requestLastPage}/>
+                </PaginationItem>
+              </Pagination>
+            </div>
           </div>
+          <div className="col-md-1"/>
         </div>
-        <div className="col-md-1"/>
-      </div>
-    </div>;
+      </div>;
+    }
 
     return <Fragment>
       <div className="container Card">
@@ -274,9 +278,9 @@ export default class FriendList extends Component {
                    firstName={state.searchBar.firstName}
                    lastName={state.searchBar.lastName}/>
       </div>
-      {state.count > 0 ? {pagination} : null}
+      {pagination}
       {contacts}
-      {state.count > 0 ? {pagination} : null}
+      {pagination}
     </Fragment>
   }
 };

@@ -22,11 +22,15 @@
     padding: 50px;
     margin-top: 5px;
     border-radius: 1%;
-    border: 1px solid #444;
+    border: 1px solid #222;
 }
 
 .top-margin {
     margin-top: 110px;
+}
+
+.new-friend-border {
+    border: 1px solid #444;
 }
 
 .Tile-Header:hover,

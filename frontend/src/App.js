@@ -45,7 +45,7 @@ export default class App extends Component {
   };
 
   createdNewFriendHandler = () => {
-    this.redirect("/new-friend")
+    this.redirect("/friends")
   };
 
   redirect = page => {
