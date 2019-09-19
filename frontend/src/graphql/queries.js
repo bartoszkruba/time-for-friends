@@ -31,6 +31,8 @@ export default {
               timezone {
                   name
               }
+              emails
+              phoneNumbers
           }
       }
   `,

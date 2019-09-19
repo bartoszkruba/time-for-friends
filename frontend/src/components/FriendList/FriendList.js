@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {Redirect} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import SearchBar from "./SearchBar/SearchBar";
 import {Pagination, PaginationItem, PaginationLink, Table} from 'reactstrap';
 import moment from 'moment-timezone'
@@ -175,8 +175,8 @@ export default class FriendList extends Component {
   render() {
     const state = this.state;
     const rows = state.friends.map(f => <tr key={f._id}>
-      <td>{f.firstName}</td>
-      <td>{f.lastName}</td>
+      <td><Link className="text-white" to={"friend/" + f._id}>{f.firstName}</Link></td>
+      <td><Link className="text-white" to={"friend/" + f._id}>{f.lastName}</Link></td>
       <td>{f.city}</td>
       <td>{f.country}</td>
       <td><span className="Time">{f.currentDate ? f.currentDate : "----.--.--"}</span></td>

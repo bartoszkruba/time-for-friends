@@ -61,7 +61,9 @@ export default class App extends Component {
     const index = () => <Index classname="card"/>;
     const newFriend = () => <NewFriendForm loggedIn={state.loggedIn} addedNewFriend={this.createdNewFriendHandler}/>;
     const friendList = () => <FriendList loggedIn={state.loggedIn}/>;
-    const friend = () => <Friend/>;
+    const friend = ({match}) => {
+      return <Friend _id={match.params.id}/>;
+    };
 
     return (
       <Router>
@@ -74,9 +76,9 @@ export default class App extends Component {
             <Route path="/" exact component={index}/>
             <Route path="/register/" exact component={register}/>
             <Route path="/login/" exact component={login}/>
-            <Route path="/friend/new" exact component={newFriend}/>
-            <Route path="/friend" exact component={friendList}/>
-            {/*<Route path="/friend/:id" exact component={friend}/>*/}
+            <Route path="/new-friend" exact component={newFriend}/>
+            <Route path="/friends" exact component={friendList}/>
+            <Route path="/friend/:id" exact component={friend}/>
           </div>
         </div>
       </Router>

@@ -53,12 +53,12 @@ export default class Navigation extends Component {
                 </NavItem>
               </Fragment> : <Fragment>
                 <NavItem>
-                  <Link to="/friend" className="nav-link text-white">
-                    <span className="Nav-Item">My Contact</span>
+                  <Link to="/friends" className="nav-link text-white">
+                    <span className="Nav-Item">My Contacts</span>
                   </Link>
                 </NavItem>
                 <NavItem>
-                  <Link to="/friend/new" className="nav-link text-white">
+                  <Link to="/new-friend" className="nav-link text-white">
                     <span className="Nav-Item">Add New Contact</span>
                   </Link>
                 </NavItem>
