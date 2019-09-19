@@ -125,20 +125,8 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
     const user = await User({email: "test@email.com", password}).save();
 
     console.log('Adding mock friends...');
-    for (let i = 0; i < 20; i++) {
-      const timezone = await Timezone.findOne({name: timezones[i]});
-      if (!timezone) {
-        console.log(timezones[i])
-      }
-      const friend = await Friend({
-        firstName: persons[i].firstName,
-        lastName: persons[i].lastName,
-        city: cities[i],
-        country: countries[i],
-        timezone: timezone._id,
-        user: user._id
-      }).save();
-      user.friends.push(friend._id);
+    for (let i = 0; i < 1; i++) {
+      await addMockFriends(user);
     }
     await user.save();
     console.log('done')
@@ -147,6 +135,24 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
   }
 })();
 
+
+const addMockFriends = async user => {
+  for (let i = 0; i < 20; i++) {
+    const timezone = await Timezone.findOne({name: timezones[i]});
+    if (!timezone) {
+      console.log(timezones[i])
+    }
+    const friend = await Friend({
+      firstName: persons[i].firstName,
+      lastName: persons[i].lastName,
+      city: cities[i],
+      country: countries[i],
+      timezone: timezone._id,
+      user: user._id
+    }).save();
+    user.friends.push(friend._id);
+  }
+};
 
 const saveTimezone = async name => {
   const timezone = new Timezone({name});

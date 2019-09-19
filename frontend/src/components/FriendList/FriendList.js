@@ -14,7 +14,7 @@ export default class FriendList extends Component {
     searchBar: {
       firstName: "",
       lastName: "",
-      range: [new Date(), new Date()],
+      range: {from: new Date(), to: new Date()},
       betweenSwitch: false,
       betweenSwitchLabel: "Off",
       sortingSwitch: false,
@@ -50,9 +50,9 @@ export default class FriendList extends Component {
 
       const format = "YYYYMMDDHHmmss";
       let from, to;
-      if (searchBar.range && searchBar.range[0] && searchBar.range[1] && searchBar.betweenSwitch) {
-        from = moment(searchBar.range[0]).format(format);
-        to = moment(searchBar.range[1]).format(format);
+      if (searchBar.range && searchBar.range.from && searchBar.range.to && searchBar.betweenSwitch) {
+        from = moment(searchBar.range.from).format(format);
+        to = moment(searchBar.range.to).format(format);
       }
 
       // eslint-disable-next-line
@@ -84,9 +84,9 @@ export default class FriendList extends Component {
 
       query.sort = state.sortingSwitch ? "country" : "firstName";
 
-      if (state.range && state.range[0] && state.range[1] && state.betweenSwitch) {
-        query.from = moment(state.range[0]).format("YYYYMMDDHHmmss");
-        query.to = moment(state.range[1]).format("YYYYMMDDHHmmss");
+      if (state.range && state.range.from && state.range.to && state.betweenSwitch) {
+        query.from = moment(state.range.from).format("YYYYMMDDHHmmss");
+        query.to = moment(state.range.to).format("YYYYMMDDHHmmss");
       }
 
       const response = await graphqlService.friends(query);
@@ -126,9 +126,16 @@ export default class FriendList extends Component {
     this.requestFriends(1)
   };
 
-  rangeChangedHandler = async range => {
+  fromRangeChangedHandler = async date => {
     const searchBar = {...this.state.searchBar};
-    searchBar.range = range;
+    searchBar.range.from = date;
+    await this.setState({searchBar});
+    this.requestFriends(1);
+  };
+
+  toRangeChangedHandler = async date => {
+    const searchBar = {...this.state.searchBar};
+    searchBar.range.to = date;
     await this.setState({searchBar});
     this.requestFriends(1);
   };
@@ -268,7 +275,9 @@ export default class FriendList extends Component {
           </div>
           <div className="col-md-1"/>
         </div>
-        <SearchBar rangeChanged={this.rangeChangedHandler} formChanged={this.searchBarChangedHandler}
+        <SearchBar fromChanged={this.fromRangeChangedHandler}
+                   toChanged={this.toRangeChangedHandler}
+                   formChanged={this.searchBarChangedHandler}
                    sortingChanged={this.sortingChangeHandler}
                    betweenSwtich={state.searchBar.betweenSwitch}
                    betweenSwtichLabel={state.searchBar.betweenSwitchLabel}

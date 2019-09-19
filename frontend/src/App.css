@@ -83,17 +83,17 @@ li.active-link button.page-link {
     color: #dc3545;
 }
 
-.react-datetimerange-picker {
+.react-datetime-picker {
     padding: 5px;
     background-color: white;
     color: black;
 }
 
-.react-datetimerange-picker__wrapper {
+.react-datetime-picker__wrapper {
     border: none
 }
 
-.react-datetimerange-picker__inputGroup {
+.react-datetime-picker__inputGroup {
     margin: 0 3px;
 }
 
