@@ -175,39 +175,56 @@ export default class FriendList extends Component {
   render() {
     const state = this.state;
 
-    const contacts = state.friends.map(f => <div className="container Tile">
-      <div className="row" key={f._id}>
-        <div className="col-md-1"/>
-        <div className="col-md-7">
-          <h1>
-            <Link style={{textDecoration: "none"}} className="text-white" to={"friend/" + f._id}>
+    let contacts;
+
+    if (state.count > 0) {
+      contacts = state.friends.map(f => <div className="container Tile">
+        <div className="row" key={f._id}>
+          <div className="col-md-1"/>
+          <div className="col-md-7">
+            <h1>
+              <Link style={{textDecoration: "none"}} className="text-white" to={"friend/" + f._id}>
               <span className="Tile-Header">
               {f.firstName} {f.lastName}
               </span>
-            </Link>
-          </h1>
+              </Link>
+            </h1>
+          </div>
+          <div className="col-md-3 text-right">
+            <h2>{f.currentTime}</h2>
+          </div>
+          <div className="col-md-1"/>
         </div>
-        <div className="col-md-3 text-right">
-          <h2>{f.currentTime}</h2>
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-5">
+            <p>{f.city}, {f.country}</p>
+          </div>
+          <div className="col-md-5 text-right">
+            <h5>{f.currentDate}</h5>
+          </div>
+          <div className="col-md-1"/>
         </div>
-        <div className="col-md-1"/>
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-10 text-right">
+            <i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
+               style={{cursor: "pointer"}}/>
+          </div>
+          <div className="col-md-1"/>
+        </div>
+      </div>);
+    } else {
+      contacts = <div className="container Tile">
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-10">
+            <h1>No Contacts</h1>
+          </div>
+          <div className="col-md-1"/>
+        </div>
       </div>
-      <div className="row">
-        <div className="col-md-1"/>
-        <div className="col-md-5">
-          <p>{f.city}, {f.country}</p>
-        </div>
-        <div className="col-md-5 text-right">
-          <h5>{f.currentDate}</h5>
-        </div>
-        <div className="col-md-1"/>
-      </div>
-    </div>);
-
-    const rows = state.friends.map(f => <tr key={f._id}>
-      <td><i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
-             style={{cursor: "pointer"}}/></td>
-    </tr>);
+    }
 
     const pagination = <div className="container Pagination">
       <div className="row">
@@ -257,9 +274,9 @@ export default class FriendList extends Component {
                    firstName={state.searchBar.firstName}
                    lastName={state.searchBar.lastName}/>
       </div>
-      {pagination}
+      {state.count > 0 ? {pagination} : null}
       {contacts}
-      {pagination}
+      {state.count > 0 ? {pagination} : null}
     </Fragment>
   }
 };
