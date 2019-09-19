@@ -1,7 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import {CustomInput, FormGroup, Input} from "reactstrap";
-import DateTimeRangePicker from '@wojtekmaj/react-datetimerange-picker'
-
+import DateTimePicker from 'react-datetime-picker';
 
 export default class SearchBar extends Component {
 
@@ -39,23 +38,36 @@ export default class SearchBar extends Component {
         </div>
         <div className="col-md-1"/>
       </div>
-      {props.betweenSwtich ?
-        <div className="row mt-3">
+      {props.betweenSwtich ? <Fragment>
+        <div className="row mt-4">
           <div className="col-md-1"/>
-          <div className="col-md-10">
-          <span className="Time mt-4" style={{display: "block"}}>
-          <DateTimeRangePicker
-            disableClock={true}
+          <div className="col-md-5 mt-1">
+            <h4 className="mr-3" style={{display: "inline"}}>From:</h4>
+            <span className="Time mt-4">
+          <DateTimePicker
             calendarIcon={null}
             clearIcon={null}
-            format="yyyy.MM.dd | HH:mm"
-            onChange={props.rangeChanged}
-            value={props.range}
+            format="yyyy.MM.dd HH:mm"
+            onChange={props.fromChanged}
+            value={props.range.from}
+          />
+          </span>
+          </div>
+          <div className="col-md-5 mt-1">
+            <h4 className="mr-3" style={{display: "inline"}}>To:</h4>
+            <span className="Time mt-4">
+          <DateTimePicker
+            calendarIcon={null}
+            clearIcon={null}
+            format="yyyy.MM.dd HH:mm"
+            onChange={props.toChanged}
+            value={props.range.to}
           />
           </span>
           </div>
           <div className="col-md-1"/>
-        </div> : null}
+        </div>
+      </Fragment> : null}
     </Fragment>
   }
 }

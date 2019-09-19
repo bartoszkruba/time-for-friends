@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react'
+import React, {Fragment, PureComponent} from 'react'
 import {Redirect} from "react-router-dom";
 import {Button, FormGroup, Input, Label} from "reactstrap";
 import validator from 'validator';
@@ -136,155 +136,164 @@ export default class NewFriendForm extends PureComponent {
       color: "red"
     };
 
-    const enteredEmails = state.form.enteredEmails.map(e => <div key={e}>
-      {e} <span onClick={event => this.removeEmailHandler(e)} className="Delete-Icon" style={{cursor: "pointer"}}><i
-      className="fas fa-trash"/></span>
+    const enteredEmails = state.form.enteredEmails.map(e => <div key={e}
+                                                                 className="d-flex justify-content-between new-friend-border p-2">
+      <span>{e}</span>
+      <span onClick={event => this.removeEmailHandler(e)} className="Delete-Icon" style={{cursor: "pointer"}}><i
+        className="fas fa-trash"/></span>
     </div>);
 
-    const enteredPhoneNumbers = state.form.enteredPhoneNumbers.map(p => <div key={p}>
-      {p} <span onClick={event => this.removePhoneNumberHandler(p)} className="Delete-Icon"
-                style={{cursor: "pointer"}}><i className="fas fa-trash"/></span>
+    const enteredPhoneNumbers = state.form.enteredPhoneNumbers.map(p => <div key={p}
+                                                                             className="d-flex justify-content-between new-friend-border p-2">
+      <span>{p}</span>
+      <span onClick={event => this.removePhoneNumberHandler(p)} className="Delete-Icon"
+            style={{cursor: "pointer"}}><i className="fas fa-trash"/></span>
     </div>);
     const countries = state.countries.map(c => <option key={c.name}>{c.name}</option>);
     const timezones = state.timezones.map(t => <option key={t.name}>{t.name}</option>);
 
-    return <div className="container Card">
-      {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
-      <div className="row">
-        <div className="col-md-1"/>
-        <div className="col-md-10">
-          <h1 className="Card-Header">Add New Contact</h1>
+    return <Fragment>
+      <div className="container Card">
+        {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-10">
+            <h1 className="Card-Header">Add New Contact</h1>
+          </div>
+          <div className="col-md-1"/>
         </div>
-        <div className="col-md-1"/>
+        <div className="row mt-4">
+          <div className="col-md-1"/>
+          <div className="col-md-5">
+            <FormGroup>
+              <Label>First Name </Label>
+              <span style={redColorStyle}> *</span>
+              <Input value={state.form.firstName} onChange={this.inputChangeHandler} type="text" name="firstName"
+                     placeholder="First Name" onKeyDown={this.keyDownHandler}/>
+            </FormGroup>
+          </div>
+          <div className="col-md-5">
+            <FormGroup>
+              <Label>Last Name </Label>
+              <span style={redColorStyle}> *</span>
+              <Input value={state.form.lastName} onChange={this.inputChangeHandler} type="text" name="lastName"
+                     placeholder="Last Name" onKeyDown={this.keyDownHandler}/>
+            </FormGroup>
+          </div>
+          <div className="col-md-1"/>
+        </div>
+        <div className="row mt-3">
+          <div className="col-md-1"/>
+          <div className="col-md-5">
+            <FormGroup>
+              <Label>City </Label>
+              <span style={redColorStyle}> *</span>
+              <Input value={state.form.city} onChange={this.inputChangeHandler} type="text" name="city"
+                     placeholder="City" onKeyDown={this.keyDownHandler}/>
+            </FormGroup>
+          </div>
+          <div className="col-md-5">
+            <FormGroup>
+              <Label>Country </Label>
+              <span style={redColorStyle}> *</span>
+              <Input value={state.form.country} onChange={this.inputChangeHandler} type="select" name="country"
+                     placeholder="Country" onKeyDown={this.keyDownHandler}>
+                {countries}
+              </Input>
+            </FormGroup>
+          </div>
+          <div className="col-md-1"/>
+        </div>
+        <div className="row mt-3">
+          <div className="col-md-1"/>
+          <div className="col-md-5">
+            <FormGroup>
+              <Label>Timezone</Label>
+              <span style={redColorStyle}> *</span>
+              <Input value={state.form.timezone} onChange={this.inputChangeHandler} type="select" name="timezone"
+                     placeholder="Timezone" onKeyDown={this.keyDownHandler}>
+                {timezones}
+              </Input>
+            </FormGroup>
+          </div>
+          <div className="col-md-6"/>
+        </div>
       </div>
-      <div className="row mt-4">
-        <div className="col-md-1"/>
-        <div className="col-md-5">
-          <FormGroup>
-            <Label>First Name </Label>
-            <span style={redColorStyle}> *</span>
-            <Input value={state.form.firstName} onChange={this.inputChangeHandler} type="text" name="firstName"
-                   placeholder="First Name" onKeyDown={this.keyDownHandler}/>
-          </FormGroup>
+      <div className="container Tile">
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-10">
+            <h4>Emails</h4>
+          </div>
+          <div className="col-md-1"/>
         </div>
-        <div className="col-md-5">
-          <FormGroup>
-            <Label>Last Name </Label>
-            <span style={redColorStyle}> *</span>
-            <Input value={state.form.lastName} onChange={this.inputChangeHandler} type="text" name="lastName"
-                   placeholder="Last Name" onKeyDown={this.keyDownHandler}/>
-          </FormGroup>
+        <div className="row mt-1">
+          <div className="col-md-1"/>
+          <div className="col-md-5">
+            <FormGroup>
+              <Input value={state.form.email} onChange={this.inputChangeHandler} type="email" placeholder="Email"
+                     name="email" onKeyDown={this.keyDownOnEmail}/>
+            </FormGroup>
+          </div>
+          <div className="col-md-1">
+            <FormGroup>
+              <Button onClick={this.emailEnteredHandler} outline color="info">Add</Button>
+            </FormGroup>
+          </div>
+          <div className="col-md-4"/>
         </div>
-        <div className="col-md-1"/>
+        {enteredEmails.length > 0 ? <div className="row mt-3">
+          <div className="col-md-1"/>
+          <div className="col-md-6">
+            <FormGroup>
+              {enteredEmails}
+            </FormGroup>
+          </div>
+          <div className="col-md-5"/>
+          <div className="col-md-1"/>
+        </div> : null}
+        <div className="row mt-3">
+          <div className="col-md-1"/>
+          <div className="col-md-10">
+            <h4>Phone Numbers</h4>
+          </div>
+          <div className="col-md-1"/>
+        </div>
+        <div className="row mt-1">
+          <div className="col-md-1"/>
+          <div className="col-md-5">
+            <FormGroup>
+              <Input value={state.form.phoneNumber} onChange={this.inputChangeHandler} type="text"
+                     placeholder="Phone Number" name="phoneNumber" onKeyDown={this.keyDownOnPhoneNumber}/>
+            </FormGroup>
+          </div>
+          <div className="col-md-1">
+            <FormGroup>
+              <Button onClick={this.phoneNumberEnteredHandler} outline color="info">Add</Button>
+            </FormGroup>
+          </div>
+          <div className="col-md-4"/>
+        </div>
+        {enteredPhoneNumbers.length > 0 ? <div className="row mt-3">
+          <div className="col-md-1"/>
+          <div className="col-md-6">
+            <FormGroup>
+              {enteredPhoneNumbers}
+            </FormGroup>
+          </div>
+          <div className="col-md-5"/>
+        </div> : null}
+        <div className="row mt-4 text-right">
+          <div className="col-md-1"/>
+          <div className="col-md-10">
+            <Button onClick={this.submitHandler} disabled={!state.validation} type="button" size="lg" color="info">
+              Add Contact
+            </Button>
+          </div>
+          <div className="col-md-1"/>
+        </div>
       </div>
-      <div className="row mt-3">
-        <div className="col-md-1"/>
-        <div className="col-md-5">
-          <FormGroup>
-            <Label>City </Label>
-            <span style={redColorStyle}> *</span>
-            <Input value={state.form.city} onChange={this.inputChangeHandler} type="text" name="city"
-                   placeholder="City" onKeyDown={this.keyDownHandler}/>
-          </FormGroup>
-        </div>
-        <div className="col-md-5">
-          <FormGroup>
-            <Label>Country </Label>
-            <span style={redColorStyle}> *</span>
-            <Input value={state.form.country} onChange={this.inputChangeHandler} type="select" name="country"
-                   placeholder="Country" onKeyDown={this.keyDownHandler}>
-              {countries}
-            </Input>
-          </FormGroup>
-        </div>
-        <div className="col-md-1"/>
-      </div>
-      <div className="row mt-3">
-        <div className="col-md-1"/>
-        <div className="col-md-5">
-          <FormGroup>
-            <Label>Timezone</Label>
-            <span style={redColorStyle}> *</span>
-            <Input value={state.form.timezone} onChange={this.inputChangeHandler} type="select" name="timezone"
-                   placeholder="Timezone" onKeyDown={this.keyDownHandler}>
-              {timezones}
-            </Input>
-          </FormGroup>
-        </div>
-        <div className="col-md-6"/>
-      </div>
-      <div className="row mt-5">
-        <div className="col-md-1"/>
-        <div className="col-md-10">
-          <h4>Emails</h4>
-        </div>
-        <div className="col-md-1"/>
-      </div>
-      <div className="row mt-1">
-        <div className="col-md-1"/>
-        <div className="col-md-5">
-          <FormGroup>
-            <Input value={state.form.email} onChange={this.inputChangeHandler} type="email" placeholder="Email"
-                   name="email" onKeyDown={this.keyDownOnEmail}/>
-          </FormGroup>
-        </div>
-        <div className="col-md-1">
-          <FormGroup>
-            <Button onClick={this.emailEnteredHandler} outline color="info">Add</Button>
-          </FormGroup>
-        </div>
-        <div className="col-md-4"/>
-      </div>
-      {enteredEmails.length > 0 ? <div className="row mt-3">
-        <div className="col-md-1"/>
-        <div className="col-md-10">
-          <FormGroup>
-            {enteredEmails}
-          </FormGroup>
-        </div>
-        <div className="col-md-1"/>
-      </div> : null}
-      <div className="row mt-3">
-        <div className="col-md-1"/>
-        <div className="col-md-10">
-          <h4>Phone Numbers</h4>
-        </div>
-        <div className="col-md-1"/>
-      </div>
-      <div className="row mt-1">
-        <div className="col-md-1"/>
-        <div className="col-md-5">
-          <FormGroup>
-            <Input value={state.form.phoneNumber} onChange={this.inputChangeHandler} type="text"
-                   placeholder="Phone Number" name="phoneNumber" onKeyDown={this.keyDownOnPhoneNumber}/>
-          </FormGroup>
-        </div>
-        <div className="col-md-1">
-          <FormGroup>
-            <Button onClick={this.phoneNumberEnteredHandler} outline color="info">Add</Button>
-          </FormGroup>
-        </div>
-        <div className="col-md-4"/>
-      </div>
-      {enteredPhoneNumbers.length > 0 ? <div className="row mt-3">
-        <div className="col-md-1"/>
-        <div className="col-md-10">
-          <FormGroup>
-            {enteredPhoneNumbers}
-          </FormGroup>
-        </div>
-        <div className="col-md-1"/>
-      </div> : null}
-      <div className="row mt-4">
-        <div className="col-md-1"/>
-        <div className="col-md-10">
-          <Button onClick={this.submitHandler} disabled={!state.validation} type="button" size="lg" color="info">
-            Add Contact
-          </Button>
-        </div>
-        <div className="col-md-1"/>
-      </div>
-    </div>
+    </Fragment>
   }
 
 };
