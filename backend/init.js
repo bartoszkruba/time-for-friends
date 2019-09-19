@@ -91,12 +91,12 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
   {"firstName": "Rasla", "lastName": "Semper"},
   {"firstName": "Patty", "lastName": "Allabarton"},
   {"firstName": "Cash", "lastName": "Grover"},
-  {"firstName": "Bradan", "lastName": "Van Der Weedenburg"},
+  {"firstName": "Cash", "lastName": "Van Der Weedenburg"},
   {"firstName": "Conn", "lastName": "Rosengart"},
   {"firstName": "Julian", "lastName": "Connew"},
   {"firstName": "Spike", "lastName": "Bum"},
   {"firstName": "Zelda", "lastName": "Charlson"},
-  {"firstName": "Josey", "lastName": "Rex"}];
+  {"firstName": "Cash", "lastName": "Rex"}];
 
 (async () => {
   try {

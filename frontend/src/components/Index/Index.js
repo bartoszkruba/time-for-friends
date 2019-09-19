@@ -1,23 +1,27 @@
 import React from 'react'
+import {Link} from "react-router-dom";
+import {Button, Jumbotron} from 'reactstrap';
 import '../../App.css'
 
 
 const index = () => {
 
-  return <div className="container Card">
-    <div className="row">
-      <div className="col-md-2"/>
-      <div className="col-md-8">
-        <h1>Welcome!</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      </div>
-      <div className="col-md-2"/>
-    </div>
+  return <div className="container">
+    <Jumbotron className="Card" style={{backgroundColor: "rgba(0, 0, 0, 0.8)", paddingRight: "100px",
+      paddingLeft: "100px"}}>
+      <h1 className="display-3">Welcome!</h1>
+      <p className="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+        labore et dolore. t enim ad minim veniam, quis nostrud exercitation !</p>
+      <hr className="my-2"/>
+      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur.</p>
+      <p className="lead">
+        <Link to="/register">
+          <Button color="info" size="lg" className="m-auto">Sign Up Now!</Button>
+        </Link>
+      </p>
+    </Jumbotron>
   </div>
-
-
 };
 
 export default index;

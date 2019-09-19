@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Alert, Button, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Alert, Button, FormGroup, Input, Label} from 'reactstrap';
 import validator from 'validator';
 import '../../App.css'
 import graphqlService from "../../graphql/graphqlService";
@@ -81,40 +81,48 @@ export default class RegisterForm extends Component {
       color: "red"
     };
 
-    return <div className="container Card align-self-center">
+    return <div className="container Card align-self-center top-margin">
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8">
-
-          <h1>Register</h1>
+          <h1 className="Card-Header">Register New Account</h1>
           {(state.validation.email !== "" || state.validation.password !== "" ||
-            this.state.validation.repeatPassword !== "") ? <Alert color="info">
+            this.state.validation.repeatPassword !== "") ? <Alert className="mt-4" color="info">
             {this.state.validation.email !== "" ? <div>- {state.validation.email}</div> : null}
             {this.state.validation.password !== "" ? <div>- {state.validation.password}</div> : null}
             {this.state.validation.repeatPassword !== "" ? <div>-{state.validation.repeatPassword}</div> : null}
-          </Alert> : null
-          }
-          <Form>
-            <FormGroup>
-              <Label>Email </Label>
-              <span style={redColorStyle}> *</span>
-              <Input value={state.email} onChange={this.inputChangeHandler} type="email" name="email"
-                     placeholder="Email" onKeyDown={this.keyDownHandler}/>
-            </FormGroup>
-            <FormGroup>
-              <Label>Password </Label>
-              <span style={redColorStyle}> *</span>
-              <Input value={state.password} onChange={this.inputChangeHandler} type="password" name="password"
-                     placeholder="Password" onKeyDown={this.keyDownHandler}/>
-            </FormGroup>
-            <FormGroup>
-              <Label>Repeat Password</Label>
-              <span style={redColorStyle}> *</span>
-              <Input value={state.repeatPassword} onChange={this.inputChangeHandler} type="password"
-                     name="repeatPassword" placeholder="Repeat Password" onKeyDown={this.keyDownHandler}/>
-            </FormGroup>
-            <Button onClick={this.submitHandler} type="button" color="info">Register</Button>
-          </Form>
+          </Alert> : null}
+        </div>
+        <div className="col-md-2"/>
+      </div>
+      <div className="row mt-4">
+        <div className="col-md-2"/>
+        <div className="col-md-8">
+          <FormGroup>
+            <Label>Email </Label>
+            <span style={redColorStyle}> *</span>
+            <Input value={state.email} onChange={this.inputChangeHandler} type="email" name="email"
+                   placeholder="Email" onKeyDown={this.keyDownHandler}/>
+          </FormGroup>
+          <FormGroup>
+            <Label>Password </Label>
+            <span style={redColorStyle}> *</span>
+            <Input value={state.password} onChange={this.inputChangeHandler} type="password" name="password"
+                   placeholder="Password" onKeyDown={this.keyDownHandler}/>
+          </FormGroup>
+          <FormGroup>
+            <Label>Repeat Password</Label>
+            <span style={redColorStyle}> *</span>
+            <Input value={state.repeatPassword} onChange={this.inputChangeHandler} type="password"
+                   name="repeatPassword" placeholder="Repeat Password" onKeyDown={this.keyDownHandler}/>
+          </FormGroup>
+        </div>
+        <div className="col-md-2"/>
+      </div>
+      <div className="row">
+        <div className="col-md-2"/>
+        <div className="col-md-8 mt-3">
+          <Button onClick={this.submitHandler} type="button" size="lg" color="info">Sign Up</Button>
         </div>
         <div className="col-md-2"/>
       </div>

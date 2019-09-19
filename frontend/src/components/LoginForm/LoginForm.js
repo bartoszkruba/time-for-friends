@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Alert, Button, Form, FormGroup, Input, Label} from "reactstrap";
+import {Alert, Button, FormGroup, Input, Label} from "reactstrap";
 import validator from 'validator';
 import graphqlService from "../../graphql/graphqlService";
 
@@ -69,29 +69,39 @@ export default class LoginForm extends Component {
       color: "red"
     };
 
-    return <div className="container Card">
+    return <div className="container Card ">
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8">
-          <h1>Log In</h1>
-          {state.validation.errorMessage !== "" ? <Alert color="info">
+          <h1 className="Card-Header">Sign In To Your Account</h1>
+          {state.validation.errorMessage !== "" ? <Alert className="mt-4" color="info">
             <div>- {state.validation.errorMessage}</div>
           </Alert> : null}
-          <Form>
-            <FormGroup>
-              <Label>Email </Label>
-              <span style={redColorStyle}> *</span>
-              <Input value={state.email} onChange={this.inputChangeHandler} type="email" name="email"
-                     placeholder="Email" onKeyDown={this.keyDownHandler}/>
-            </FormGroup>
-            <FormGroup>
-              <Label>Password </Label>
-              <span style={redColorStyle}> *</span>
-              <Input value={state.password} onChange={this.inputChangeHandler} type="password" name="password"
-                     placeholder="Password" onKeyDown={this.keyDownHandler}/>
-            </FormGroup>
-            <Button onClick={this.submitHandler} type="button" color="info">Log In</Button>
-          </Form>
+        </div>
+        <div className="col-md-2"/>
+      </div>
+      <div className="row mt-4">
+        <div className="col-md-2"/>
+        <div className="col-md-8">
+          <FormGroup>
+            <Label>Email </Label>
+            <span style={redColorStyle}> *</span>
+            <Input value={state.email} onChange={this.inputChangeHandler} type="email" name="email"
+                   placeholder="Email" onKeyDown={this.keyDownHandler}/>
+          </FormGroup>
+          <FormGroup>
+            <Label>Password </Label>
+            <span style={redColorStyle}> *</span>
+            <Input value={state.password} onChange={this.inputChangeHandler} type="password" name="password"
+                   placeholder="Password" onKeyDown={this.keyDownHandler}/>
+          </FormGroup>
+        </div>
+        <div className="col-md-2"/>
+      </div>
+      <div className="row mt-3">
+        <div className="col-md-2"/>
+        <div className="col-md-8">
+          <Button onClick={this.submitHandler} type="button" size="lg" color="info">Sign In</Button>
         </div>
         <div className="col-md-2"/>
       </div>

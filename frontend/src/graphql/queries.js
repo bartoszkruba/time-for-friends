@@ -20,10 +20,9 @@ export default {
           }
       }
   `,
-  friends: gql`
-      query friends($firstName: String!, $lastName: String!, $sort: String!, $from: String, $to: String){
-          friends(friendQuery: {
-              firstName: $firstName, lastName: $lastName, sort: $sort, from: $from, to: $to}) {
+  friend: gql`
+      query friend($_id: ID!){
+          friend(_id: $_id) {
               _id
               firstName
               lastName
@@ -32,6 +31,26 @@ export default {
               timezone {
                   name
               }
+              emails
+              phoneNumbers
+          }
+      }
+  `,
+  friends: gql`
+      query friends($firstName: String!, $lastName: String!, $sort: String!, $from: String, $to: String, $page: Int!){
+          friends(friendQuery: {
+              firstName: $firstName, lastName: $lastName, sort: $sort, from: $from, to: $to, page: $page}) {
+              friends{
+                  _id
+                  firstName
+                  lastName
+                  city
+                  country
+                  timezone {
+                      name
+                  }
+              }
+              count
           }
       }
   `
