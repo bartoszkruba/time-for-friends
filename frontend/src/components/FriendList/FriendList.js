@@ -185,8 +185,8 @@ export default class FriendList extends Component {
     let contacts;
 
     if (state.count > 0) {
-      contacts = state.friends.map(f => <div className="container Tile">
-        <div className="row" key={f._id}>
+      contacts = state.friends.map(f => <div key={f._id} className="container Tile">
+        <div className="row">
           <div className="col-md-1"/>
           <div className="col-md-7">
             <h1>

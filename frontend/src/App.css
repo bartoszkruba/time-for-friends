@@ -85,12 +85,16 @@ li.active-link button.page-link {
 
 .react-datetime-picker {
     padding: 5px;
-    background-color: white;
-    color: black;
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+}
+
+.react-datetime-picker__inputGroup__input {
+    color: white;
 }
 
 .react-datetime-picker__wrapper {
-    border: none
+    border: none !important;
 }
 
 .react-datetime-picker__inputGroup {
