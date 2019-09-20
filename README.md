@@ -20,7 +20,7 @@ Start server in production setup (without nodemon):
 `
 npm run start`
 
-### Environment Variables (On Linux):
+### Environment Variables (Terminal command for Linux machine):
 
 Server port (default 8080):
   
@@ -34,6 +34,7 @@ MONGO_URI=YOUR_URI node run start
 `
 
 Geocode API key (server won't run without this variable)  
+
 `
 GEOCODE_API_KEY=YOU_API_KEY npm start
 `
@@ -42,7 +43,13 @@ GEOCODE_API_KEY=YOU_API_KEY npm start
 
 ## Frontend
 
-### Environment Variables (On Linux):  
+### Environment Variables (Terminal commands for Linux machine):  
+
+Backend URI (default http://localhost:8080/graphql)  
+
+`
+REACT_APP_BACKEND_URI=YOUR_URI npm start`
+
 
 Google Maps API 
 

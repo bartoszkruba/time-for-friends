@@ -2,7 +2,7 @@ import ApolloClient from 'apollo-boost';
 import queries from "./queries";
 import mutations from './mutations'
 
-const URI = "http://localhost:8080/graphql";
+const URI = process.env._REACT_APP_BACKEND_URI || "http://localhost:8080/graphql";
 
 let client;
 
