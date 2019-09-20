@@ -50,13 +50,13 @@ export default class SearchBar extends Component {
         <div className="col-md-1"/>
       </div>
       {props.betweenSwtich ? <Fragment>
-        <div className="row mt-5">
+        <div className="row mt-4">
           <div className="col-md-1"/>
-          <div className="col-md-5">
-            <h2>From: {this.tipFormatter(props.range.from)}</h2>
+          <div className="col-md-5 mt-1">
+            <h3>From: {this.tipFormatter(props.range.from)}</h3>
           </div>
-          <div className="col-md-5">
-            <h2>To: {this.tipFormatter(props.range.to)}</h2>
+          <div className="col-md-5 mt-1">
+            <h3>To: {this.tipFormatter(props.range.to)}</h3>
           </div>
           <div className="col-md-1"/>
         </div>
