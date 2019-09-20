@@ -19,6 +19,7 @@ export default class MapComponent extends Component {
       this.setState({friends: response.data.allFriends})
     } catch (e) {
       console.log(e);
+      this.props.showModal();
     }
   }
 

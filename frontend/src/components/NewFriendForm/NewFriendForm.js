@@ -34,13 +34,15 @@ export default class NewFriendForm extends PureComponent {
     }
     try {
       const response = await graphqlService.timezones();
-      response.data.timezones.unshift({name: "---"});
+      const timezones = [...response.data.timezones];
+      timezones.unshift({name: "---"});
       const form = {...this.state.form};
       form.timezone = "---";
       form.country = "---";
-      this.setState({timezones: response.data.timezones, form})
+      await this.setState({timezones, form})
     } catch (e) {
       console.log(e);
+      this.showModal();
     }
   }
 
@@ -126,6 +128,7 @@ export default class NewFriendForm extends PureComponent {
       this.props.addedNewFriend()
     } catch (e) {
       console.log(e);
+      this.props.showModal();
     }
   };
 

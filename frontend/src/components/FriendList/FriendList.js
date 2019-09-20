@@ -128,6 +128,7 @@ export default class FriendList extends Component {
       this.setState({friends: response.data.friends.friends, page: page, count: response.data.friends.count})
     } catch (e) {
       console.log(e);
+      this.props.showModal();
     }
   };
 
