@@ -28,8 +28,13 @@ export default class SearchBar extends Component {
         <div className="col-md-1"/>
         <div className="col-md-5 mt-1">
           <h4 className="mr-4" style={{display: "inline"}}> Sort By </h4>
-          <CustomInput inline checked={props.sortingSwitch} type="switch" id="sortingSwitch" name="sortingSwitch"
-                       onChange={props.sortingChanged} label={props.sortingSwitchLabel}/>
+          <Input className="mt-2" placeholder="Sorting" type="select" value={props.sorting} name="sorting"
+                 onChange={props.formChanged}>
+            <option>First Name</option>
+            <option>Country</option>
+            <option>Current Time</option>
+          </Input>
+
         </div>
         <div className="col-md-5 mt-1">
           <h4 className="mr-4" style={{display: "inline"}}> Time Picker </h4>

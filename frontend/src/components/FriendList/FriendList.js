@@ -17,6 +17,7 @@ export default class FriendList extends Component {
       range: {from: new Date(), to: new Date()},
       betweenSwitch: false,
       betweenSwitchLabel: "Off",
+      sorting: "First Name",
       sortingSwitch: false,
       sortingSwitchLabel: "First Name"
     },
@@ -82,7 +83,16 @@ export default class FriendList extends Component {
         page: page
       };
 
-      query.sort = state.sortingSwitch ? "country" : "firstName";
+      switch (state.sorting) {
+        case "First Name":
+          query.sort = "firstName";
+          break;
+        case "Country":
+          query.sort = "country";
+          break;
+        default:
+          query.sort = "currentTime";
+      }
 
       if (state.range && state.range.from && state.range.to && state.betweenSwitch) {
         query.from = moment(state.range.from).format("YYYYMMDDHHmmss");
@@ -136,14 +146,6 @@ export default class FriendList extends Component {
   toRangeChangedHandler = async date => {
     const searchBar = {...this.state.searchBar};
     searchBar.range.to = date;
-    await this.setState({searchBar});
-    this.requestFriends(1);
-  };
-
-  sortingChangeHandler = async e => {
-    const searchBar = {...this.state.searchBar};
-    searchBar.sortingSwitch = !searchBar.sortingSwitch;
-    searchBar.sortingSwitchLabel = searchBar.sortingSwitch ? "Country" : "First Name";
     await this.setState({searchBar});
     this.requestFriends(1);
   };
@@ -279,10 +281,9 @@ export default class FriendList extends Component {
                    toChanged={this.toRangeChangedHandler}
                    formChanged={this.searchBarChangedHandler}
                    sortingChanged={this.sortingChangeHandler}
+                   sorting={state.searchBar.sorting}
                    betweenSwtich={state.searchBar.betweenSwitch}
                    betweenSwtichLabel={state.searchBar.betweenSwitchLabel}
-                   sortingSwitch={state.searchBar.sortingSwitch}
-                   sortingSwitchLabel={state.searchBar.sortingSwitchLabel}
                    range={state.searchBar.range}
                    firstName={state.searchBar.firstName}
                    lastName={state.searchBar.lastName}/>
