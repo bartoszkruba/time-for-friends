@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
 import GoogleMapReact from 'google-map-react';
-import Geocode from 'react-geocode';
 import Marker from "./Marker/Marker";
 import graphqlService from "../../graphql/graphqlService";
-
-const GEOCODE_API_KEY = "";
-// const GEOCODE_API_KEY = "AIzaSyCsFAebmSpLmEFctzPC7kh9nl8efYDkgac";
 
 export default class MapComponent extends Component {
   state = {
@@ -18,17 +14,9 @@ export default class MapComponent extends Component {
   };
 
   async componentDidMount() {
-    Geocode.setApiKey(GEOCODE_API_KEY);
     try {
-      const response = await graphqlService.friends({firstName: "", lastName: "", sort: "firstName", page: 1});
-      const friends = [];
-      for (let friend of response.data.friends.friends) {
-        const result = await Geocode.fromAddress(friend.city + ", " + friend.country);
-        friend.lat = result.results[0].geometry.location.lat;
-        friend.lng = result.results[0].geometry.location.lng;
-        friends.push(friend)
-      }
-      this.setState({friends})
+      const response = await graphqlService.friendsLocations();
+      this.setState({friends: response.data.allFriends})
     } catch (e) {
       console.log(e);
     }
@@ -57,7 +45,7 @@ export default class MapComponent extends Component {
           <div>
             <GoogleMapReact
               yesIWantToUseGoogleMapApiInternals
-              bootstrapURLKeys={{key: "AIzaSyC14Jm2T-rQD5SzyDTxZ1IFIISrOL6myqo"}}
+              bootstrapURLKeys={{key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY}}
               style={{width: "100%", height: "500"}}
               defaultCenter={this.state.center}
               defaultZoom={this.state.zoom}

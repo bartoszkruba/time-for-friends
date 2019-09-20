@@ -58,6 +58,11 @@ module.exports.deleteFriend = async ({_id}, req) => {
   return true;
 };
 
+module.exports.allFriends = async (props, req) => {
+  const user = await checkIfAuthenticated(req);
+  return await Friend.find({user: user._id});
+};
+
 module.exports.friends = async ({friendQuery}, req) => {
   const user = await checkIfAuthenticated(req);
   const query = {
