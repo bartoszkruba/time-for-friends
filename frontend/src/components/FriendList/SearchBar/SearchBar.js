@@ -34,7 +34,6 @@ export default class SearchBar extends Component {
             <option>Country</option>
             <option>Current Time</option>
           </Input>
-
         </div>
         <div className="col-md-5 mt-1">
           <h4 className="mr-4" style={{display: "inline"}}> Time Picker </h4>

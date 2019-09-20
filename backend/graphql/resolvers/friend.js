@@ -78,13 +78,30 @@ module.exports.friends = async ({friendQuery}, req) => {
     user: user._id
   };
 
-  let friends = await Friend.find(query)
-    .sort([[friendQuery.sort, 1],
-      [(friendQuery.sort === "firstName" ? "country" : "firstName"), 1]])
-    .populate('timezone');
+  let friends;
+  if (friendQuery.sort === "firstName" || friendQuery.sort === "country") {
+    friends = await Friend.find(query)
+      .sort([[friendQuery.sort, 1],
+        [(friendQuery.sort === "firstName" ? "country" : "firstName"), 1]])
+      .populate('timezone');
+    if (friendQuery.from && friendQuery.to) {
+      friends = friends.filter(f => (f.timezone.currentTime >= friendQuery.from && f.timezone.currentTime <= friendQuery.to))
+    }
+  } else {
+    friends = await Friend.find(query)
+      .populate('timezone');
 
-  if (friendQuery.from && friendQuery.to) {
-    friends = friends.filter(f => (f.timezone.currentTime >= friendQuery.from && f.timezone.currentTime <= friendQuery.to))
+    if (friendQuery.from && friendQuery.to) {
+      friends = friends.filter(f => (f.timezone.currentTime >= friendQuery.from && f.timezone.currentTime <= friendQuery.to))
+    }
+
+    friends = friends.sort((a, b) => {
+      if (a.timezone.currentTime > b.timezone.currentTime) return 1;
+      if (a.timezone.currentTime < b.timezone.currentTime) return -1;
+
+      if (a.firstName.currentTime > b.firstName) return 1;
+      if (a.firstName.currentTime < b.firstName) return -1;
+    });
   }
 
   const count = friends.length;
