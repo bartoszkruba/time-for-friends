@@ -37,19 +37,9 @@ export default class FriendList extends Component {
       }
     }
 
-    const searchBar = {...this.state.searchBar};
-
-    const earliest = new Date(moment.tz("Pacific/Samoa").format("MMM DD, YYYY HH:MM"));
-    const latest = new Date(moment.tz("Pacific/Kiritimati").format("MMM DD, YYYY HH:MM"));
-    latest.setHours(latest.getHours() + 1);
-
-    searchBar.range.min = earliest.getTime();
-    searchBar.range.max = latest.getTime();
-    searchBar.range.from = earliest.getTime();
-    searchBar.range.to = latest.getTime();
-
-    await this.setState({_isMounted: true, searchBar});
+    await this.setState({_isMounted: true});
     this.requestFriends(1);
+    this.calculateTimePickerRange();
     this.calculateTimes();
   }
 
@@ -58,6 +48,25 @@ export default class FriendList extends Component {
   }
 
   sleep = ms => new Promise((resolve => setTimeout(resolve, ms)));
+
+  calculateTimePickerRange = async () => {
+    while (this.state._isMounted) {
+      const searchBar = {...this.state.searchBar};
+
+      const earliest = new Date(moment.tz("Pacific/Samoa").format("MMM DD, YYYY HH:MM"));
+      const latest = new Date(moment.tz("Pacific/Kiritimati").format("MMM DD, YYYY HH:MM"));
+      latest.setHours(latest.getHours() + 1);
+
+      searchBar.range.min = earliest.getTime();
+      searchBar.range.max = latest.getTime();
+      searchBar.range.from = earliest.getTime();
+      searchBar.range.to = latest.getTime();
+
+      this.setState({searchBar});
+
+      await this.sleep(60 * 30 * 1000);
+    }
+  };
 
   calculateTimes = async () => {
     while (this.state._isMounted) {
