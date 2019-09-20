@@ -88,7 +88,7 @@ li.active-link button.page-link {
 
 .react-datetime-picker {
     padding: 5px;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: transparent;
     color: white;
 }
 

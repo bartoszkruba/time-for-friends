@@ -32,7 +32,16 @@ export default class FriendList extends Component {
       }
     }
 
-    await this.setState({_isMounted: true});
+    const searchBar = {...this.state.searchBar};
+
+    const earliest = new Date(moment.tz("Pacific/Samoa").format("MMM DD, YYYY HH:MM"));
+    const latest = new Date(moment.tz("Pacific/Kiritimati").format("MMM DD, YYYY HH:MM"));
+    latest.setHours(latest.getHours() + 1);
+
+    searchBar.range.from = earliest;
+    searchBar.range.to = latest;
+
+      await this.setState({_isMounted: true, searchBar});
     this.requestFriends(1);
     this.calculateTimes();
   }
