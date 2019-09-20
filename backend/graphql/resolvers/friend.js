@@ -1,5 +1,6 @@
 const validator = require('validator');
 
+const {getCoordinatesForName} = require('../../geocode/geocode');
 const Friend = require('../../models/Friend');
 const Timezone = require('../../models/Timezone');
 const User = require('../../models/User');
@@ -24,7 +25,13 @@ module.exports.addFriend = async ({friendInput}, req) => {
   validateNewFriend(friendInput);
 
   const timezone = await getTimezone(friendInput.timezone);
-  const friend = await Friend({...friendInput, user: user._id, timezone: timezone._id}).save();
+  const coordinates = await getCoordinatesForName(friendInput.city + " " + friendInput.country);
+  const friend = await Friend({
+    ...friendInput,
+    ...coordinates,
+    user: user._id,
+    timezone: timezone._id
+  }).save();
   user.friends.push(friend);
   await user.save();
 
