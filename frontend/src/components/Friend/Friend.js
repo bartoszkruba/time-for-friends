@@ -35,6 +35,7 @@ export default class Friend extends Component {
 
     } catch (e) {
       console.log(e);
+      this.props.showModal();
     }
   }
 

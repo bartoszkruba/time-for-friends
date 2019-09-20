@@ -12,11 +12,10 @@ const index = () => {
       paddingLeft: "100px"
     }}>
       <h1 className="display-3">Welcome!</h1>
-      <p className="lead">"Time For Friends" is an web application that allows you to track you friends local time live.
-        You can enter as many different friends and timezones as you want and we will track theirs local times for you
+      <p className="lead">"Time For Friends" is an web application that allows you to track your friends local time live.
+        You can enter as many persons with different timezones as you want and we will track their local time for you
         totally for free.</p>
       <hr className="my-2"/>
-      <p>Join 100.000 other users right now.</p>
       <p className="lead">
         <Link to="/register">
           <Button color="info" size="lg" className="m-auto">Sign Up Now!</Button>
