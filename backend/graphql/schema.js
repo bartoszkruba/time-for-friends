@@ -14,6 +14,8 @@ module.exports = buildSchema(`
       lastName: String!
       city: String!
       country: String!
+      lat: String!
+      lng: String!
       emails: [String]
       phoneNumbers: [String]
       timezone: Timezone
@@ -63,6 +65,7 @@ module.exports = buildSchema(`
      login(email: String! password: String!): AuthData!
      timezones: [Timezone]!
      friends(friendQuery: FriendQuery): FriendList!
+     allFriends: [Friend]!
      friend(_id: ID!): Friend!
      isAuthenticated: Boolean!
    }

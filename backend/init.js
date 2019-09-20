@@ -1,12 +1,14 @@
 const moment = require('moment-timezone');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const NodeGeocoder = require('node-geocoder');
 
 const Timezone = require('./models/Timezone');
 const User = require('./models/User');
 const Friend = require('./models/Friend');
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost/time_for_friends';
+const GEOCODE_KEY = process.env.GEOCODE_API_KEY || null;
 
 const timezones = [
   "Asia/Tokyo",
@@ -99,6 +101,11 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
   {"firstName": "Cash", "lastName": "Rex"}];
 
 (async () => {
+  if (!GEOCODE_KEY) {
+    console.log('Cannot initialize data without geocode api key');
+    return;
+  }
+
   try {
     console.log('Connecting to database...');
 
@@ -129,7 +136,8 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
       await addMockFriends(user);
     }
     await user.save();
-    console.log('done')
+    console.log('done');
+    return;
   } catch (e) {
     console.log(e);
   }
@@ -137,20 +145,36 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
 
 
 const addMockFriends = async user => {
-  for (let i = 0; i < 20; i++) {
-    const timezone = await Timezone.findOne({name: timezones[i]});
-    if (!timezone) {
-      console.log(timezones[i])
+  try {
+    let options = {
+      provider: "google",
+      apiKey: GEOCODE_KEY,
+    };
+
+    let geocoder = NodeGeocoder(options);
+
+    for (let i = 0; i < 20; i++) {
+      const timezone = await Timezone.findOne({name: timezones[i]});
+      if (!timezone) {
+        console.log(timezones[i])
+      }
+
+      const geocodeResponse = await geocoder.geocode(cities[i] + " " + countries[i]);
+
+      const friend = await Friend({
+        firstName: persons[i].firstName,
+        lastName: persons[i].lastName,
+        city: cities[i],
+        country: countries[i],
+        lat: geocodeResponse[0].latitude,
+        lng: geocodeResponse[0].longitude,
+        timezone: timezone._id,
+        user: user._id
+      }).save();
+      user.friends.push(friend._id);
     }
-    const friend = await Friend({
-      firstName: persons[i].firstName,
-      lastName: persons[i].lastName,
-      city: cities[i],
-      country: countries[i],
-      timezone: timezone._id,
-      user: user._id
-    }).save();
-    user.friends.push(friend._id);
+  } catch (e) {
+    console.log(e);
   }
 };
 

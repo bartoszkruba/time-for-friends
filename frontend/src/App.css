@@ -62,8 +62,11 @@ li.active-link button.page-link {
 }
 
 .Time {
-    font-family: 'Ubuntu Mono', monospace;
-    font-size: 105%;
+    font-size: 120%;
+}
+
+.DateTimePicker {
+    font-size: 130%;
 }
 
 .Nav-Item {
