@@ -1,8 +1,15 @@
 import React, {Component, Fragment} from 'react';
 import {CustomInput, FormGroup, Input} from "reactstrap";
-import DateTimePicker from 'react-datetime-picker';
+import 'rc-slider/assets/index.css';
+import {Range} from 'rc-slider';
+import moment from 'moment-timezone';
 
 export default class SearchBar extends Component {
+
+
+  tipFormatter = value => {
+    return moment(value).format("YYYY.MM.DD, HH:MM")
+  };
 
   render() {
     const props = this.props;
@@ -43,31 +50,26 @@ export default class SearchBar extends Component {
         <div className="col-md-1"/>
       </div>
       {props.betweenSwtich ? <Fragment>
+        <div className="row mt-5">
+          <div className="col-md-1"/>
+          <div className="col-md-5">
+            <h2>From: {this.tipFormatter(props.range.from)}</h2>
+          </div>
+          <div className="col-md-5">
+            <h2>To: {this.tipFormatter(props.range.to)}</h2>
+          </div>
+          <div className="col-md-1"/>
+        </div>
         <div className="row mt-4">
           <div className="col-md-1"/>
-          <div className="col-md-5 mt-1">
-            <h4 className="mr-3" style={{display: "inline"}}>From:</h4>
-            <span className="Time mt-4">
-          <DateTimePicker
-            calendarIcon={null}
-            clearIcon={null}
-            format="yyyy.MM.dd HH:mm"
-            onChange={props.fromChanged}
-            value={props.range.from}
-          />
-          </span>
-          </div>
-          <div className="col-md-5 mt-1">
-            <h4 className="mr-3" style={{display: "inline"}}>To:</h4>
-            <span className="Time mt-4">
-          <DateTimePicker
-            calendarIcon={null}
-            clearIcon={null}
-            format="yyyy.MM.dd HH:mm"
-            onChange={props.toChanged}
-            value={props.range.to}
-          />
-          </span>
+          <div className="col-md-10">
+            <Range
+              min={props.range.min}
+              max={props.range.max}
+              allowCross={false}
+              defaultValue={[0, 0]}
+              value={[props.range.from, props.range.to]}
+              onChange={props.rangeChanged}/>
           </div>
           <div className="col-md-1"/>
         </div>

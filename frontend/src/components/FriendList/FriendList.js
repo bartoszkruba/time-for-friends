@@ -14,7 +14,12 @@ export default class FriendList extends Component {
     searchBar: {
       firstName: "",
       lastName: "",
-      range: {from: new Date(), to: new Date()},
+      range: {
+        min: 0,
+        max: 40,
+        from: new Date(),
+        to: new Date(),
+      },
       betweenSwitch: false,
       betweenSwitchLabel: "Off",
       sorting: "First Name",
@@ -38,10 +43,12 @@ export default class FriendList extends Component {
     const latest = new Date(moment.tz("Pacific/Kiritimati").format("MMM DD, YYYY HH:MM"));
     latest.setHours(latest.getHours() + 1);
 
-    searchBar.range.from = earliest;
-    searchBar.range.to = latest;
+    searchBar.range.min = earliest.getTime();
+    searchBar.range.max = latest.getTime();
+    searchBar.range.from = earliest.getTime();
+    searchBar.range.to = latest.getTime();
 
-      await this.setState({_isMounted: true, searchBar});
+    await this.setState({_isMounted: true, searchBar});
     this.requestFriends(1);
     this.calculateTimes();
   }
@@ -145,16 +152,11 @@ export default class FriendList extends Component {
     this.requestFriends(1)
   };
 
-  fromRangeChangedHandler = async date => {
+  rangeChangedHandler = async value => {
     const searchBar = {...this.state.searchBar};
-    searchBar.range.from = date;
-    await this.setState({searchBar});
-    this.requestFriends(1);
-  };
+    searchBar.range.from = value[0];
+    searchBar.range.to = value[1];
 
-  toRangeChangedHandler = async date => {
-    const searchBar = {...this.state.searchBar};
-    searchBar.range.to = date;
     await this.setState({searchBar});
     this.requestFriends(1);
   };
@@ -286,16 +288,16 @@ export default class FriendList extends Component {
           </div>
           <div className="col-md-1"/>
         </div>
-        <SearchBar fromChanged={this.fromRangeChangedHandler}
-                   toChanged={this.toRangeChangedHandler}
-                   formChanged={this.searchBarChangedHandler}
-                   sortingChanged={this.sortingChangeHandler}
-                   sorting={state.searchBar.sorting}
-                   betweenSwtich={state.searchBar.betweenSwitch}
-                   betweenSwtichLabel={state.searchBar.betweenSwitchLabel}
-                   range={state.searchBar.range}
-                   firstName={state.searchBar.firstName}
-                   lastName={state.searchBar.lastName}/>
+        <SearchBar
+          rangeChanged={this.rangeChangedHandler}
+          formChanged={this.searchBarChangedHandler}
+          sortingChanged={this.sortingChangeHandler}
+          sorting={state.searchBar.sorting}
+          betweenSwtich={state.searchBar.betweenSwitch}
+          betweenSwtichLabel={state.searchBar.betweenSwitchLabel}
+          range={state.searchBar.range}
+          firstName={state.searchBar.firstName}
+          lastName={state.searchBar.lastName}/>
       </div>
       {pagination}
       {contacts}
