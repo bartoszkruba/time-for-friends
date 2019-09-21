@@ -24,7 +24,9 @@ export default class NewFriendForm extends PureComponent {
       phoneNumber: "",
       enteredPhoneNumbers: []
     },
-    validation: false
+    validation: false,
+    emailValidation: false,
+    phoneNumberValidation: false
   };
 
   // load timezones on mount
@@ -63,12 +65,11 @@ export default class NewFriendForm extends PureComponent {
   };
 
   phoneNumberEnteredHandler = e => {
-    const form = {...this.state.form};
-    form.phoneNumber = form.phoneNumber.trim();
-    if (form.phoneNumber !== "" && form.enteredPhoneNumbers.findIndex(p => p === form.phoneNumber) === -1) {
+    if (this.state.phoneNumberValidation) {
+      const form = {...this.state.form};
       form.enteredPhoneNumbers.push(form.phoneNumber);
       form.phoneNumber = "";
-      this.setState({form})
+      this.setState({form, phoneNumberValidation: false});
     }
   };
 
@@ -98,8 +99,20 @@ export default class NewFriendForm extends PureComponent {
   };
 
   keyDownOnPhoneNumber = e => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && this.state.phoneNumberValidation) {
       this.phoneNumberEnteredHandler();
+    }
+  };
+
+  phoneNumberChangedHandler = e => {
+    const form = {...this.state.form};
+    const phoneNumber = e.target.value.trim();
+    if (phoneNumber !== "" && form.enteredPhoneNumbers.findIndex(p => p === phoneNumber) === -1) {
+      form.phoneNumber = phoneNumber;
+      this.setState({phoneNumberValidation: true, form});
+    } else {
+      form.phoneNumber = phoneNumber;
+      this.setState({phoneNumberValidation: false, form});
     }
   };
 
@@ -232,7 +245,8 @@ export default class NewFriendForm extends PureComponent {
               <Input value={state.form.email} onChange={this.inputChangeHandler} type="email" placeholder="Email"
                      name="email" onKeyDown={this.keyDownOnEmail}/>
               <InputGroupAddon addonType="append">
-                <Button onClick={this.emailEnteredHandler} outline color="info">Add</Button>
+                <Button disabled={!state.emailValidation} onClick={this.emailEnteredHandler} outline
+                        color="info">Add</Button>
               </InputGroupAddon>
             </InputGroup>
             <FormGroup className="mt-3">
@@ -242,10 +256,11 @@ export default class NewFriendForm extends PureComponent {
           <div className="col-md-5">
             <h4>Phone Numbers</h4>
             <InputGroup>
-              <Input value={state.form.phoneNumber} onChange={this.inputChangeHandler} type="text"
+              <Input value={state.form.phoneNumber} onChange={this.phoneNumberChangedHandler} type="text"
                      placeholder="Phone Number" name="phoneNumber" onKeyDown={this.keyDownOnPhoneNumber}/>
               <InputGroupAddon addonType="append">
-                <Button onClick={this.phoneNumberEnteredHandler} outline color="info">Add</Button>
+                <Button disabled={!state.phoneNumberValidation}
+                        onClick={this.phoneNumberEnteredHandler} outline color="info">Add</Button>
               </InputGroupAddon>
             </InputGroup>
             <FormGroup className="mt-3">
