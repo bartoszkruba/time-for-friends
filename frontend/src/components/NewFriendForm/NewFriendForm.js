@@ -51,10 +51,10 @@ export default class NewFriendForm extends PureComponent {
   emailEnteredHandler = e => {
     const form = {...this.state.form};
     form.email = form.email.trim();
-    if (validator.isEmail(form.email) && form.enteredEmails.findIndex(e => e === form.email) === -1) {
+    if (this.state.emailValidation) {
       form.enteredEmails.push(this.state.form.email);
       form.email = "";
-      this.setState({form})
+      this.setState({form, emailValidation: false})
     }
   };
 
@@ -101,6 +101,17 @@ export default class NewFriendForm extends PureComponent {
   keyDownOnPhoneNumber = e => {
     if (e.key === 'Enter' && this.state.phoneNumberValidation) {
       this.phoneNumberEnteredHandler();
+    }
+  };
+
+  emailChangedHandler = e => {
+    const form = {...this.state.form};
+    const email = e.target.value.trim();
+    form.email = email;
+    if (validator.isEmail(email) && form.enteredEmails.findIndex(e => e === email) === -1) {
+      this.setState({form, emailValidation: true})
+    } else {
+      this.setState({form, emailValidation: false})
     }
   };
 
@@ -160,7 +171,9 @@ export default class NewFriendForm extends PureComponent {
     </div>);
 
     const enteredPhoneNumbers = state.form.enteredPhoneNumbers.map(p => <div key={p}
-                                                                             className="mt-1 d-flex justify-content-between new-friend-border p-2">
+                                                                             className="mt-1
+                                                                             d-flex justify-content-between
+                                                                             new-friend-border p-2">
       <span>{p}</span>
       <span onClick={event => this.removePhoneNumberHandler(p)} className="Delete-Icon"
             style={{cursor: "pointer"}}><i className="fas fa-trash"/></span>
@@ -242,7 +255,7 @@ export default class NewFriendForm extends PureComponent {
           <div className="col-md-5">
             <h4>Emails</h4>
             <InputGroup>
-              <Input value={state.form.email} onChange={this.inputChangeHandler} type="email" placeholder="Email"
+              <Input value={state.form.email} onChange={this.emailChangedHandler} type="email" placeholder="Email"
                      name="email" onKeyDown={this.keyDownOnEmail}/>
               <InputGroupAddon addonType="append">
                 <Button disabled={!state.emailValidation} onClick={this.emailEnteredHandler} outline
