@@ -125,12 +125,15 @@ export default class FriendList extends Component {
 
       switch (state.sorting) {
         case "First Name":
+        case "Förnamn":
           query.sort = "firstName";
           break;
         case "Country":
+        case "Land":
           query.sort = "country";
           break;
         case "Last Name":
+        case "Efternamn":
           query.sort = "lastName";
           break;
         default:
@@ -225,6 +228,17 @@ export default class FriendList extends Component {
 
     let contacts;
 
+    const text = {};
+
+    switch (this.props.language) {
+      case "se":
+        text.header = "Filtrera Dina Kontakter";
+        break;
+      case "en":
+        text.header = "Filter Your Contacts";
+        break;
+    }
+
     if (state.count > 0) {
       contacts = state.friends.map(f => <div key={f._id} className="container Tile">
         <div className="row">
@@ -312,11 +326,12 @@ export default class FriendList extends Component {
         <div className="row mb-2">
           <div className="col-md-1"/>
           <div className="col-md-10">
-            <h1 className="Card-Header">Filter Your Contacts</h1>
+            <h1 className="Card-Header">{text.header}</h1>
           </div>
           <div className="col-md-1"/>
         </div>
         <SearchBar
+          language={this.props.language}
           rangeChanged={this.rangeChangedHandler}
           formChanged={this.searchBarChangedHandler}
           sortingChanged={this.sortingChangeHandler}

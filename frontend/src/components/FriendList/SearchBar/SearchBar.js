@@ -6,10 +6,52 @@ import moment from 'moment-timezone';
 
 export default class SearchBar extends Component {
 
-  tipFormatter = value => moment(value).format("YYYY.MM.DD, HH:mm");
+  formatTime = value => {
+    let format;
+
+    switch (this.props.language) {
+      case "se":
+        format = "DD.MM.YYYY, HH:mm";
+        break;
+      case "en":
+        format = "MM.DD.YYYY, hh:mm A";
+        break;
+    }
+    return moment(value).format(format);
+  };
 
   render() {
     const props = this.props;
+
+    const text = {};
+
+    switch (this.props.language) {
+      case "se":
+        text.header = "Filtrera Dina Kontakter";
+        text.firstNamePlaceholder = "Förnamn";
+        text.lastNamePlaceHolder = "Efternamn";
+        text.sortBy = "Sortera Efter";
+        text.timePicker = "Tidväljare";
+        text.optionFirstName = "Förnamn";
+        text.optionLastName = "Efternamn";
+        text.optionCountry = "Land";
+        text.optionCurrentTime = "Nuvarande Tid";
+        text.betweenSwitchFrom = "Från:";
+        text.betweenSwitchTo = "Till:";
+        break;
+      case "en":
+        text.firstNamePlaceholder = "First Name";
+        text.lastNamePlaceHolder = "Last Name";
+        text.sortBy = "Sort By";
+        text.timePicker = "Time Picker";
+        text.optionFirstName = "First Name";
+        text.optionLastName = "Last Name";
+        text.optionCountry = "Country";
+        text.optionCurrentTime = "Current Time";
+        text.betweenSwitchFrom = "From";
+        text.betweenSwitchTo = "To";
+        break;
+    }
 
     return <Fragment>
       <div className="row mt-4">
@@ -17,13 +59,13 @@ export default class SearchBar extends Component {
         <div className="col-md-5">
           <FormGroup>
             <Input onChange={props.formChanged} value={props.firstName} type="text" name="firstName"
-                   placeholder="First Name"/>
+                   placeholder={text.firstNamePlaceholder}/>
           </FormGroup>
         </div>
         <div className="col-md-5">
           <FormGroup>
             <Input onChange={props.formChanged} value={props.lastName} type="text" name="lastName"
-                   placeholder="Last Name"/>
+                   placeholder={text.lastNamePlaceHolder}/>
           </FormGroup>
         </div>
         <div className="col-md-1"/>
@@ -31,19 +73,19 @@ export default class SearchBar extends Component {
       <div className="row mt-3">
         <div className="col-md-1"/>
         <div className="col-md-5 mt-1">
-          <h4 className="mr-4" style={{display: "inline"}}> Sort By </h4>
-          <Input className="mt-2" placeholder="Sorting" type="select" value={props.sorting} name="sorting"
+          <h4 className="mr-4" style={{display: "inline"}}>{text.sortBy}</h4>
+          <Input className="mt-2" type="select" value={props.sorting} name="sorting"
                  onChange={props.formChanged}>
-            <option>First Name</option>
-            <option>Last Name</option>
-            <option>Country</option>
-            <option>Current Time</option>
+            <option>{text.optionFirstName}</option>
+            <option>{text.optionLastName}</option>
+            <option>{text.optionCountry}</option>
+            <option>{text.optionCurrentTime}</option>
           </Input>
         </div>
         <div className="col-md-5 mt-1">
-          <h4 className="mr-4" style={{display: "inline"}}> Time Picker </h4>
+          <h4 className="mr-4" style={{display: "inline"}}>{text.timePicker}</h4>
           <CustomInput inline checked={props.betweenSwtich} type="switch" id="betweenSwitch" name="betweenSwitch"
-                       label={props.betweenSwtichLabel} onChange={props.formChanged}/>
+                       onChange={props.formChanged}/>
         </div>
         <div className="col-md-1"/>
       </div>
@@ -51,10 +93,10 @@ export default class SearchBar extends Component {
         <div className="row mt-4">
           <div className="col-md-1"/>
           <div className="col-md-5 mt-1">
-            <h3>From: {this.tipFormatter(props.range.from)}</h3>
+            <h3>{text.betweenSwitchFrom} {this.formatTime(props.range.from)}</h3>
           </div>
           <div className="col-md-5 mt-1">
-            <h3>To: {this.tipFormatter(props.range.to)}</h3>
+            <h3>{text.betweenSwitchTo} {this.formatTime(props.range.to)}</h3>
           </div>
           <div className="col-md-1"/>
         </div>
