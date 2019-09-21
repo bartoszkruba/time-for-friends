@@ -16,10 +16,10 @@ import graphqlService from "./graphql/graphqlService";
 export default class App extends Component {
 
   state = {
+    language: "en",
     loggedIn: true,
     redirect: "",
     showModal: false,
-    modalText: ""
   };
 
   async componentDidMount() {
@@ -64,14 +64,30 @@ export default class App extends Component {
     const state = this.state;
 
     const register = () => <RegisterForm showModal={this.showModal}
+                                         language={this.state.language}
                                          registerSuccessfull={this.successfullRegisterHandler}/>;
-    const login = () => <LoginForm showModal={this.showModal} loginSuccessfull={this.successfullLoginHandler}/>;
-    const index = () => <Index showModal={this.showModal} classname="card"/>;
+
+    const login = () => <LoginForm showModal={this.showModal}
+                                   language={this.state.language}
+                                   loginSuccessfull={this.successfullLoginHandler}/>;
+
+    const index = () => <Index showModal={this.showModal}
+                               language={this.state.language}/>;
+
     const newFriend = () => <NewFriendForm showModal={this.showModal} loggedIn={state.loggedIn}
+                                           language={this.state.language}
                                            addedNewFriend={this.createdNewFriendHandler}/>;
-    const friendList = () => <FriendList showModal={this.showModal} loggedIn={state.loggedIn}/>;
-    const friend = ({match}) => <Friend showModal={this.showModal} _id={match.params.id}/>;
-    const mapComponent = () => <MapComponent showModal={this.showModal}/>;
+
+    const friendList = () => <FriendList showModal={this.showModal}
+                                         language={this.state.language}
+                                         loggedIn={state.loggedIn}/>;
+
+    const friend = ({match}) => <Friend showModal={this.showModal}
+                                        language={this.state.language}
+                                        _id={match.params.id}/>;
+
+    const mapComponent = () => <MapComponent showModal={this.showModal}
+                                             language={this.state.language}/>;
 
     return (
       <Router>
