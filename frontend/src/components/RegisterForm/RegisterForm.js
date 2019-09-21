@@ -41,7 +41,15 @@ export default class RegisterForm extends Component {
             this.setState({validation})
           }
         } else {
-          const validation = {email: "Something went wrong, please try again", password: "", repeatPassword: ""};
+          let validation;
+          switch (this.props.language) {
+            case "se":
+              validation = {email: "Något har blivit fel, försök igen", password: "", repeatPassword: ""};
+              break;
+            case "en":
+              validation = {email: "Something went wrong, please try again", password: "", repeatPassword: ""};
+              break;
+          }
           this.setState({validation})
         }
       }
@@ -57,7 +65,13 @@ export default class RegisterForm extends Component {
       !validator.isLength(state.password, {min: 5} ||
         !validator.isAlphanumeric(this.state.password))) {
       dataIsCorrect = false;
-      validation.password = "Password need to be at least 5 characters long and contain only letters and digits"
+      switch (this.props.language) {
+        case "se":
+          validation.password = "Lösenordet måste vara minst fem tecken lång och endast innehålla bokstäver och siffror";
+          break;
+        case "en":
+          validation.password = "Password need to be at least 5 characters long and contain only letters and digits";
+      }
     }
 
     this.setState({validation});
@@ -75,11 +89,30 @@ export default class RegisterForm extends Component {
       color: "red"
     };
 
+    const text = {};
+
+    switch (this.props.language) {
+      case "se":
+        text.header = "Registrera Nytt Konto";
+        text.emailLabel = "E-Post";
+        text.passwordLabel = "Lösenord";
+        text.repeatPasswordLabel = "Upprepa Lösenord";
+        text.signUp = "Registrera Dig";
+        break;
+      case "en":
+        text.header = "Register New Account";
+        text.emailLabel = "Email";
+        text.passwordLabel = "Password";
+        text.repeatPasswordLabel = "Repeat Password";
+        text.signUp = "Sign Up";
+        break;
+    }
+
     return <div className="container Card align-self-center top-margin">
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8">
-          <h1 className="Card-Header">Register New Account</h1>
+          <h1 className="Card-Header">{text.header}</h1>
           {(state.validation.email !== "" || state.validation.password !== "" ||
             this.state.validation.repeatPassword !== "") ? <Alert className="mt-4" color="info">
             {this.state.validation.email !== "" ? <div>- {state.validation.email}</div> : null}
@@ -93,22 +126,22 @@ export default class RegisterForm extends Component {
         <div className="col-md-2"/>
         <div className="col-md-8">
           <FormGroup>
-            <Label>Email </Label>
+            <Label>{text.emailLabel}</Label>
             <span style={redColorStyle}> *</span>
             <Input value={state.email} onChange={this.inputChangeHandler} type="email" name="email"
-                   placeholder="Email" onKeyDown={this.keyDownHandler}/>
+                   placeholder={text.emailLabel} onKeyDown={this.keyDownHandler}/>
           </FormGroup>
           <FormGroup>
-            <Label>Password </Label>
+            <Label>{text.passwordLabel}</Label>
             <span style={redColorStyle}> *</span>
             <Input value={state.password} onChange={this.inputChangeHandler} type="password" name="password"
-                   placeholder="Password" onKeyDown={this.keyDownHandler}/>
+                   placeholder={text.passwordLabel} onKeyDown={this.keyDownHandler}/>
           </FormGroup>
           <FormGroup>
-            <Label>Repeat Password</Label>
+            <Label>{text.repeatPasswordLabel}</Label>
             <span style={redColorStyle}> *</span>
             <Input value={state.repeatPassword} onChange={this.inputChangeHandler} type="password"
-                   name="repeatPassword" placeholder="Repeat Password" onKeyDown={this.keyDownHandler}/>
+                   name="repeatPassword" placeholder={text.repeatPasswordLabel} onKeyDown={this.keyDownHandler}/>
           </FormGroup>
         </div>
         <div className="col-md-2"/>
@@ -117,7 +150,7 @@ export default class RegisterForm extends Component {
         <div className="col-md-2"/>
         <div className="col-md-8 mt-3">
           <Button onClick={this.submitHandler} disabled={!this.areFieldsFilledIn()} type="button" size="lg"
-                  color="info">Sign Up</Button>
+                  color="info">{text.signUp}</Button>
         </div>
         <div className="col-md-2"/>
       </div>

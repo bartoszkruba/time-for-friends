@@ -30,7 +30,7 @@ export default class Navigation extends Component {
     switch (this.props.language) {
       case "se":
         text.signIn = "Logga In";
-        text.signup = "Registrera";
+        text.signup = "Registrera Dig";
         text.map = "Karta";
         text.myContacts = "Mina Kontakter";
         text.addContact = "Lägg Till Kontakt";
