@@ -7,9 +7,7 @@ import moment from 'moment-timezone';
 export default class SearchBar extends Component {
 
 
-  tipFormatter = value => {
-    return moment(value).format("YYYY.MM.DD, HH:MM")
-  };
+  tipFormatter = value => moment(value).format("YYYY.MM.DD, HH:mm");
 
   render() {
     const props = this.props;

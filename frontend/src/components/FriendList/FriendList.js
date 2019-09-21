@@ -53,8 +53,8 @@ export default class FriendList extends Component {
     while (this.state._isMounted) {
       const searchBar = {...this.state.searchBar};
 
-      const earliest = new Date(moment.tz("Pacific/Samoa").format("MMM DD, YYYY HH:MM"));
-      const latest = new Date(moment.tz("Pacific/Kiritimati").format("MMM DD, YYYY HH:MM"));
+      const earliest = new Date(moment.tz("Pacific/Samoa").format("MMM DD, YYYY HH:mm"));
+      const latest = new Date(moment.tz("Pacific/Kiritimati").format("MMM DD, YYYY HH:mm"));
       latest.setHours(latest.getHours() + 1);
 
       searchBar.range.min = earliest.getTime();
