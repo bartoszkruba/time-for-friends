@@ -104,7 +104,7 @@ export default class App extends Component {
               <Button color="info" onClick={this.closeModal}>Close</Button>{' '}
             </ModalFooter>
           </Modal>
-          <Navbar loggedIn={state.loggedIn} logout={this.logoutHandler}/>
+          <Navbar language={this.state.language} loggedIn={state.loggedIn} logout={this.logoutHandler}/>
           <div className="top-margin">
             <Route path="/" exact component={index}/>
             <Route path="/register/" exact component={register}/>
