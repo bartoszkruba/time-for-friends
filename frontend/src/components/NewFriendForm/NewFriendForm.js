@@ -1,6 +1,6 @@
 import React, {Fragment, PureComponent} from 'react'
 import {Redirect} from "react-router-dom";
-import {Button, FormGroup, Input, Label} from "reactstrap";
+import {Button, FormGroup, Input, InputGroup, InputGroupAddon, Label} from "reactstrap";
 import validator from 'validator';
 import countries from './countries'
 
@@ -140,14 +140,14 @@ export default class NewFriendForm extends PureComponent {
     };
 
     const enteredEmails = state.form.enteredEmails.map(e => <div key={e}
-                                                                 className="d-flex justify-content-between new-friend-border p-2">
+                                                                 className="mt-1 d-flex justify-content-between new-friend-border p-2">
       <span>{e}</span>
       <span onClick={event => this.removeEmailHandler(e)} className="Delete-Icon" style={{cursor: "pointer"}}><i
         className="fas fa-trash"/></span>
     </div>);
 
     const enteredPhoneNumbers = state.form.enteredPhoneNumbers.map(p => <div key={p}
-                                                                             className="d-flex justify-content-between new-friend-border p-2">
+                                                                             className="mt-1 d-flex justify-content-between new-friend-border p-2">
       <span>{p}</span>
       <span onClick={event => this.removePhoneNumberHandler(p)} className="Delete-Icon"
             style={{cursor: "pointer"}}><i className="fas fa-trash"/></span>
@@ -223,70 +223,38 @@ export default class NewFriendForm extends PureComponent {
         </div>
       </div>
       <div className="container Tile">
-        <div className="row">
-          <div className="col-md-1"/>
-          <div className="col-md-10">
-            <h4>Emails</h4>
-          </div>
-          <div className="col-md-1"/>
-        </div>
+
         <div className="row mt-1">
           <div className="col-md-1"/>
           <div className="col-md-5">
-            <FormGroup>
+            <h4>Emails</h4>
+            <InputGroup>
               <Input value={state.form.email} onChange={this.inputChangeHandler} type="email" placeholder="Email"
                      name="email" onKeyDown={this.keyDownOnEmail}/>
-            </FormGroup>
-          </div>
-          <div className="col-md-1">
-            <FormGroup>
-              <Button onClick={this.emailEnteredHandler} outline color="info">Add</Button>
-            </FormGroup>
-          </div>
-          <div className="col-md-4"/>
-        </div>
-        {enteredEmails.length > 0 ? <div className="row mt-3">
-          <div className="col-md-1"/>
-          <div className="col-md-6">
-            <FormGroup>
+              <InputGroupAddon addonType="append">
+                <Button onClick={this.emailEnteredHandler} outline color="info">Add</Button>
+              </InputGroupAddon>
+            </InputGroup>
+            <FormGroup className="mt-3">
               {enteredEmails}
             </FormGroup>
           </div>
-          <div className="col-md-5"/>
-          <div className="col-md-1"/>
-        </div> : null}
-        <div className="row mt-3">
-          <div className="col-md-1"/>
-          <div className="col-md-10">
-            <h4>Phone Numbers</h4>
-          </div>
-          <div className="col-md-1"/>
-        </div>
-        <div className="row mt-1">
-          <div className="col-md-1"/>
           <div className="col-md-5">
-            <FormGroup>
+            <h4>Phone Numbers</h4>
+            <InputGroup>
               <Input value={state.form.phoneNumber} onChange={this.inputChangeHandler} type="text"
                      placeholder="Phone Number" name="phoneNumber" onKeyDown={this.keyDownOnPhoneNumber}/>
-            </FormGroup>
-          </div>
-          <div className="col-md-1">
-            <FormGroup>
-              <Button onClick={this.phoneNumberEnteredHandler} outline color="info">Add</Button>
-            </FormGroup>
-          </div>
-          <div className="col-md-4"/>
-        </div>
-        {enteredPhoneNumbers.length > 0 ? <div className="row mt-3">
-          <div className="col-md-1"/>
-          <div className="col-md-6">
-            <FormGroup>
+              <InputGroupAddon addonType="append">
+                <Button onClick={this.phoneNumberEnteredHandler} outline color="info">Add</Button>
+              </InputGroupAddon>
+            </InputGroup>
+            <FormGroup className="mt-3">
               {enteredPhoneNumbers}
             </FormGroup>
           </div>
-          <div className="col-md-5"/>
-        </div> : null}
-        <div className="row mt-4 text-right">
+          <div className="col-md-1"/>
+        </div>
+        <div className="row mt-4">
           <div className="col-md-1"/>
           <div className="col-md-10">
             <Button onClick={this.submitHandler} disabled={!state.validation} type="button" size="lg" color="info">
