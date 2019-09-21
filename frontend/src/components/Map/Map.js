@@ -24,6 +24,17 @@ export default class MapComponent extends Component {
   }
 
   render() {
+    const text = {};
+
+    switch (this.props.language) {
+      case "se":
+        text.header = "Karta";
+        break;
+      case "en":
+        text.header = "Map";
+        break;
+    }
+
     const markers = this.state.friends.map(f => <Marker
       key={f._id}
       name={f.firstName + " " + f.lastName}
@@ -36,7 +47,7 @@ export default class MapComponent extends Component {
       <div className="row">
         <div className="col-md-1"/>
         <div className="col-md-10">
-          <h1 className="Card-Header">Map</h1>
+          <h1 className="Card-Header">{text.header}</h1>
         </div>
         <div className="col-md-1"/>
       </div>
