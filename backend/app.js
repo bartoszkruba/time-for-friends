@@ -14,6 +14,7 @@ const app = express();
 
 const PORT = process.env.PORT || 8080;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost/time_for_friends';
+const {GEOCODE_API_KEY} = require('./geocode/geocode');
 
 // Allowing CORS
 app.use(cors());
@@ -43,6 +44,11 @@ app.use('/graphql', graphqlHttp({
 // Starting server
 (async () => {
   try {
+    if (!GEOCODE_API_KEY) {
+      console.log("Cannot start server without geocode api key");
+      return
+    }
+
     // Connecting to MongoDB
     await mongoose.connect(MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true});
 

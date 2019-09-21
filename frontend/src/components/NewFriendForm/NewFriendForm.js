@@ -1,6 +1,6 @@
 import React, {Fragment, PureComponent} from 'react'
 import {Redirect} from "react-router-dom";
-import {Button, FormGroup, Input, Label} from "reactstrap";
+import {Button, FormGroup, Input, InputGroup, InputGroupAddon, Label} from "reactstrap";
 import validator from 'validator';
 import countries from './countries'
 
@@ -24,7 +24,9 @@ export default class NewFriendForm extends PureComponent {
       phoneNumber: "",
       enteredPhoneNumbers: []
     },
-    validation: false
+    validation: false,
+    emailValidation: false,
+    phoneNumberValidation: false
   };
 
   // load timezones on mount
@@ -34,23 +36,25 @@ export default class NewFriendForm extends PureComponent {
     }
     try {
       const response = await graphqlService.timezones();
-      response.data.timezones.unshift({name: "---"});
+      const timezones = [...response.data.timezones];
+      timezones.unshift({name: "---"});
       const form = {...this.state.form};
       form.timezone = "---";
       form.country = "---";
-      this.setState({timezones: response.data.timezones, form})
+      await this.setState({timezones, form})
     } catch (e) {
       console.log(e);
+      this.showModal();
     }
   }
 
   emailEnteredHandler = e => {
     const form = {...this.state.form};
     form.email = form.email.trim();
-    if (validator.isEmail(form.email) && form.enteredEmails.findIndex(e => e === form.email) === -1) {
+    if (this.state.emailValidation) {
       form.enteredEmails.push(this.state.form.email);
       form.email = "";
-      this.setState({form})
+      this.setState({form, emailValidation: false})
     }
   };
 
@@ -61,12 +65,11 @@ export default class NewFriendForm extends PureComponent {
   };
 
   phoneNumberEnteredHandler = e => {
-    const form = {...this.state.form};
-    form.phoneNumber = form.phoneNumber.trim();
-    if (form.phoneNumber !== "" && form.enteredPhoneNumbers.findIndex(p => p === form.phoneNumber) === -1) {
+    if (this.state.phoneNumberValidation) {
+      const form = {...this.state.form};
       form.enteredPhoneNumbers.push(form.phoneNumber);
       form.phoneNumber = "";
-      this.setState({form})
+      this.setState({form, phoneNumberValidation: false});
     }
   };
 
@@ -96,8 +99,31 @@ export default class NewFriendForm extends PureComponent {
   };
 
   keyDownOnPhoneNumber = e => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && this.state.phoneNumberValidation) {
       this.phoneNumberEnteredHandler();
+    }
+  };
+
+  emailChangedHandler = e => {
+    const form = {...this.state.form};
+    const email = e.target.value.trim();
+    form.email = email;
+    if (validator.isEmail(email) && form.enteredEmails.findIndex(e => e === email) === -1) {
+      this.setState({form, emailValidation: true})
+    } else {
+      this.setState({form, emailValidation: false})
+    }
+  };
+
+  phoneNumberChangedHandler = e => {
+    const form = {...this.state.form};
+    const phoneNumber = e.target.value.trim();
+    if (phoneNumber !== "" && form.enteredPhoneNumbers.findIndex(p => p === phoneNumber) === -1) {
+      form.phoneNumber = phoneNumber;
+      this.setState({phoneNumberValidation: true, form});
+    } else {
+      form.phoneNumber = phoneNumber;
+      this.setState({phoneNumberValidation: false, form});
     }
   };
 
@@ -126,6 +152,7 @@ export default class NewFriendForm extends PureComponent {
       this.props.addedNewFriend()
     } catch (e) {
       console.log(e);
+      this.props.showModal();
     }
   };
 
@@ -137,14 +164,16 @@ export default class NewFriendForm extends PureComponent {
     };
 
     const enteredEmails = state.form.enteredEmails.map(e => <div key={e}
-                                                                 className="d-flex justify-content-between new-friend-border p-2">
+                                                                 className="mt-1 d-flex justify-content-between new-friend-border p-2">
       <span>{e}</span>
       <span onClick={event => this.removeEmailHandler(e)} className="Delete-Icon" style={{cursor: "pointer"}}><i
         className="fas fa-trash"/></span>
     </div>);
 
     const enteredPhoneNumbers = state.form.enteredPhoneNumbers.map(p => <div key={p}
-                                                                             className="d-flex justify-content-between new-friend-border p-2">
+                                                                             className="mt-1
+                                                                             d-flex justify-content-between
+                                                                             new-friend-border p-2">
       <span>{p}</span>
       <span onClick={event => this.removePhoneNumberHandler(p)} className="Delete-Icon"
             style={{cursor: "pointer"}}><i className="fas fa-trash"/></span>
@@ -220,70 +249,40 @@ export default class NewFriendForm extends PureComponent {
         </div>
       </div>
       <div className="container Tile">
-        <div className="row">
-          <div className="col-md-1"/>
-          <div className="col-md-10">
-            <h4>Emails</h4>
-          </div>
-          <div className="col-md-1"/>
-        </div>
+
         <div className="row mt-1">
           <div className="col-md-1"/>
           <div className="col-md-5">
-            <FormGroup>
-              <Input value={state.form.email} onChange={this.inputChangeHandler} type="email" placeholder="Email"
+            <h4>Emails</h4>
+            <InputGroup>
+              <Input value={state.form.email} onChange={this.emailChangedHandler} type="email" placeholder="Email"
                      name="email" onKeyDown={this.keyDownOnEmail}/>
-            </FormGroup>
-          </div>
-          <div className="col-md-1">
-            <FormGroup>
-              <Button onClick={this.emailEnteredHandler} outline color="info">Add</Button>
-            </FormGroup>
-          </div>
-          <div className="col-md-4"/>
-        </div>
-        {enteredEmails.length > 0 ? <div className="row mt-3">
-          <div className="col-md-1"/>
-          <div className="col-md-6">
-            <FormGroup>
+              <InputGroupAddon addonType="append">
+                <Button disabled={!state.emailValidation} onClick={this.emailEnteredHandler} outline
+                        color="info">Add</Button>
+              </InputGroupAddon>
+            </InputGroup>
+            <FormGroup className="mt-3">
               {enteredEmails}
             </FormGroup>
           </div>
-          <div className="col-md-5"/>
-          <div className="col-md-1"/>
-        </div> : null}
-        <div className="row mt-3">
-          <div className="col-md-1"/>
-          <div className="col-md-10">
-            <h4>Phone Numbers</h4>
-          </div>
-          <div className="col-md-1"/>
-        </div>
-        <div className="row mt-1">
-          <div className="col-md-1"/>
           <div className="col-md-5">
-            <FormGroup>
-              <Input value={state.form.phoneNumber} onChange={this.inputChangeHandler} type="text"
+            <h4>Phone Numbers</h4>
+            <InputGroup>
+              <Input value={state.form.phoneNumber} onChange={this.phoneNumberChangedHandler} type="text"
                      placeholder="Phone Number" name="phoneNumber" onKeyDown={this.keyDownOnPhoneNumber}/>
-            </FormGroup>
-          </div>
-          <div className="col-md-1">
-            <FormGroup>
-              <Button onClick={this.phoneNumberEnteredHandler} outline color="info">Add</Button>
-            </FormGroup>
-          </div>
-          <div className="col-md-4"/>
-        </div>
-        {enteredPhoneNumbers.length > 0 ? <div className="row mt-3">
-          <div className="col-md-1"/>
-          <div className="col-md-6">
-            <FormGroup>
+              <InputGroupAddon addonType="append">
+                <Button disabled={!state.phoneNumberValidation}
+                        onClick={this.phoneNumberEnteredHandler} outline color="info">Add</Button>
+              </InputGroupAddon>
+            </InputGroup>
+            <FormGroup className="mt-3">
               {enteredPhoneNumbers}
             </FormGroup>
           </div>
-          <div className="col-md-5"/>
-        </div> : null}
-        <div className="row mt-4 text-right">
+          <div className="col-md-1"/>
+        </div>
+        <div className="row mt-4">
           <div className="col-md-1"/>
           <div className="col-md-10">
             <Button onClick={this.submitHandler} disabled={!state.validation} type="button" size="lg" color="info">

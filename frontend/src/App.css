@@ -62,8 +62,11 @@ li.active-link button.page-link {
 }
 
 .Time {
-    font-family: 'Ubuntu Mono', monospace;
-    font-size: 105%;
+    font-size: 120%;
+}
+
+.DateTimePicker {
+    font-size: 130%;
 }
 
 .Nav-Item {
@@ -85,7 +88,7 @@ li.active-link button.page-link {
 
 .react-datetime-picker {
     padding: 5px;
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: transparent;
     color: white;
 }
 

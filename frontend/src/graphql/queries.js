@@ -36,6 +36,17 @@ export default {
           }
       }
   `,
+  friendsLocations: gql`
+      query friendsLocations{
+          allFriends {
+              _id
+              firstName
+              lastName
+              lat
+              lng
+          }
+      }
+  `,
   friends: gql`
       query friends($firstName: String!, $lastName: String!, $sort: String!, $from: String, $to: String, $page: Int!){
           friends(friendQuery: {

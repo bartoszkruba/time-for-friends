@@ -20,7 +20,7 @@ export default class LoginForm extends Component {
   };
 
   keyDownHandler = e => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && this.areFieldsFilledIn()) {
       this.submitHandler()
     }
   };
@@ -49,10 +49,7 @@ export default class LoginForm extends Component {
 
   validateData = e => {
     const state = this.state;
-    if (!validator.isEmail(state.email)) {
-      this.setState({validation: {errorMessage: "Invalid Email"}});
-      return false;
-    } else if (validator.isEmpty(state.password) ||
+    if (validator.isEmpty(state.password) ||
       !validator.isLength(state.password, {min: 5} ||
         !validator.isAlphanumeric(this.state.password))) {
       this.setState({validation: {errorMessage: "Invalid Password"}});
@@ -61,6 +58,9 @@ export default class LoginForm extends Component {
     this.setState({validation: {errorMessage: ""}});
     return true;
   };
+
+  areFieldsFilledIn = () => (validator.isEmail(this.state.email) &&
+    !validator.isEmpty(this.state.password));
 
   render() {
     const state = this.state;
@@ -101,7 +101,9 @@ export default class LoginForm extends Component {
       <div className="row mt-3">
         <div className="col-md-2"/>
         <div className="col-md-8">
-          <Button onClick={this.submitHandler} type="button" size="lg" color="info">Sign In</Button>
+          <Button disabled={!this.areFieldsFilledIn()} onClick={this.submitHandler} type="button" size="lg" color="info">
+            Sign In
+          </Button>
         </div>
         <div className="col-md-2"/>
       </div>

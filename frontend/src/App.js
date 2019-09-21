@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
+import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 import './App.css';
 
 import Navbar from "./components/Navbar/Navbar";
@@ -9,13 +10,16 @@ import Index from './components/Index/Index';
 import NewFriendForm from "./components/NewFriendForm/NewFriendForm";
 import FriendList from "./components/FriendList/FriendList";
 import Friend from "./components/Friend/Friend";
+import MapComponent from "./components/Map/Map";
 import graphqlService from "./graphql/graphqlService";
 
 export default class App extends Component {
 
   state = {
     loggedIn: true,
-    redirect: ""
+    redirect: "",
+    showModal: false,
+    modalText: ""
   };
 
   async componentDidMount() {
@@ -27,6 +31,9 @@ export default class App extends Component {
       this.setState({loggedIn: false});
     }
   }
+
+  showModal = () => this.setState({showModal: true});
+  closeModal = () => this.setState({showModal: false});
 
   successfullRegisterHandler = (_id, email) => {
     this.redirect("/login")
@@ -56,14 +63,15 @@ export default class App extends Component {
   render() {
     const state = this.state;
 
-    const register = () => <RegisterForm registerSuccessfull={this.successfullRegisterHandler}/>;
-    const login = () => <LoginForm loginSuccessfull={this.successfullLoginHandler}/>;
-    const index = () => <Index classname="card"/>;
-    const newFriend = () => <NewFriendForm loggedIn={state.loggedIn} addedNewFriend={this.createdNewFriendHandler}/>;
-    const friendList = () => <FriendList loggedIn={state.loggedIn}/>;
-    const friend = ({match}) => {
-      return <Friend _id={match.params.id}/>;
-    };
+    const register = () => <RegisterForm showModal={this.showModal}
+                                         registerSuccessfull={this.successfullRegisterHandler}/>;
+    const login = () => <LoginForm showModal={this.showModal} loginSuccessfull={this.successfullLoginHandler}/>;
+    const index = () => <Index showModal={this.showModal} classname="card"/>;
+    const newFriend = () => <NewFriendForm showModal={this.showModal} loggedIn={state.loggedIn}
+                                           addedNewFriend={this.createdNewFriendHandler}/>;
+    const friendList = () => <FriendList showModal={this.showModal} loggedIn={state.loggedIn}/>;
+    const friend = ({match}) => <Friend showModal={this.showModal} _id={match.params.id}/>;
+    const mapComponent = () => <MapComponent showModal={this.showModal}/>;
 
     return (
       <Router>
@@ -71,6 +79,15 @@ export default class App extends Component {
         {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
 
         <div className="App">
+          <Modal isOpen={state.showModal} toggle={this.toggle} className={this.props.className}>
+            <ModalHeader toggle={this.toggle}>Something Went Wrong!</ModalHeader>
+            <ModalBody>
+              Please refresh site and try again.
+            </ModalBody>
+            <ModalFooter>
+              <Button color="info" onClick={this.closeModal}>Close</Button>{' '}
+            </ModalFooter>
+          </Modal>
           <Navbar loggedIn={state.loggedIn} logout={this.logoutHandler}/>
           <div className="top-margin">
             <Route path="/" exact component={index}/>
@@ -79,6 +96,7 @@ export default class App extends Component {
             <Route path="/new-friend" exact component={newFriend}/>
             <Route path="/friends" exact component={friendList}/>
             <Route path="/friend/:id" exact component={friend}/>
+            <Route path="/map" exact component={mapComponent}/>
           </div>
         </div>
       </Router>

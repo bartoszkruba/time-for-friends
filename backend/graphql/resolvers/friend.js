@@ -1,5 +1,6 @@
 const validator = require('validator');
 
+const {getCoordinatesForName} = require('../../geocode/geocode');
 const Friend = require('../../models/Friend');
 const Timezone = require('../../models/Timezone');
 const User = require('../../models/User');
@@ -24,7 +25,13 @@ module.exports.addFriend = async ({friendInput}, req) => {
   validateNewFriend(friendInput);
 
   const timezone = await getTimezone(friendInput.timezone);
-  const friend = await Friend({...friendInput, user: user._id, timezone: timezone._id}).save();
+  const coordinates = await getCoordinatesForName(friendInput.city + " " + friendInput.country);
+  const friend = await Friend({
+    ...friendInput,
+    ...coordinates,
+    user: user._id,
+    timezone: timezone._id
+  }).save();
   user.friends.push(friend);
   await user.save();
 
@@ -58,6 +65,11 @@ module.exports.deleteFriend = async ({_id}, req) => {
   return true;
 };
 
+module.exports.allFriends = async (props, req) => {
+  const user = await checkIfAuthenticated(req);
+  return await Friend.find({user: user._id});
+};
+
 module.exports.friends = async ({friendQuery}, req) => {
   const user = await checkIfAuthenticated(req);
   const query = {
@@ -66,13 +78,30 @@ module.exports.friends = async ({friendQuery}, req) => {
     user: user._id
   };
 
-  let friends = await Friend.find(query)
-    .sort([[friendQuery.sort, 1],
-      [(friendQuery.sort === "firstName" ? "country" : "firstName"), 1]])
-    .populate('timezone');
+  let friends;
+  if (friendQuery.sort === "firstName" || friendQuery.sort === "country" || friendQuery.sort === "lastName") {
+    friends = await Friend.find(query)
+      .sort([[friendQuery.sort, 1],
+        [(friendQuery.sort === "firstName" ? "lastName" : "firstName"), 1]])
+      .populate('timezone');
+    if (friendQuery.from && friendQuery.to) {
+      friends = friends.filter(f => (f.timezone.currentTime >= friendQuery.from && f.timezone.currentTime <= friendQuery.to))
+    }
+  } else {
+    friends = await Friend.find(query)
+      .populate('timezone');
 
-  if (friendQuery.from && friendQuery.to) {
-    friends = friends.filter(f => (f.timezone.currentTime >= friendQuery.from && f.timezone.currentTime <= friendQuery.to))
+    if (friendQuery.from && friendQuery.to) {
+      friends = friends.filter(f => (f.timezone.currentTime >= friendQuery.from && f.timezone.currentTime <= friendQuery.to))
+    }
+
+    friends = friends.sort((a, b) => {
+      if (a.timezone.currentTime > b.timezone.currentTime) return 1;
+      if (a.timezone.currentTime < b.timezone.currentTime) return -1;
+
+      if (a.firstName.currentTime > b.firstName) return 1;
+      if (a.firstName.currentTime < b.firstName) return -1;
+    });
   }
 
   const count = friends.length;

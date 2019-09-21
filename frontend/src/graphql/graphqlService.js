@@ -2,7 +2,7 @@ import ApolloClient from 'apollo-boost';
 import queries from "./queries";
 import mutations from './mutations'
 
-const URI = "http://localhost:8080/graphql";
+const URI = process.env._REACT_APP_BACKEND_URI || "http://localhost:8080/graphql";
 
 let client;
 
@@ -41,6 +41,10 @@ export default {
 
   timezones: async () => await getClient().query({
     query: queries.timezones, errorPolicy: "all"
+  }),
+
+  friendsLocations: async () => await getClient().query({
+    query: queries.friendsLocations, errorPolicy: "all", fetchPolicy: "no-cache"
   }),
 
   friends: async query => await getClient().query({
