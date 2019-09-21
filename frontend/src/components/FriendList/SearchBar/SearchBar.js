@@ -6,7 +6,6 @@ import moment from 'moment-timezone';
 
 export default class SearchBar extends Component {
 
-
   tipFormatter = value => moment(value).format("YYYY.MM.DD, HH:mm");
 
   render() {
@@ -36,6 +35,7 @@ export default class SearchBar extends Component {
           <Input className="mt-2" placeholder="Sorting" type="select" value={props.sorting} name="sorting"
                  onChange={props.formChanged}>
             <option>First Name</option>
+            <option>Last Name</option>
             <option>Country</option>
             <option>Current Time</option>
           </Input>
