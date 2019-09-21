@@ -17,7 +17,7 @@ export default class RegisterForm extends Component {
   };
 
   keyDownHandler = e => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && this.areFieldsFilledIn()) {
       this.submitHandler()
     }
   };
@@ -53,11 +53,6 @@ export default class RegisterForm extends Component {
     const state = this.state;
     const validation = {email: "", password: "", repeatPassword: ""};
 
-    if (!validator.isEmail(state.email)) {
-      dataIsCorrect = false;
-      validation.email = "Invalid Email";
-    }
-
     if (validator.isEmpty(state.password) ||
       !validator.isLength(state.password, {min: 5} ||
         !validator.isAlphanumeric(this.state.password))) {
@@ -65,14 +60,13 @@ export default class RegisterForm extends Component {
       validation.password = "Password need to be at least 5 characters long and contain only letters and digits"
     }
 
-    if (this.state.password !== this.state.repeatPassword) {
-      dataIsCorrect = false;
-      validation.repeatPassword = "Passwords doesn't match";
-    }
-
     this.setState({validation});
     return dataIsCorrect;
   };
+
+  areFieldsFilledIn = () => (validator.isEmail(this.state.email) &&
+    !validator.isEmpty(this.state.password) &&
+    this.state.password === this.state.repeatPassword);
 
   render() {
     const state = this.state;
@@ -122,7 +116,8 @@ export default class RegisterForm extends Component {
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8 mt-3">
-          <Button onClick={this.submitHandler} type="button" size="lg" color="info">Sign Up</Button>
+          <Button onClick={this.submitHandler} disabled={!this.areFieldsFilledIn()} type="button" size="lg"
+                  color="info">Sign Up</Button>
         </div>
         <div className="col-md-2"/>
       </div>
