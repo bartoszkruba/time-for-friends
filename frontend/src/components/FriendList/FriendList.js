@@ -90,8 +90,23 @@ export default class FriendList extends Component {
             continue;
           }
         }
-        friend.currentTime = m.format('HH:mm:ss');
-        friend.currentDate = m.format('YYYY.MM.DD');
+
+        let timeFormat;
+        let dateFormat;
+
+        switch (this.props.language) {
+          case "se":
+            timeFormat = 'HH:mm:ss';
+            dateFormat = 'DD.MM.YYYY';
+            break;
+          case "en":
+            timeFormat = "hh:mm:ss A";
+            dateFormat = "MM.DD.YYYY";
+            break;
+        }
+
+        friend.currentTime = m.format(timeFormat);
+        friend.currentDate = m.format(dateFormat);
         newFriends.push(friend);
       }
       this.setState({friends: newFriends});
