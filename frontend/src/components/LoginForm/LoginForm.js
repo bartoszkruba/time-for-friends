@@ -98,6 +98,13 @@ export default class LoginForm extends Component {
         text.emailLabel = "E-Post";
         text.passwordLabel = "Lösenord";
         text.signIn = "Logga In";
+        break;
+      case "en":
+        text.header = "Sign In to Your Account";
+        text.emailLabel = "Email";
+        text.passwordLabel = "Password";
+        text.signIn = "Sign In";
+        break;
     }
 
     return <div className="container Card ">
