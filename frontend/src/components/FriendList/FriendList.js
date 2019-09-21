@@ -115,6 +115,9 @@ export default class FriendList extends Component {
         case "Country":
           query.sort = "country";
           break;
+        case "Last Name":
+          query.sort = "lastName";
+          break;
         default:
           query.sort = "currentTime";
       }
