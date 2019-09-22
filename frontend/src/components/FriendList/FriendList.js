@@ -90,8 +90,24 @@ export default class FriendList extends Component {
             continue;
           }
         }
-        friend.currentTime = m.format('HH:mm:ss');
-        friend.currentDate = m.format('YYYY.MM.DD');
+
+        let timeFormat;
+        let dateFormat;
+
+        // eslint-disable-next-line
+        switch (this.props.language) {
+          case "se":
+            timeFormat = 'HH:mm:ss';
+            dateFormat = 'DD.MM.YYYY';
+            break;
+          case "us":
+            timeFormat = "hh:mm:ss A";
+            dateFormat = "MM.DD.YYYY";
+            break;
+        }
+
+        friend.currentTime = m.format(timeFormat);
+        friend.currentDate = m.format(dateFormat);
         newFriends.push(friend);
       }
       this.setState({friends: newFriends});
@@ -110,12 +126,15 @@ export default class FriendList extends Component {
 
       switch (state.sorting) {
         case "First Name":
+        case "Förnamn":
           query.sort = "firstName";
           break;
         case "Country":
+        case "Land":
           query.sort = "country";
           break;
         case "Last Name":
+        case "Efternamn":
           query.sort = "lastName";
           break;
         default:
@@ -210,6 +229,18 @@ export default class FriendList extends Component {
 
     let contacts;
 
+    const text = {};
+
+    // eslint-disable-next-line
+    switch (this.props.language) {
+      case "se":
+        text.header = "Filtrera Dina Kontakter";
+        break;
+      case "us":
+        text.header = "Filter Your Contacts";
+        break;
+    }
+
     if (state.count > 0) {
       contacts = state.friends.map(f => <div key={f._id} className="container Tile">
         <div className="row">
@@ -297,11 +328,12 @@ export default class FriendList extends Component {
         <div className="row mb-2">
           <div className="col-md-1"/>
           <div className="col-md-10">
-            <h1 className="Card-Header">Filter Your Contacts</h1>
+            <h1 className="Card-Header">{text.header}</h1>
           </div>
           <div className="col-md-1"/>
         </div>
         <SearchBar
+          language={this.props.language}
           rangeChanged={this.rangeChangedHandler}
           formChanged={this.searchBarChangedHandler}
           sortingChanged={this.sortingChangeHandler}

@@ -16,10 +16,10 @@ import graphqlService from "./graphql/graphqlService";
 export default class App extends Component {
 
   state = {
+    language: "us",
     loggedIn: true,
     redirect: "",
     showModal: false,
-    modalText: ""
   };
 
   async componentDidMount() {
@@ -51,6 +51,11 @@ export default class App extends Component {
     this.redirect("/")
   };
 
+  switchLanguageHandler = () => {
+    if (this.state.language === "se") this.setState({language: "us"});
+    else this.setState({language: "se"});
+  };
+
   createdNewFriendHandler = () => {
     this.redirect("/friends")
   };
@@ -64,14 +69,31 @@ export default class App extends Component {
     const state = this.state;
 
     const register = () => <RegisterForm showModal={this.showModal}
+                                         language={state.language}
                                          registerSuccessfull={this.successfullRegisterHandler}/>;
-    const login = () => <LoginForm showModal={this.showModal} loginSuccessfull={this.successfullLoginHandler}/>;
-    const index = () => <Index showModal={this.showModal} classname="card"/>;
+
+    const login = () => <LoginForm showModal={this.showModal}
+                                   language={state.language}
+                                   loginSuccessfull={this.successfullLoginHandler}/>;
+
+    const index = () => <Index showModal={this.showModal}
+                               language={state.language}/>;
+
     const newFriend = () => <NewFriendForm showModal={this.showModal} loggedIn={state.loggedIn}
+                                           language={state.language}
                                            addedNewFriend={this.createdNewFriendHandler}/>;
-    const friendList = () => <FriendList showModal={this.showModal} loggedIn={state.loggedIn}/>;
-    const friend = ({match}) => <Friend showModal={this.showModal} _id={match.params.id}/>;
-    const mapComponent = () => <MapComponent showModal={this.showModal}/>;
+
+    const friendList = () => <FriendList showModal={this.showModal}
+                                         language={state.language}
+                                         loggedIn={state.loggedIn}/>;
+
+    const friend = ({match}) => <Friend showModal={this.showModal}
+                                        language={state.language}
+                                        _id={match.params.id}/>;
+
+    const mapComponent = () => <MapComponent showModal={this.showModal}
+                                             language={state.language}
+                                             loggedIn={state.loggedIn}/>;
 
     return (
       <Router>
@@ -88,7 +110,8 @@ export default class App extends Component {
               <Button color="info" onClick={this.closeModal}>Close</Button>{' '}
             </ModalFooter>
           </Modal>
-          <Navbar loggedIn={state.loggedIn} logout={this.logoutHandler}/>
+          <Navbar language={this.state.language} switchLanguage={this.switchLanguageHandler}
+                  loggedIn={state.loggedIn} logout={this.logoutHandler}/>
           <div className="top-margin">
             <Route path="/" exact component={index}/>
             <Route path="/register/" exact component={register}/>

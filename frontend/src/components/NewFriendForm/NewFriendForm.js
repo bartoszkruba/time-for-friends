@@ -163,6 +163,40 @@ export default class NewFriendForm extends PureComponent {
       color: "red"
     };
 
+    const text = {};
+
+    // eslint-disable-next-line
+    switch (this.props.language) {
+      case "se":
+        text.header = "Lägg Till Ny Kontakt";
+        text.firstNameLabel = "Förnamn";
+        text.lastNameLabel = "Efternamn";
+        text.cityLabel = "Stad";
+        text.countryLabel = "Land";
+        text.timezoneLabel = "Tidszon";
+        text.addButton = "Lägg Till";
+        text.emailsLabel = "E-postaddress";
+        text.emailPlaceholder = "E-post";
+        text.phoneNumbersLabel = "Telefonnummer";
+        text.phoneNumberPlaceholder = "Telefonnummer";
+        text.addContactButton = "Lägg Till Kontakt";
+        break;
+      case "us":
+        text.header = "Add New Contact";
+        text.firstNameLabel = "First Name";
+        text.lastNameLabel = "Efternamn";
+        text.cityLabel = "City";
+        text.countryLabel = "Country";
+        text.timezoneLabel = "Timezone";
+        text.addButton = "Add";
+        text.emailsLabel = "Emails";
+        text.emailPlaceholder = "Email";
+        text.phoneNumbersLabel = "Phone Numbers";
+        text.phoneNumberPlaceholder = "Phone Number";
+        text.addContactButton = "Add Contact";
+        break;
+    }
+
     const enteredEmails = state.form.enteredEmails.map(e => <div key={e}
                                                                  className="mt-1 d-flex justify-content-between new-friend-border p-2">
       <span>{e}</span>
@@ -187,7 +221,7 @@ export default class NewFriendForm extends PureComponent {
         <div className="row">
           <div className="col-md-1"/>
           <div className="col-md-10">
-            <h1 className="Card-Header">Add New Contact</h1>
+            <h1 className="Card-Header">{text.header}</h1>
           </div>
           <div className="col-md-1"/>
         </div>
@@ -195,18 +229,18 @@ export default class NewFriendForm extends PureComponent {
           <div className="col-md-1"/>
           <div className="col-md-5">
             <FormGroup>
-              <Label>First Name </Label>
+              <Label>{text.firstNameLabel}</Label>
               <span style={redColorStyle}> *</span>
               <Input value={state.form.firstName} onChange={this.inputChangeHandler} type="text" name="firstName"
-                     placeholder="First Name" onKeyDown={this.keyDownHandler}/>
+                     placeholder={text.firstNameLabel} onKeyDown={this.keyDownHandler}/>
             </FormGroup>
           </div>
           <div className="col-md-5">
             <FormGroup>
-              <Label>Last Name </Label>
+              <Label>{text.lastNameLabel}</Label>
               <span style={redColorStyle}> *</span>
               <Input value={state.form.lastName} onChange={this.inputChangeHandler} type="text" name="lastName"
-                     placeholder="Last Name" onKeyDown={this.keyDownHandler}/>
+                     placeholder={text.lastNameLabel} onKeyDown={this.keyDownHandler}/>
             </FormGroup>
           </div>
           <div className="col-md-1"/>
@@ -215,18 +249,18 @@ export default class NewFriendForm extends PureComponent {
           <div className="col-md-1"/>
           <div className="col-md-5">
             <FormGroup>
-              <Label>City </Label>
+              <Label>{text.cityLabel}</Label>
               <span style={redColorStyle}> *</span>
               <Input value={state.form.city} onChange={this.inputChangeHandler} type="text" name="city"
-                     placeholder="City" onKeyDown={this.keyDownHandler}/>
+                     placeholder={text.cityLabel} onKeyDown={this.keyDownHandler}/>
             </FormGroup>
           </div>
           <div className="col-md-5">
             <FormGroup>
-              <Label>Country </Label>
+              <Label>{text.countryLabel}</Label>
               <span style={redColorStyle}> *</span>
               <Input value={state.form.country} onChange={this.inputChangeHandler} type="select" name="country"
-                     placeholder="Country" onKeyDown={this.keyDownHandler}>
+                     placeholder={text.countryLabel} onKeyDown={this.keyDownHandler}>
                 {countries}
               </Input>
             </FormGroup>
@@ -237,10 +271,10 @@ export default class NewFriendForm extends PureComponent {
           <div className="col-md-1"/>
           <div className="col-md-5">
             <FormGroup>
-              <Label>Timezone</Label>
+              <Label>{text.timezoneLabel}</Label>
               <span style={redColorStyle}> *</span>
               <Input value={state.form.timezone} onChange={this.inputChangeHandler} type="select" name="timezone"
-                     placeholder="Timezone" onKeyDown={this.keyDownHandler}>
+                     onKeyDown={this.keyDownHandler}>
                 {timezones}
               </Input>
             </FormGroup>
@@ -253,13 +287,14 @@ export default class NewFriendForm extends PureComponent {
         <div className="row mt-1">
           <div className="col-md-1"/>
           <div className="col-md-5">
-            <h4>Emails</h4>
+            <h4>{text.emailsLabel}</h4>
             <InputGroup>
-              <Input value={state.form.email} onChange={this.emailChangedHandler} type="email" placeholder="Email"
+              <Input value={state.form.email} onChange={this.emailChangedHandler} type="email"
+                     placeholder={text.emailPlaceholder}
                      name="email" onKeyDown={this.keyDownOnEmail}/>
               <InputGroupAddon addonType="append">
                 <Button disabled={!state.emailValidation} onClick={this.emailEnteredHandler} outline
-                        color="info">Add</Button>
+                        color="info">{text.addButton}</Button>
               </InputGroupAddon>
             </InputGroup>
             <FormGroup className="mt-3">
@@ -267,13 +302,14 @@ export default class NewFriendForm extends PureComponent {
             </FormGroup>
           </div>
           <div className="col-md-5">
-            <h4>Phone Numbers</h4>
+            <h4>{text.phoneNumbersLabel}</h4>
             <InputGroup>
               <Input value={state.form.phoneNumber} onChange={this.phoneNumberChangedHandler} type="text"
-                     placeholder="Phone Number" name="phoneNumber" onKeyDown={this.keyDownOnPhoneNumber}/>
+                     placeholder={text.phoneNumberPlaceholder} name="phoneNumber"
+                     onKeyDown={this.keyDownOnPhoneNumber}/>
               <InputGroupAddon addonType="append">
                 <Button disabled={!state.phoneNumberValidation}
-                        onClick={this.phoneNumberEnteredHandler} outline color="info">Add</Button>
+                        onClick={this.phoneNumberEnteredHandler} outline color="info">{text.addButton}</Button>
               </InputGroupAddon>
             </InputGroup>
             <FormGroup className="mt-3">
@@ -286,7 +322,7 @@ export default class NewFriendForm extends PureComponent {
           <div className="col-md-1"/>
           <div className="col-md-10">
             <Button onClick={this.submitHandler} disabled={!state.validation} type="button" size="lg" color="info">
-              Add Contact
+              {text.addContactButton}
             </Button>
           </div>
           <div className="col-md-1"/>

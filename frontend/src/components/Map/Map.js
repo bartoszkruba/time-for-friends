@@ -14,6 +14,7 @@ export default class MapComponent extends Component {
   };
 
   async componentDidMount() {
+    if (!this.props.loggedIn) return;
     try {
       const response = await graphqlService.friendsLocations();
       this.setState({friends: response.data.allFriends})
@@ -24,6 +25,18 @@ export default class MapComponent extends Component {
   }
 
   render() {
+    const text = {};
+
+    // eslint-disable-next-line
+    switch (this.props.language) {
+      case "se":
+        text.header = "Karta";
+        break;
+      case "us":
+        text.header = "Map";
+        break;
+    }
+
     const markers = this.state.friends.map(f => <Marker
       key={f._id}
       name={f.firstName + " " + f.lastName}
@@ -36,7 +49,7 @@ export default class MapComponent extends Component {
       <div className="row">
         <div className="col-md-1"/>
         <div className="col-md-10">
-          <h1 className="Card-Header">Map</h1>
+          <h1 className="Card-Header">{text.header}</h1>
         </div>
         <div className="col-md-1"/>
       </div>
