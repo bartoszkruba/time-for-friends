@@ -14,6 +14,7 @@ export default class MapComponent extends Component {
   };
 
   async componentDidMount() {
+    if (!this.props.loggedIn) return;
     try {
       const response = await graphqlService.friendsLocations();
       this.setState({friends: response.data.allFriends})

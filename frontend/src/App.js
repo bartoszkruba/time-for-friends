@@ -64,30 +64,31 @@ export default class App extends Component {
     const state = this.state;
 
     const register = () => <RegisterForm showModal={this.showModal}
-                                         language={this.state.language}
+                                         language={state.language}
                                          registerSuccessfull={this.successfullRegisterHandler}/>;
 
     const login = () => <LoginForm showModal={this.showModal}
-                                   language={this.state.language}
+                                   language={state.language}
                                    loginSuccessfull={this.successfullLoginHandler}/>;
 
     const index = () => <Index showModal={this.showModal}
-                               language={this.state.language}/>;
+                               language={state.language}/>;
 
     const newFriend = () => <NewFriendForm showModal={this.showModal} loggedIn={state.loggedIn}
-                                           language={this.state.language}
+                                           language={state.language}
                                            addedNewFriend={this.createdNewFriendHandler}/>;
 
     const friendList = () => <FriendList showModal={this.showModal}
-                                         language={this.state.language}
+                                         language={state.language}
                                          loggedIn={state.loggedIn}/>;
 
     const friend = ({match}) => <Friend showModal={this.showModal}
-                                        language={this.state.language}
+                                        language={state.language}
                                         _id={match.params.id}/>;
 
     const mapComponent = () => <MapComponent showModal={this.showModal}
-                                             language={this.state.language}/>;
+                                             language={state.language}
+                                             loggedIn={state.loggedIn}/>;
 
     return (
       <Router>
