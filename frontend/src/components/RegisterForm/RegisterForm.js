@@ -42,11 +42,12 @@ export default class RegisterForm extends Component {
           }
         } else {
           let validation;
+          // eslint-disable-next-line
           switch (this.props.language) {
             case "se":
               validation = {email: "Något har blivit fel, försök igen", password: "", repeatPassword: ""};
               break;
-            case "en":
+            case "us":
               validation = {email: "Something went wrong, please try again", password: "", repeatPassword: ""};
               break;
           }
@@ -65,11 +66,13 @@ export default class RegisterForm extends Component {
       !validator.isLength(state.password, {min: 5} ||
         !validator.isAlphanumeric(this.state.password))) {
       dataIsCorrect = false;
+
+      // eslint-disable-next-line
       switch (this.props.language) {
         case "se":
           validation.password = "Lösenordet måste vara minst fem tecken lång och endast innehålla bokstäver och siffror";
           break;
-        case "en":
+        case "us":
           validation.password = "Password need to be at least 5 characters long and contain only letters and digits";
       }
     }
@@ -91,6 +94,7 @@ export default class RegisterForm extends Component {
 
     const text = {};
 
+    // eslint-disable-next-line
     switch (this.props.language) {
       case "se":
         text.header = "Registrera Nytt Konto";
@@ -99,7 +103,7 @@ export default class RegisterForm extends Component {
         text.repeatPasswordLabel = "Upprepa Lösenord";
         text.signUp = "Registrera Dig";
         break;
-      case "en":
+      case "us":
         text.header = "Register New Account";
         text.emailLabel = "Email";
         text.passwordLabel = "Password";

@@ -43,11 +43,12 @@ export default class LoginForm extends Component {
         } else {
           let errorMessage;
 
+          // eslint-disable-next-line
           switch (this.props.language) {
             case "se":
               errorMessage = "Något har blivit fel, försök igen";
               break;
-            case "en":
+            case "us":
               errorMessage = "Something went wrong, please try again";
               break;
           }
@@ -65,11 +66,13 @@ export default class LoginForm extends Component {
         !validator.isAlphanumeric(this.state.password))) {
 
       let errorMessage;
+
+      // eslint-disable-next-line
       switch (this.props.language) {
         case "se":
           errorMessage = "Ogiltig Lösenord";
           break;
-        case "en":
+        case "us":
           errorMessage = "Invalid Password";
       }
 
@@ -92,6 +95,7 @@ export default class LoginForm extends Component {
 
     const text = {};
 
+    // eslint-disable-next-line
     switch (this.props.language) {
       case "se":
         text.header = "Logga In Till Ditt Konto";
@@ -99,7 +103,7 @@ export default class LoginForm extends Component {
         text.passwordLabel = "Lösenord";
         text.signIn = "Logga In";
         break;
-      case "en":
+      case "us":
         text.header = "Sign In to Your Account";
         text.emailLabel = "Email";
         text.passwordLabel = "Password";

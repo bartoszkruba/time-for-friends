@@ -9,11 +9,12 @@ export default class SearchBar extends Component {
   formatTime = value => {
     let format;
 
+    // eslint-disable-next-line
     switch (this.props.language) {
       case "se":
         format = "DD.MM.YYYY, HH:mm";
         break;
-      case "en":
+      case "us":
         format = "MM.DD.YYYY, hh:mm A";
         break;
     }
@@ -25,6 +26,7 @@ export default class SearchBar extends Component {
 
     const text = {};
 
+    // eslint-disable-next-line
     switch (this.props.language) {
       case "se":
         text.header = "Filtrera Dina Kontakter";
@@ -39,7 +41,7 @@ export default class SearchBar extends Component {
         text.betweenSwitchFrom = "Från:";
         text.betweenSwitchTo = "Till:";
         break;
-      case "en":
+      case "us":
         text.firstNamePlaceholder = "First Name";
         text.lastNamePlaceHolder = "Last Name";
         text.sortBy = "Sort By";

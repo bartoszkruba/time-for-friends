@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import {Collapse, Nav, Navbar, NavbarToggler, NavItem, NavLink,} from 'reactstrap';
 import {Link} from "react-router-dom";
+import 'flag-icon-css/css/flag-icon.min.css'
 
 
 export default class Navigation extends Component {
@@ -27,6 +28,7 @@ export default class Navigation extends Component {
 
     const text = {};
 
+    // eslint-disable-next-line
     switch (this.props.language) {
       case "se":
         text.signIn = "Logga In";
@@ -35,14 +37,16 @@ export default class Navigation extends Component {
         text.myContacts = "Mina Kontakter";
         text.addContact = "Lägg Till Kontakt";
         text.logOut = "Logga Ut";
+        text.flagIcon = "flag-icon-se";
         break;
-      case "en":
+      case "us":
         text.signIn = "Sign In";
         text.signup = "Sign Up";
         text.map = "Map";
         text.myContacts = "My Contacts";
         text.addContact = "Add Contact";
         text.logOut = "Log Out";
+        text.flagIcon = "flag-icon-us"
     }
 
     return (
@@ -93,6 +97,10 @@ export default class Navigation extends Component {
                   </NavLink>
                 </NavItem>
               </Fragment>}
+              <NavItem>
+                <span onClick={props.switchLanguage} className={"flag-icon ml-md-2 flag-icon-squared " + text.flagIcon}
+                      style={{"font-size": "170%", cursor: "pointer", height: "100%"}}/>
+              </NavItem>
             </Nav>
           </Collapse>
         </Navbar>

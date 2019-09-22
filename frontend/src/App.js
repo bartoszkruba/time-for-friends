@@ -16,7 +16,7 @@ import graphqlService from "./graphql/graphqlService";
 export default class App extends Component {
 
   state = {
-    language: "en",
+    language: "us",
     loggedIn: true,
     redirect: "",
     showModal: false,
@@ -49,6 +49,11 @@ export default class App extends Component {
     localStorage.removeItem('token');
     await this.setState({loggedIn: false});
     this.redirect("/")
+  };
+
+  switchLanguageHandler = () => {
+    if (this.state.language === "se") this.setState({language: "us"});
+    else this.setState({language: "se"});
   };
 
   createdNewFriendHandler = () => {
@@ -105,7 +110,8 @@ export default class App extends Component {
               <Button color="info" onClick={this.closeModal}>Close</Button>{' '}
             </ModalFooter>
           </Modal>
-          <Navbar language={this.state.language} loggedIn={state.loggedIn} logout={this.logoutHandler}/>
+          <Navbar language={this.state.language} switchLanguage={this.switchLanguageHandler}
+                  loggedIn={state.loggedIn} logout={this.logoutHandler}/>
           <div className="top-margin">
             <Route path="/" exact component={index}/>
             <Route path="/register/" exact component={register}/>

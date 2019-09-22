@@ -27,11 +27,12 @@ export default class MapComponent extends Component {
   render() {
     const text = {};
 
+    // eslint-disable-next-line
     switch (this.props.language) {
       case "se":
         text.header = "Karta";
         break;
-      case "en":
+      case "us":
         text.header = "Map";
         break;
     }

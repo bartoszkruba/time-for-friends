@@ -8,6 +8,7 @@ const index = props => {
 
   const text = {};
 
+  // eslint-disable-next-line
   switch (props.language) {
     case "se":
       text.welcome = "Välkommen!";
@@ -15,7 +16,7 @@ const index = props => {
       text.lead = `"Time For Friends" är en webbapplikation som låter dig spåra dina vänners lokala tider.
         Du kan ange så många personer med olika tidszoner som du vill och vi kommer spåra deras lokala tid åt dig helt gratis.`;
       break;
-    case "en":
+    case "us":
       text.welcome = "Welcome!";
       text.button = "Sign Up Now!";
       text.lead = `"Time For Friends" is a web application that allows you to track your friends local time live.

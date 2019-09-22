@@ -94,12 +94,13 @@ export default class FriendList extends Component {
         let timeFormat;
         let dateFormat;
 
+        // eslint-disable-next-line
         switch (this.props.language) {
           case "se":
             timeFormat = 'HH:mm:ss';
             dateFormat = 'DD.MM.YYYY';
             break;
-          case "en":
+          case "us":
             timeFormat = "hh:mm:ss A";
             dateFormat = "MM.DD.YYYY";
             break;
@@ -230,11 +231,12 @@ export default class FriendList extends Component {
 
     const text = {};
 
+    // eslint-disable-next-line
     switch (this.props.language) {
       case "se":
         text.header = "Filtrera Dina Kontakter";
         break;
-      case "en":
+      case "us":
         text.header = "Filter Your Contacts";
         break;
     }

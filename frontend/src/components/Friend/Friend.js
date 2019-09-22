@@ -30,12 +30,13 @@ export default class Friend extends Component {
         let timeFormat;
         let dateFormat;
 
+        // eslint-disable-next-line
         switch (this.props.language) {
           case "se":
             timeFormat = "HH:mm:ss";
             dateFormat = "DD.MM.YYYY";
             break;
-          case "en":
+          case "us":
             timeFormat = "hh:mm:ss A";
             dateFormat = "MM.DD.YYYY";
             break;
@@ -63,6 +64,7 @@ export default class Friend extends Component {
 
     const text = {};
 
+    // eslint-disable-next-line
     switch (this.props.language) {
       case "se":
         text.timezone = "Tidszon";
@@ -74,7 +76,7 @@ export default class Friend extends Component {
         text.phoneNumbers = "Telefonnummer";
         text.emails = "E-postadress";
         break;
-      case "en":
+      case "us":
         text.timezone = "Timezone";
         text.currentTime = "Current Time";
         text.currentDate = "Current Date";

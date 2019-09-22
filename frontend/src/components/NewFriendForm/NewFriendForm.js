@@ -165,6 +165,7 @@ export default class NewFriendForm extends PureComponent {
 
     const text = {};
 
+    // eslint-disable-next-line
     switch (this.props.language) {
       case "se":
         text.header = "Lägg Till Ny Kontakt";
@@ -180,7 +181,7 @@ export default class NewFriendForm extends PureComponent {
         text.phoneNumberPlaceholder = "Telefonnummer";
         text.addContactButton = "Lägg Till Kontakt";
         break;
-      case "en":
+      case "us":
         text.header = "Add New Contact";
         text.firstNameLabel = "First Name";
         text.lastNameLabel = "Efternamn";
