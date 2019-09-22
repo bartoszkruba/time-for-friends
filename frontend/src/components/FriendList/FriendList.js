@@ -21,7 +21,6 @@ export default class FriendList extends Component {
         to: new Date(),
       },
       betweenSwitch: false,
-      betweenSwitchLabel: "Off",
       sorting: "First Name",
       sortingSwitch: false,
       sortingSwitchLabel: "First Name"
@@ -174,7 +173,6 @@ export default class FriendList extends Component {
   searchBarChangedHandler = async e => {
     const searchBar = {...this.state.searchBar};
     if (e.target.name === "betweenSwitch") {
-      searchBar.betweenSwitchLabel = searchBar.betweenSwitch ? "Off" : "On";
       searchBar.betweenSwitch = !searchBar.betweenSwitch;
     } else {
       searchBar[e.target.name] = e.target.value;
@@ -339,7 +337,6 @@ export default class FriendList extends Component {
           sortingChanged={this.sortingChangeHandler}
           sorting={state.searchBar.sorting}
           betweenSwtich={state.searchBar.betweenSwitch}
-          betweenSwtichLabel={state.searchBar.betweenSwitchLabel}
           range={state.searchBar.range}
           firstName={state.searchBar.firstName}
           lastName={state.searchBar.lastName}/>

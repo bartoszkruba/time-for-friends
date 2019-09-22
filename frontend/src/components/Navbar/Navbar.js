@@ -99,7 +99,7 @@ export default class Navigation extends Component {
               </Fragment>}
               <NavItem>
                 <span onClick={props.switchLanguage} className={"flag-icon ml-md-2 flag-icon-squared " + text.flagIcon}
-                      style={{"font-size": "170%", cursor: "pointer", height: "100%"}}/>
+                      style={{"fontSize": "170%", cursor: "pointer", height: "100%"}}/>
               </NavItem>
             </Nav>
           </Collapse>
