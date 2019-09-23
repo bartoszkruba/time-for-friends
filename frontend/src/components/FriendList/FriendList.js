@@ -80,6 +80,21 @@ export default class FriendList extends Component {
         to = moment(searchBar.range.to).format(format);
       }
 
+      let timeFormat;
+      let dateFormat;
+
+      // eslint-disable-next-line
+      switch (this.props.language) {
+        case "se":
+          timeFormat = 'HH:mm:ss';
+          dateFormat = 'DD.MM.YYYY';
+          break;
+        case "us":
+          timeFormat = "hh:mm:ss A";
+          dateFormat = "MM.DD.YYYY";
+          break;
+      }
+
       // eslint-disable-next-line
       for (const friend of this.state.friends) {
         const m = moment.tz(friend.timezone.name);
@@ -90,23 +105,27 @@ export default class FriendList extends Component {
           }
         }
 
-        let timeFormat;
-        let dateFormat;
-
-        // eslint-disable-next-line
-        switch (this.props.language) {
-          case "se":
-            timeFormat = 'HH:mm:ss';
-            dateFormat = 'DD.MM.YYYY';
-            break;
-          case "us":
-            timeFormat = "hh:mm:ss A";
-            dateFormat = "MM.DD.YYYY";
-            break;
-        }
-
         friend.currentTime = m.format(timeFormat);
         friend.currentDate = m.format(dateFormat);
+
+        const currentMinute = m.hours() * 60 + m.minutes();
+
+        if ((friend.workMarks.to > friend.workMarks.from &&
+          currentMinute >= friend.workMarks.from &&
+          currentMinute <= friend.workMarks.to) ||
+          (friend.workMarks.to < friend.workMarks.from &&
+            currentMinute < friend.workMarks.to)) {
+          friend.working = true;
+        }
+
+        if ((friend.sleepMarks.to > friend.sleepMarks.from &&
+          currentMinute >= friend.sleepMarks.from &&
+          currentMinute <= friend.sleepMarks.to) ||
+          (friend.sleepMarks.to < friend.sleepMarks.from &&
+            currentMinute < friend.sleepMarks.to)) {
+          friend.sleeping = true;
+        }
+
         newFriends.push(friend);
       }
       this.setState({friends: newFriends});
@@ -260,16 +279,12 @@ export default class FriendList extends Component {
         <div className="row">
           <div className="col-md-1"/>
           <div className="col-md-5">
-            <p>{f.city}, {f.country}</p>
+            <h5 style={{fontWeight: "normal"}}>{f.city}, {f.country}</h5>
+            {f.working ? <i className="fas fa-briefcase mt-1"/> : null}
+            {f.sleeping ? <i className="fas fa-bed mt-1"/> : null}
           </div>
           <div className="col-md-5 text-right">
             <h5>{f.currentDate}</h5>
-          </div>
-          <div className="col-md-1"/>
-        </div>
-        <div className="row">
-          <div className="col-md-1"/>
-          <div className="col-md-10 text-right">
             <i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
                style={{cursor: "pointer"}}/>
           </div>
