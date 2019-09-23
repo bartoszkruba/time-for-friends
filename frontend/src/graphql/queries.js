@@ -33,14 +33,6 @@ export default {
               }
               emails
               phoneNumbers
-              workMarks {
-                  from
-                  to
-              }
-              sleepMarks {
-                  from
-                  to
-              }
           }
       }
   `,
@@ -67,6 +59,14 @@ export default {
                   country
                   timezone {
                       name
+                  }
+                  workMarks {
+                      from
+                      to
+                  }
+                  sleepMarks {
+                      from
+                      to
                   }
               }
               count

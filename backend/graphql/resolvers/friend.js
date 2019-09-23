@@ -107,6 +107,8 @@ module.exports.friends = async ({friendQuery}, req) => {
   const count = friends.length;
   friends = friends.splice((friendQuery.page - 1) * PAGE_SIZE, PAGE_SIZE);
 
+  console.log(friends);
+
   return {friends, count};
 };
 

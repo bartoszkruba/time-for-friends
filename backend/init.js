@@ -249,7 +249,15 @@ const addMockFriends = async user => {
         lat: geocodeResponse[0].latitude,
         lng: geocodeResponse[0].longitude,
         timezone: timezone._id,
-        user: user._id
+        user: user._id,
+        workMarks: {
+          from: 420,
+          to: 960
+        },
+        sleepMarks: {
+          from: 1320,
+          to: 360
+        }
       }).save();
       user.friends.push(friend._id);
     }
