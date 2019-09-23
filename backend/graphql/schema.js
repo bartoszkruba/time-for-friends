@@ -8,6 +8,11 @@ module.exports = buildSchema(`
       password: String
    }
    
+   type RangeMarks {
+      from: Int!
+      to: Int!
+   }
+   
    type Friend {
       _id: ID!
       firstName: String!
@@ -19,6 +24,8 @@ module.exports = buildSchema(`
       emails: [String]
       phoneNumbers: [String]
       timezone: Timezone
+      workMarks: RangeMarks
+      sleepMarks: RangeMarks
    }
    
    type FriendList {

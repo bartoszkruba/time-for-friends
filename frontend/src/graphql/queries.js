@@ -33,6 +33,14 @@ export default {
               }
               emails
               phoneNumbers
+              workMarks {
+                  from
+                  to
+              }
+              sleepMarks {
+                  from
+                  to
+              }
           }
       }
   `,
