@@ -279,7 +279,7 @@ export default class FriendList extends Component {
         <div className="row">
           <div className="col-md-1"/>
           <div className="col-md-5">
-            <h5 style={{fontWeight: "normal"}}>{f.city}, {f.country}</h5>
+            <h6 style={{fontWeight: "normal"}}>{f.city}, {f.country}</h6>
             {f.working ? <i className="fas fa-briefcase mt-1"/> : null}
             {f.sleeping ? <i className="fas fa-bed mt-1"/> : null}
           </div>

@@ -15,7 +15,9 @@ export default class Friend extends Component {
     emails: [],
     phoneNumbers: [],
     currentTime: "",
-    currentDate: ""
+    currentDate: "",
+    worksBetween: "07:00 - 16:00",
+    sleepsBetween: "22:00 - 06:00"
   };
 
   sleep = ms => new Promise((resolve => setTimeout(resolve, ms)));
@@ -23,24 +25,60 @@ export default class Friend extends Component {
   async componentDidMount() {
     try {
       const response = await graphqlService.friend(this.props._id);
-      await this.setState({...response.data.friend, _isMounted: true});
+
+      let hourFormat;
+      // eslint-disable-next-line
+      switch (this.props.language) {
+        case "se":
+          hourFormat = "HH:mm";
+          break;
+        case "us":
+          hourFormat = "hh:mm A";
+          break;
+      }
+
+      const worksFrom = moment.utc()
+        .hour(~~(response.data.friend.workMarks.from / 60))
+        .minute(response.data.friend.workMarks.from % 60)
+        .format(hourFormat);
+      const worksTo = moment.utc()
+        .hours(~~(response.data.friend.workMarks.to / 60))
+        .minutes(response.data.friend.workMarks.to % 60)
+        .format(hourFormat);
+
+      const sleepsFrom = moment.utc()
+        .hour(~~(response.data.friend.sleepMarks.from / 60))
+        .minute(response.data.friend.sleepMarks.from % 60)
+        .format(hourFormat);
+      const sleepsTo = moment.utc()
+        .hours(~~(response.data.friend.sleepMarks.to / 60))
+        .minutes(response.data.friend.sleepMarks.to % 60)
+        .format(hourFormat);
+
+      await this.setState({
+        ...response.data.friend,
+        worksBetween: worksFrom + " - " + worksTo,
+        sleepsBetween: sleepsFrom + " - " + sleepsTo,
+        _isMounted: true
+      });
+
+      let timeFormat;
+      let dateFormat;
+
+
+      // eslint-disable-next-line
+      switch (this.props.language) {
+        case "se":
+          timeFormat = "HH:mm:ss";
+          dateFormat = "DD.MM.YYYY";
+          break;
+        case "us":
+          timeFormat = "hh:mm:ss A";
+          dateFormat = "MM.DD.YYYY";
+          break;
+      }
 
       while (this.state._isMounted) {
-
-        let timeFormat;
-        let dateFormat;
-
-        // eslint-disable-next-line
-        switch (this.props.language) {
-          case "se":
-            timeFormat = "HH:mm:ss";
-            dateFormat = "DD.MM.YYYY";
-            break;
-          case "us":
-            timeFormat = "hh:mm:ss A";
-            dateFormat = "MM.DD.YYYY";
-            break;
-        }
 
         const m = moment.tz(this.state.timezone.name);
         this.setState({currentTime: m.format(timeFormat)});
@@ -75,6 +113,8 @@ export default class Friend extends Component {
         text.country = "Land";
         text.phoneNumbers = "Telefonnummer";
         text.emails = "E-postadress";
+        text.worksBetween = "Arbetar Mellan:";
+        text.sleepsBetween = "Sover Mellan:";
         break;
       case "us":
         text.timezone = "Timezone";
@@ -85,6 +125,8 @@ export default class Friend extends Component {
         text.country = "Country";
         text.phoneNumbers = "Phone Numbers";
         text.emails = "Emails";
+        text.worksBetween = "Works Between:";
+        text.sleepsBetween = "Sleeps Between:";
         break;
     }
 
@@ -151,6 +193,34 @@ export default class Friend extends Component {
         <div className="col-md-1"/>
         <div className="col-md-8">
           <p>{state.currentDate}</p>
+        </div>
+        <div className="col-md-1"/>
+      </div>
+      <div className="row mt-4">
+        <div className="col-md-1"/>
+        <div className="col-md-8">
+          <h2>{text.worksBetween}</h2>
+        </div>
+        <div className="col-md-1"/>
+      </div>
+      <div className="row">
+        <div className="col-md-1"/>
+        <div className="col-md-8">
+          <p>{state.worksBetween}</p>
+        </div>
+        <div className="col-md-1"/>
+      </div>
+      <div className="row mt-4">
+        <div className="col-md-1"/>
+        <div className="col-md-8">
+          <h2>{text.sleepsBetween}</h2>
+        </div>
+        <div className="col-md-1"/>
+      </div>
+      <div className="row">
+        <div className="col-md-1"/>
+        <div className="col-md-8">
+          <p>{state.sleepsBetween}</p>
         </div>
         <div className="col-md-1"/>
       </div>
