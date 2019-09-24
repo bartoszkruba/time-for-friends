@@ -58,9 +58,9 @@ export default class Friend extends Component {
       await this.setState({
         ...response.data.friend,
         worksBetween: worksFrom + " - " + worksTo,
-        sleepsBetween: sleepsFrom + " - " + sleepsTo,
-        _isMounted: true
+        sleepsBetween: sleepsFrom + " - " + sleepsTo
       });
+
 
       let timeFormat;
       let dateFormat;
@@ -78,8 +78,9 @@ export default class Friend extends Component {
           break;
       }
 
-      while (this.state._isMounted) {
+      this._isMounted = true;
 
+      while (this._isMounted) {
         const m = moment.tz(this.state.timezone.name);
         this.setState({currentTime: m.format(timeFormat)});
         this.setState({currentDate: m.format(dateFormat)});
@@ -94,7 +95,7 @@ export default class Friend extends Component {
   }
 
   componentWillUnmount() {
-    this.setState({_isMounted: false})
+    this._isMounted = false;
   }
 
   render() {
