@@ -1,9 +1,11 @@
 import React, {Fragment, PureComponent} from 'react'
 import {Redirect} from "react-router-dom";
-import {Button, FormGroup, Input, InputGroup, InputGroupAddon, Label} from "reactstrap";
+import {Button, CustomInput, FormGroup, Input, InputGroup, InputGroupAddon, Label} from "reactstrap";
 import validator from 'validator';
+import 'rc-slider/assets/index.css';
+import {Range} from 'rc-slider';
+import moment from 'moment-timezone';
 import countries from './countries'
-
 
 import graphqlService from "../../graphql/graphqlService";
 
@@ -22,11 +24,25 @@ export default class NewFriendForm extends PureComponent {
       email: "",
       enteredEmails: [],
       phoneNumber: "",
-      enteredPhoneNumbers: []
+      enteredPhoneNumbers: [],
+      sleepHoursSwitch: false,
+      workHoursSwitch: false
     },
     validation: false,
     emailValidation: false,
-    phoneNumberValidation: false
+    phoneNumberValidation: false,
+    workHours: {
+      fromLabel: "",
+      toLabel: "",
+      from: 420,
+      to: 960,
+    },
+    sleepHours: {
+      fromLabel: "",
+      toLabel: "",
+      from: 1320,
+      to: 1800
+    }
   };
 
   // load timezones on mount
@@ -34,6 +50,23 @@ export default class NewFriendForm extends PureComponent {
     if (!this.props.loggedIn) {
       return this.setState({redirect: "/login"});
     }
+
+    // eslint-disable-next-line
+    switch (this.props.language) {
+      case "se":
+        this.setState({
+          workHours: {fromLabel: "07:00", toLabel: "16:00", from: 420, to: 960},
+          sleepHours: {fromLabel: "22:00", toLabel: "06:00", from: 1320, to: 1800}
+        });
+        break;
+      case "us":
+        this.setState({
+          workHours: {fromLabel: "07:00 AM", toLabel: "16:00 PM", from: 420, to: 960},
+          sleepHours: {fromLabel: "10:00 PM", toLabel: "06:00 AM", from: 1320, to: 1800}
+        });
+        break;
+    }
+
     try {
       const response = await graphqlService.timezones();
       const timezones = [...response.data.timezones];
@@ -84,6 +117,17 @@ export default class NewFriendForm extends PureComponent {
     form[e.target.name] = e.target.value;
     await this.setState({form});
     this.validateForm();
+  };
+
+  switchChangeHandler = e => {
+    const form = {...this.state.form};
+
+    if (e.target.name === "workHoursSwitch") {
+      form.workHoursSwitch = !form.workHoursSwitch;
+    } else if (e.target.name === "sleepHoursSwitch") {
+      form.sleepHoursSwitch = !form.sleepHoursSwitch;
+    }
+    this.setState({form})
   };
 
   keyDownHandler = e => {
@@ -141,8 +185,85 @@ export default class NewFriendForm extends PureComponent {
     this.setState({validation: true});
   };
 
+  workHoursChangeHandler = values => {
+
+    const fromHours = ~~((values[0] < 1440 ? values[0] : (values[0] - 1440)) / 60);
+    const fromMinutes = values[0] % 60;
+
+    const toHours = ~~((values[1] < 1440 ? values[1] : (values[1] - 1440)) / 60);
+    const toMinutes = values[1] % 60;
+
+    let format;
+
+    // eslint-disable-next-line
+    switch (this.props.language) {
+      case "se":
+        format = "HH:mm";
+        break;
+      case "us":
+        format = "hh:mm A";
+        break;
+    }
+
+    this.setState({
+      workHours: {
+        from: values[0],
+        to: values[1],
+        fromLabel: moment.utc().hours(fromHours).minutes(fromMinutes).format(format),
+        toLabel: moment.utc().hours(toHours).minutes(toMinutes).format(format)
+      }
+    });
+  };
+
+  sleepHoursChangeHandler = values => {
+
+    const fromHours = ~~((values[0] < 1440 ? values[0] : (values[0] - 1440)) / 60);
+    const fromMinutes = values[0] % 60;
+
+    const toHours = ~~((values[1] < 1440 ? values[1] : (values[1] - 1440)) / 60);
+    const toMinutes = values[1] % 60;
+
+    let format;
+
+    // eslint-disable-next-line
+    switch (this.props.language) {
+      case "se":
+        format = "HH:mm";
+        break;
+      case "us":
+        format = "hh:mm A";
+        break;
+    }
+
+    this.setState({
+      sleepHours: {
+        from: values[0],
+        to: values[1],
+        fromLabel: moment.utc().hours(fromHours).minutes(fromMinutes).format(format),
+        toLabel: moment.utc().hours(toHours).minutes(toMinutes).format(format)
+      }
+    });
+  };
+
   submitHandler = async e => {
     const form = {...this.state.form};
+
+    if (form.sleepHoursSwitch) {
+      form.sleepsFrom = this.state.sleepHours.from % 1440;
+      form.sleepsTo = this.state.sleepHours.to % 1440
+    } else {
+      form.sleepsFrom = -1;
+      form.sleepsTo = -1;
+    }
+
+    if (form.workHoursSwitch) {
+      form.worksFrom = this.state.workHours.from % 1440;
+      form.worksTo = this.state.workHours.to % 1440
+    }else{
+      form.worksFrom = -1;
+      form.worksTo = -1;
+    }
+
     try {
       await graphqlService.addNewFriend({
         ...form,
@@ -179,7 +300,13 @@ export default class NewFriendForm extends PureComponent {
         text.emailPlaceholder = "E-post";
         text.phoneNumbersLabel = "Telefonnummer";
         text.phoneNumberPlaceholder = "Telefonnummer";
+        text.workHours = "Arbetstider";
+        text.sleepHours = "Sovtider";
+        text.from = "Från";
+        text.to = "Till";
         text.addContactButton = "Lägg Till Kontakt";
+        text.midnightMark = "00:00";
+        text.noonMark = "12:00";
         break;
       case "us":
         text.header = "Add New Contact";
@@ -193,7 +320,13 @@ export default class NewFriendForm extends PureComponent {
         text.emailPlaceholder = "Email";
         text.phoneNumbersLabel = "Phone Numbers";
         text.phoneNumberPlaceholder = "Phone Number";
+        text.workHours = "Work Hours";
+        text.sleepHours = "Sleep Hours";
+        text.from = "From";
+        text.to = "To";
         text.addContactButton = "Add Contact";
+        text.midnightMark = "12:00 AM";
+        text.noonMark = "12:00 PM";
         break;
     }
 
@@ -318,6 +451,96 @@ export default class NewFriendForm extends PureComponent {
           </div>
           <div className="col-md-1"/>
         </div>
+        <div className="row mt-5">
+          <div className="col-md-1"/>
+          <div className="col-md-10">
+            <h2 className="mr-3" style={{display: "inline"}}>{text.workHours}</h2>
+            <CustomInput checked={state.form.workHoursSwitch} inline type="switch" name="workHoursSwitch"
+                         id="workHoursSwitch"
+                         onChange={this.switchChangeHandler}/>
+          </div>
+          <div className="col-md-1"/>
+        </div>
+        {
+          state.form.workHoursSwitch ? <Fragment>
+            <div className="row mt-3">
+              <div className="col-md-1"/>
+              <div className="col-md-5 mt-1">
+                <h4>{text.from}: {state.workHours.fromLabel}</h4>
+              </div>
+              <div className="col-md-5 mt-1">
+                <h4>{text.to}: {state.workHours.toLabel}</h4>
+              </div>
+              <div className="col-md-1"/>
+            </div>
+            <div className="row mt-3 mb-5 p-1">
+              <div className="col-md-1"/>
+              <div className="col-md-10">
+                <Range
+                  marks={{
+                    0: text.midnightMark,
+                    1440: text.midnightMark,
+                    2880: text.midnightMark,
+                    720: text.noonMark,
+                    2169: text.noonMark
+                  }}
+                  step={30}
+                  min={0}
+                  max={2880}
+                  allowCross={false}
+                  defaultValue={[480, 960]}
+                  value={[state.workHours.from, state.workHours.to]}
+                  onChange={this.workHoursChangeHandler}/>
+              </div>
+              <div className="col-md-1"/>
+            </div>
+          </Fragment> : null
+        }
+        <div className="row mt-5">
+          <div className="col-md-1"/>
+          <div className="col-md-10">
+            <h2 className="mr-3" style={{display: "inline"}}>{text.sleepHours}</h2>
+            <CustomInput checked={state.form.sleepHoursSwitch} inline type="switch" name="sleepHoursSwitch"
+                         id="sleepHoursSwitch" onChange={this.switchChangeHandler}/>
+          </div>
+          <div className="col-md-1"/>
+        </div>
+        {
+          state.form.sleepHoursSwitch ? <Fragment>
+            <div className="row mt-3">
+              <div className="col-md-1"/>
+              <div className="col-md-5 mt-1">
+                <h4>{text.from}: {state.sleepHours.fromLabel}</h4>
+              </div>
+              <div className="col-md-5 mt-1">
+                <h4>{text.to}: {state.sleepHours.toLabel}</h4>
+              </div>
+              <div className="col-md-1"/>
+            </div>
+            <div className="row mt-3 mb-5 p-1">
+              <div className="col-md-1"/>
+              <div className="col-md-10">
+                <Range
+                  marks={{
+                    0: text.midnightMark,
+                    1440: text.midnightMark,
+                    2880: text.midnightMark,
+                    720: text.noonMark,
+                    2169: text.noonMark
+                  }}
+                  step={30}
+                  min={0}
+                  max={2880}
+                  allowCross={false}
+                  defaultValue={[1320, 1800]}
+                  value={[state.sleepHours.from, state.sleepHours.to]}
+                  onChange={this.sleepHoursChangeHandler}
+                />
+              </div>
+              <div className="col-md-1"/>
+            </div>
+          </Fragment> : null
+        }
         <div className="row mt-4">
           <div className="col-md-1"/>
           <div className="col-md-10">

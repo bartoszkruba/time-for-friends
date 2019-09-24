@@ -36,7 +36,7 @@ export default {
   }),
 
   isAuthenticated: async () => await getClient().query({
-    query: queries.isAuthenticated, errorPolicy: "all", fetchPolicy: "no-cache"
+    query: queries.isAuthenticated, errorPolicy: "all", fetchPolicy: "no-cache",
   }),
 
   timezones: async () => await getClient().query({

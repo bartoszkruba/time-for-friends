@@ -44,6 +44,26 @@ const FriendSchema = Schema({
     type: ObjectId,
     ref: "User",
     required: true
+  },
+  workMarks: {
+    from: {
+      required: true,
+      type: Number
+    },
+    to: {
+      required: true,
+      type: Number
+    }
+  },
+  sleepMarks: {
+    from: {
+      required: true,
+      type: Number
+    },
+    to: {
+      required: true,
+      type: Number
+    }
   }
 });
 
