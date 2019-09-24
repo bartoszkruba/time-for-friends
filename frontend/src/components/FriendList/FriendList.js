@@ -273,22 +273,14 @@ export default class FriendList extends Component {
               </span>
               </Link>
             </h1>
-          </div>
-          <div className="col-md-3 text-right">
-            <Clock hour={f.hour} minute={f.minute}/>
-            {/*<h2>{f.currentTime}</h2>*/}
-          </div>
-          <div className="col-md-1"/>
-        </div>
-        <div className="row">
-          <div className="col-md-1"/>
-          <div className="col-md-5">
             <h6 style={{fontWeight: "normal"}}>{f.city}, {f.country}</h6>
             {f.working ? <i className="fas fa-briefcase mt-1"/> : null}
             {f.sleeping ? <i className="fas fa-bed mt-1"/> : null}
           </div>
-          <div className="col-md-5 text-right">
-            <h5>{f.currentDate}</h5>
+          <div className="col-md-3 text-md-right">
+            <Clock hour={f.hour} minute={f.minute}/>
+            {/*<h2>{f.currentTime ? f.currentTime : "-"}</h2>*/}
+            <h5>{f.currentDate ? f.currentDate : "-"}</h5>
             <i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
                style={{cursor: "pointer"}}/>
           </div>

@@ -24,7 +24,7 @@ export default ({hour, minute}) => {
     transform: `rotate(${minuteRotation}deg)`
   };
 
-  return <div className="Clock ml-auto mb-3" style={{width: "90px", height: "90px"}}>
+  return <div className="Clock ml-md-auto mb-3" style={{width: "90px", height: "90px"}}>
     <span className="ClockContainer">
       <div className="MiddlePointContainer">
         <div className="MiddlePoint"/>
