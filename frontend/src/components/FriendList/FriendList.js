@@ -1,8 +1,10 @@
 import React, {Component, Fragment} from 'react';
 import {Link, Redirect} from "react-router-dom";
-import SearchBar from "./SearchBar/SearchBar";
 import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
 import moment from 'moment-timezone'
+
+import Clock from "./Clock/Clock";
+import SearchBar from "./SearchBar/SearchBar";
 
 import graphqlService from "../../graphql/graphqlService";
 
@@ -105,9 +107,13 @@ export default class FriendList extends Component {
         }
 
         friend.currentTime = m.format(timeFormat);
+
+        friend.hour = m.hours();
+        friend.minute = m.minutes();
+
         friend.currentDate = m.format(dateFormat);
 
-        const currentMinute = m.hours() * 60 + m.minutes();
+        const currentMinute = friend.hour * 60 + friend.minute;
 
         if ((friend.workMarks.to > friend.workMarks.from &&
           currentMinute >= friend.workMarks.from &&
@@ -269,7 +275,8 @@ export default class FriendList extends Component {
             </h1>
           </div>
           <div className="col-md-3 text-right">
-            <h2>{f.currentTime}</h2>
+            <Clock hour={f.hour} minute={f.minute}/>
+            {/*<h2>{f.currentTime}</h2>*/}
           </div>
           <div className="col-md-1"/>
         </div>
