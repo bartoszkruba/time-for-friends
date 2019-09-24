@@ -49,6 +49,11 @@ module.exports = buildSchema(`
       password: String!
    }
    
+   input RangeInput {
+      from: Int
+      to: Int
+   }
+   
    input FriendInputData {
       firstName: String!
       lastName: String!
@@ -57,6 +62,8 @@ module.exports = buildSchema(`
       emails: [String]
       phoneNumbers: [String]
       timezone: String!
+      workMarks: RangeInput
+      sleepMarks: RangeInput
    }
    
    input FriendQuery {

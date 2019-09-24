@@ -119,9 +119,9 @@ export default class FriendList extends Component {
 
         if ((friend.sleepMarks.to > friend.sleepMarks.from &&
           currentMinute >= friend.sleepMarks.from &&
-          currentMinute <= friend.sleepMarks.to) ||
+          currentMinute < friend.sleepMarks.to) ||
           (friend.sleepMarks.to < friend.sleepMarks.from &&
-            (currentMinute < friend.sleepMarks.to || currentMinute > friend.sleepMarks.from))) {
+            (currentMinute < friend.sleepMarks.to || currentMinute >= friend.sleepMarks.from))) {
           friend.sleeping = true;
         }
 

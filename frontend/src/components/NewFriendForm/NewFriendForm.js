@@ -247,6 +247,23 @@ export default class NewFriendForm extends PureComponent {
 
   submitHandler = async e => {
     const form = {...this.state.form};
+
+    if (form.sleepHoursSwitch) {
+      form.sleepsFrom = this.state.sleepHours.from % 1440;
+      form.sleepsTo = this.state.sleepHours.to % 1440
+    } else {
+      form.sleepsFrom = -1;
+      form.sleepsTo = -1;
+    }
+
+    if (form.workHoursSwitch) {
+      form.worksFrom = this.state.workHours.from % 1440;
+      form.worksTo = this.state.workHours.to % 1440
+    }else{
+      form.worksFrom = -1;
+      form.worksTo = -1;
+    }
+
     try {
       await graphqlService.addNewFriend({
         ...form,

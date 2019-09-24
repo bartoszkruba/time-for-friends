@@ -21,6 +21,9 @@ module.exports.friend = async ({_id}) => {
 };
 
 module.exports.addFriend = async ({friendInput}, req) => {
+
+  console.log(friendInput);
+
   const user = await checkIfAuthenticated(req);
   validateNewFriend(friendInput);
 
@@ -33,6 +36,7 @@ module.exports.addFriend = async ({friendInput}, req) => {
     timezone: timezone._id
   }).save();
   user.friends.push(friend);
+
   await user.save();
 
   return {...friend._doc, _id: friend._id.toString(), timezone: timezone}
