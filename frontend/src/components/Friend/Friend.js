@@ -15,7 +15,9 @@ export default class Friend extends Component {
     emails: [],
     phoneNumbers: [],
     currentTime: "",
-    currentDate: ""
+    currentDate: "",
+    worksBetween: "07:00 - 16:00",
+    sleepsBetween: "22:00 - 06:00"
   };
 
   sleep = ms => new Promise((resolve => setTimeout(resolve, ms)));
@@ -23,12 +25,65 @@ export default class Friend extends Component {
   async componentDidMount() {
     try {
       const response = await graphqlService.friend(this.props._id);
-      await this.setState({...response.data.friend, _isMounted: true});
 
-      while (this.state._isMounted) {
+      let hourFormat;
+      // eslint-disable-next-line
+      switch (this.props.language) {
+        case "se":
+          hourFormat = "HH:mm";
+          break;
+        case "us":
+          hourFormat = "hh:mm A";
+          break;
+      }
+
+      const worksFrom = moment.utc()
+        .hour(~~(response.data.friend.workMarks.from / 60))
+        .minute(response.data.friend.workMarks.from % 60)
+        .format(hourFormat);
+      const worksTo = moment.utc()
+        .hours(~~(response.data.friend.workMarks.to / 60))
+        .minutes(response.data.friend.workMarks.to % 60)
+        .format(hourFormat);
+
+      const sleepsFrom = moment.utc()
+        .hour(~~(response.data.friend.sleepMarks.from / 60))
+        .minute(response.data.friend.sleepMarks.from % 60)
+        .format(hourFormat);
+      const sleepsTo = moment.utc()
+        .hours(~~(response.data.friend.sleepMarks.to / 60))
+        .minutes(response.data.friend.sleepMarks.to % 60)
+        .format(hourFormat);
+
+      await this.setState({
+        ...response.data.friend,
+        worksBetween: worksFrom + " - " + worksTo,
+        sleepsBetween: sleepsFrom + " - " + sleepsTo
+      });
+
+
+      let timeFormat;
+      let dateFormat;
+
+
+      // eslint-disable-next-line
+      switch (this.props.language) {
+        case "se":
+          timeFormat = "HH:mm:ss";
+          dateFormat = "DD.MM.YYYY";
+          break;
+        case "us":
+          timeFormat = "hh:mm:ss A";
+          dateFormat = "MM.DD.YYYY";
+          break;
+      }
+
+      this._isMounted = true;
+
+      while (this._isMounted) {
         const m = moment.tz(this.state.timezone.name);
-        this.setState({currentTime: m.format('HH:mm:ss')});
-        this.setState({currentDate: m.format('YYYY.MM.DD')});
+        this.setState({currentTime: m.format(timeFormat)});
+        this.setState({currentDate: m.format(dateFormat)});
 
         await this.sleep(500);
       }
@@ -40,11 +95,41 @@ export default class Friend extends Component {
   }
 
   componentWillUnmount() {
-    this.setState({_isMounted: false})
+    this._isMounted = false;
   }
 
   render() {
     const state = this.state;
+
+    const text = {};
+
+    // eslint-disable-next-line
+    switch (this.props.language) {
+      case "se":
+        text.timezone = "Tidszon";
+        text.currentTime = "Nuvarande Klockan";
+        text.currentDate = "Nuvarande Datum";
+        text.address = "Adress";
+        text.city = "Stad";
+        text.country = "Land";
+        text.phoneNumbers = "Telefonnummer";
+        text.emails = "E-postadress";
+        text.worksBetween = "Arbetar Mellan:";
+        text.sleepsBetween = "Sover Mellan:";
+        break;
+      case "us":
+        text.timezone = "Timezone";
+        text.currentTime = "Current Time";
+        text.currentDate = "Current Date";
+        text.address = "Address";
+        text.city = "City";
+        text.country = "Country";
+        text.phoneNumbers = "Phone Numbers";
+        text.emails = "Emails";
+        text.worksBetween = "Works Between:";
+        text.sleepsBetween = "Sleeps Between:";
+        break;
+    }
 
     const emails = state.emails.map(e => <div className="row">
       <div className="col-md-1"/>
@@ -73,7 +158,7 @@ export default class Friend extends Component {
       <div className="row mt-4">
         <div className="col-md-1"/>
         <div className="col-md-8">
-          <h2>Timezone: </h2>
+          <h2>{text.timezone}: </h2>
         </div>
         <div className="col-md-1"/>
       </div>
@@ -87,7 +172,7 @@ export default class Friend extends Component {
       <div className="row mt-4">
         <div className="col-md-1"/>
         <div className="col-md-8">
-          <h2>Current Time: </h2>
+          <h2>{text.currentTime}: </h2>
         </div>
         <div className="col-md-1"/>
       </div>
@@ -101,7 +186,7 @@ export default class Friend extends Component {
       <div className="row mt-4">
         <div className="col-md-1"/>
         <div className="col-md-8">
-          <h2>Current Date: </h2>
+          <h2>{text.currentDate}: </h2>
         </div>
         <div className="col-md-1"/>
       </div>
@@ -112,10 +197,38 @@ export default class Friend extends Component {
         </div>
         <div className="col-md-1"/>
       </div>
+      <div className="row mt-4">
+        <div className="col-md-1"/>
+        <div className="col-md-8">
+          <h2>{text.worksBetween}</h2>
+        </div>
+        <div className="col-md-1"/>
+      </div>
       <div className="row">
         <div className="col-md-1"/>
         <div className="col-md-8">
-          <h2>Address:</h2>
+          <p>{state.worksBetween}</p>
+        </div>
+        <div className="col-md-1"/>
+      </div>
+      <div className="row mt-4">
+        <div className="col-md-1"/>
+        <div className="col-md-8">
+          <h2>{text.sleepsBetween}</h2>
+        </div>
+        <div className="col-md-1"/>
+      </div>
+      <div className="row">
+        <div className="col-md-1"/>
+        <div className="col-md-8">
+          <p>{state.sleepsBetween}</p>
+        </div>
+        <div className="col-md-1"/>
+      </div>
+      <div className="row">
+        <div className="col-md-1"/>
+        <div className="col-md-8">
+          <h2>{text.address}:</h2>
         </div>
         <div className="col-md-1"/>
       </div>
@@ -123,7 +236,7 @@ export default class Friend extends Component {
         <div className="col-md-1"/>
         <div className="col md-8">
           <p>
-            <b>City:</b> {state.city}
+            <b>{text.city}:</b> {state.city}
           </p>
         </div>
         <div className="row-md-1"/>
@@ -132,7 +245,7 @@ export default class Friend extends Component {
         <div className="col-md-1"/>
         <div className="col md-1">
           <p>
-            <b>Country:</b> {state.country}
+            <b>{text.country}:</b> {state.country}
           </p>
         </div>
         <div className="row-md-1"/>
@@ -141,7 +254,7 @@ export default class Friend extends Component {
         <div className="row">
           <div className="col-md-1"/>
           <div className="col-md-8">
-            <h2>Emails:</h2>
+            <h2>{text.emails}:</h2>
           </div>
           <div className="col-md-1"/>
         </div>
@@ -150,7 +263,7 @@ export default class Friend extends Component {
         <div className="row">
           <div className="col-md-1"/>
           <div className="col-md-8">
-            <h2>Phone Numbers:</h2>
+            <h2>{text.phoneNumbers}:</h2>
           </div>
           <div className="col-md-1"/>
         </div>

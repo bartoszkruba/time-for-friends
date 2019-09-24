@@ -21,7 +21,6 @@ export default class FriendList extends Component {
         to: new Date(),
       },
       betweenSwitch: false,
-      betweenSwitchLabel: "Off",
       sorting: "First Name",
       sortingSwitch: false,
       sortingSwitchLabel: "First Name"
@@ -36,21 +35,20 @@ export default class FriendList extends Component {
         return this.setState({redirect: "/login"});
       }
     }
-
-    await this.setState({_isMounted: true});
+    this._isMounted = true;
     this.requestFriends(1);
     this.calculateTimePickerRange();
     this.calculateTimes();
   }
 
   componentWillUnmount() {
-    this.setState({_isMounted: false})
+    this._isMounted = false
   }
 
   sleep = ms => new Promise((resolve => setTimeout(resolve, ms)));
 
   calculateTimePickerRange = async () => {
-    while (this.state._isMounted) {
+    while (this._isMounted) {
       const searchBar = {...this.state.searchBar};
 
       const earliest = new Date(moment.tz("Pacific/Samoa").format("MMM DD, YYYY HH:mm"));
@@ -69,7 +67,7 @@ export default class FriendList extends Component {
   };
 
   calculateTimes = async () => {
-    while (this.state._isMounted) {
+    while (this._isMounted) {
       const state = this.state;
       const searchBar = state.searchBar;
       const newFriends = [];
@@ -81,6 +79,21 @@ export default class FriendList extends Component {
         to = moment(searchBar.range.to).format(format);
       }
 
+      let timeFormat;
+      let dateFormat;
+
+      // eslint-disable-next-line
+      switch (this.props.language) {
+        case "se":
+          timeFormat = 'HH:mm:ss';
+          dateFormat = 'DD.MM.YYYY';
+          break;
+        case "us":
+          timeFormat = "hh:mm:ss A";
+          dateFormat = "MM.DD.YYYY";
+          break;
+      }
+
       // eslint-disable-next-line
       for (const friend of this.state.friends) {
         const m = moment.tz(friend.timezone.name);
@@ -90,8 +103,28 @@ export default class FriendList extends Component {
             continue;
           }
         }
-        friend.currentTime = m.format('HH:mm:ss');
-        friend.currentDate = m.format('YYYY.MM.DD');
+
+        friend.currentTime = m.format(timeFormat);
+        friend.currentDate = m.format(dateFormat);
+
+        const currentMinute = m.hours() * 60 + m.minutes();
+
+        if ((friend.workMarks.to > friend.workMarks.from &&
+          currentMinute >= friend.workMarks.from &&
+          currentMinute <= friend.workMarks.to) ||
+          (friend.workMarks.to < friend.workMarks.from &&
+            (currentMinute < friend.workMarks.to || currentMinute > friend.workMarks.from))) {
+          friend.working = true;
+        }
+
+        if ((friend.sleepMarks.to > friend.sleepMarks.from &&
+          currentMinute >= friend.sleepMarks.from &&
+          currentMinute < friend.sleepMarks.to) ||
+          (friend.sleepMarks.to < friend.sleepMarks.from &&
+            (currentMinute < friend.sleepMarks.to || currentMinute >= friend.sleepMarks.from))) {
+          friend.sleeping = true;
+        }
+
         newFriends.push(friend);
       }
       this.setState({friends: newFriends});
@@ -110,12 +143,15 @@ export default class FriendList extends Component {
 
       switch (state.sorting) {
         case "First Name":
+        case "Förnamn":
           query.sort = "firstName";
           break;
         case "Country":
+        case "Land":
           query.sort = "country";
           break;
         case "Last Name":
+        case "Efternamn":
           query.sort = "lastName";
           break;
         default:
@@ -140,8 +176,6 @@ export default class FriendList extends Component {
       await graphqlService.deleteFriend(_id);
       const currentPage = this.state.page;
       const maxPage = Math.ceil((((this.state.count - 1) < 1) ? 1 : (this.state.count - 1)) / 10);
-      console.log("maxPage: " + maxPage);
-      console.log('currentPage: ' + currentPage);
       if (currentPage > maxPage) {
         this.requestFriends(currentPage - 1)
       } else {
@@ -155,7 +189,6 @@ export default class FriendList extends Component {
   searchBarChangedHandler = async e => {
     const searchBar = {...this.state.searchBar};
     if (e.target.name === "betweenSwitch") {
-      searchBar.betweenSwitchLabel = searchBar.betweenSwitch ? "Off" : "On";
       searchBar.betweenSwitch = !searchBar.betweenSwitch;
     } else {
       searchBar[e.target.name] = e.target.value;
@@ -210,6 +243,18 @@ export default class FriendList extends Component {
 
     let contacts;
 
+    const text = {};
+
+    // eslint-disable-next-line
+    switch (this.props.language) {
+      case "se":
+        text.header = "Filtrera Dina Kontakter";
+        break;
+      case "us":
+        text.header = "Filter Your Contacts";
+        break;
+    }
+
     if (state.count > 0) {
       contacts = state.friends.map(f => <div key={f._id} className="container Tile">
         <div className="row">
@@ -231,16 +276,12 @@ export default class FriendList extends Component {
         <div className="row">
           <div className="col-md-1"/>
           <div className="col-md-5">
-            <p>{f.city}, {f.country}</p>
+            <h6 style={{fontWeight: "normal"}}>{f.city}, {f.country}</h6>
+            {f.working ? <i className="fas fa-briefcase mt-1"/> : null}
+            {f.sleeping ? <i className="fas fa-bed mt-1"/> : null}
           </div>
           <div className="col-md-5 text-right">
             <h5>{f.currentDate}</h5>
-          </div>
-          <div className="col-md-1"/>
-        </div>
-        <div className="row">
-          <div className="col-md-1"/>
-          <div className="col-md-10 text-right">
             <i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
                style={{cursor: "pointer"}}/>
           </div>
@@ -297,17 +338,17 @@ export default class FriendList extends Component {
         <div className="row mb-2">
           <div className="col-md-1"/>
           <div className="col-md-10">
-            <h1 className="Card-Header">Filter Your Contacts</h1>
+            <h1 className="Card-Header">{text.header}</h1>
           </div>
           <div className="col-md-1"/>
         </div>
         <SearchBar
+          language={this.props.language}
           rangeChanged={this.rangeChangedHandler}
           formChanged={this.searchBarChangedHandler}
           sortingChanged={this.sortingChangeHandler}
           sorting={state.searchBar.sorting}
           betweenSwtich={state.searchBar.betweenSwitch}
-          betweenSwtichLabel={state.searchBar.betweenSwitchLabel}
           range={state.searchBar.range}
           firstName={state.searchBar.firstName}
           lastName={state.searchBar.lastName}/>
