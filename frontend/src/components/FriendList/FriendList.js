@@ -35,21 +35,20 @@ export default class FriendList extends Component {
         return this.setState({redirect: "/login"});
       }
     }
-
-    await this.setState({_isMounted: true});
+    this._isMounted = true;
     this.requestFriends(1);
     this.calculateTimePickerRange();
     this.calculateTimes();
   }
 
   componentWillUnmount() {
-    this.setState({_isMounted: false})
+    this._isMounted = false
   }
 
   sleep = ms => new Promise((resolve => setTimeout(resolve, ms)));
 
   calculateTimePickerRange = async () => {
-    while (this.state._isMounted) {
+    while (this._isMounted) {
       const searchBar = {...this.state.searchBar};
 
       const earliest = new Date(moment.tz("Pacific/Samoa").format("MMM DD, YYYY HH:mm"));
@@ -68,7 +67,7 @@ export default class FriendList extends Component {
   };
 
   calculateTimes = async () => {
-    while (this.state._isMounted) {
+    while (this._isMounted) {
       const state = this.state;
       const searchBar = state.searchBar;
       const newFriends = [];
@@ -114,7 +113,7 @@ export default class FriendList extends Component {
           currentMinute >= friend.workMarks.from &&
           currentMinute <= friend.workMarks.to) ||
           (friend.workMarks.to < friend.workMarks.from &&
-            currentMinute < friend.workMarks.to)) {
+            (currentMinute < friend.workMarks.to || currentMinute > friend.workMarks.from))) {
           friend.working = true;
         }
 
@@ -122,7 +121,7 @@ export default class FriendList extends Component {
           currentMinute >= friend.sleepMarks.from &&
           currentMinute <= friend.sleepMarks.to) ||
           (friend.sleepMarks.to < friend.sleepMarks.from &&
-            currentMinute < friend.sleepMarks.to)) {
+            (currentMinute < friend.sleepMarks.to || currentMinute > friend.sleepMarks.from))) {
           friend.sleeping = true;
         }
 
@@ -177,8 +176,6 @@ export default class FriendList extends Component {
       await graphqlService.deleteFriend(_id);
       const currentPage = this.state.page;
       const maxPage = Math.ceil((((this.state.count - 1) < 1) ? 1 : (this.state.count - 1)) / 10);
-      console.log("maxPage: " + maxPage);
-      console.log('currentPage: ' + currentPage);
       if (currentPage > maxPage) {
         this.requestFriends(currentPage - 1)
       } else {
