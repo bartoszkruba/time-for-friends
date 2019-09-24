@@ -25,11 +25,11 @@ export default class FriendList extends Component {
       betweenSwitch: false,
       sorting: "First Name",
       sortingSwitch: false,
-      sortingSwitchLabel: "First Name"
+      sortingSwitchLabel: "First Name",
+      analogClockSwitch: false
     },
     redirect: "",
     friends: [],
-    analogClock: true
   };
 
   async componentDidMount() {
@@ -279,7 +279,7 @@ export default class FriendList extends Component {
             {f.sleeping ? <i className="fas fa-bed mt-1"/> : null}
           </div>
           <div className="col-md-3 text-md-right">
-            {state.analogClock ? <Clock hour={f.hour} minute={f.minute}/> :
+            {state.searchBar.analogClockSwitch ? <Clock hour={f.hour} minute={f.minute}/> :
               <h2>{f.currentTime ? f.currentTime : "-"}</h2>}
             <h5>{f.currentDate ? f.currentDate : "-"}</h5>
             <i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
@@ -349,6 +349,7 @@ export default class FriendList extends Component {
           sortingChanged={this.sortingChangeHandler}
           sorting={state.searchBar.sorting}
           betweenSwtich={state.searchBar.betweenSwitch}
+          analogClockSwitch={state.analogClockSwitch}
           range={state.searchBar.range}
           firstName={state.searchBar.firstName}
           lastName={state.searchBar.lastName}/>

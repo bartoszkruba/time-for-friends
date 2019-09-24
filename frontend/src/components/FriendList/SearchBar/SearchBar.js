@@ -40,6 +40,7 @@ export default class SearchBar extends Component {
         text.optionCurrentTime = "Nuvarande Tid";
         text.betweenSwitchFrom = "Från:";
         text.betweenSwitchTo = "Till:";
+        text.analogClock = "Analog Klocka";
         break;
       case "us":
         text.firstNamePlaceholder = "First Name";
@@ -52,6 +53,7 @@ export default class SearchBar extends Component {
         text.optionCurrentTime = "Current Time";
         text.betweenSwitchFrom = "From";
         text.betweenSwitchTo = "To";
+        text.analogClock = "Analog Clock";
         break;
     }
 
@@ -85,6 +87,16 @@ export default class SearchBar extends Component {
           </Input>
         </div>
         <div className="col-md-5 mt-1">
+          <h4 className="mr-4" style={{display: "inline"}}>{text.analogClock}</h4>
+          <CustomInput inline checked={props.analogClockSwitch} type="switch" id="analogClockSwitch"
+                       name="analogClockSwitch"
+                       onChange={props.formChanged}/>
+        </div>
+        <div className="col-md-1"/>
+      </div>
+      <div className="row mt-4">
+        <div className="col-md-1"/>
+        <div className="col-md-10 mt-1">
           <h4 className="mr-4" style={{display: "inline"}}>{text.timePicker}</h4>
           <CustomInput inline checked={props.betweenSwtich} type="switch" id="betweenSwitch" name="betweenSwitch"
                        onChange={props.formChanged}/>
