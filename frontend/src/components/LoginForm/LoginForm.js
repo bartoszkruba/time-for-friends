@@ -111,7 +111,7 @@ export default class LoginForm extends Component {
         break;
     }
 
-    return <div className="container Card ">
+    return <div className="container Card Full-Height-In-Mobile">
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8">

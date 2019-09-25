@@ -124,3 +124,22 @@ button.page-link {
     color: white;
 }
 
+
+@media (max-width: 500px) {
+    .top-margin {
+        margin-top: 0;
+    }
+
+    .App {
+        padding-bottom: 0;
+    }
+
+    .Index-Jumbotron {
+        margin-top: 45px;
+    }
+
+    .Full-Height-In-Mobile {
+        min-height: 89vh;
+    }
+}
+

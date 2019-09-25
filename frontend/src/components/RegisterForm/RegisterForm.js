@@ -112,7 +112,7 @@ export default class RegisterForm extends Component {
         break;
     }
 
-    return <div className="container Card align-self-center top-margin">
+    return <div className="container Card align-self-center top-margin Full-Height-In-Mobile">
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8">
