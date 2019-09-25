@@ -271,19 +271,25 @@ export default class FriendList extends Component {
           <div className="col-md-7">
             <h1>
               <Link style={{textDecoration: "none"}} className="text-white" to={"friend/" + f._id}>
-              <span className="Tile-Header">
-              {f.firstName} {f.lastName}
-              </span>
+                <span className="Tile-Header">{f.firstName} {f.lastName}</span>
               </Link>
             </h1>
             <h6 style={{fontWeight: "normal"}}>{f.city}, {f.country}</h6>
-            {f.working ? <i className="fas fa-briefcase mt-1"/> : null}
-            {f.sleeping ? <i className="fas fa-bed mt-1"/> : null}
           </div>
           <div className="col-md-3 text-md-right">
             {state.searchBar.analogClockSwitch ? <Clock hour={f.hour} minute={f.minute}/> :
-              <h2>{f.currentTime ? f.currentTime : "-"}</h2>}
+              (<h2>{f.currentTime ? f.currentTime : "-"}</h2>)}
             <h5>{f.currentDate ? f.currentDate : "-"}</h5>
+          </div>
+          <div className="col-md-1"/>
+        </div>
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-10 d-flex justify-content-between">
+            <span>
+            {f.sleeping ? <i className="fas fa-bed mt-1"/> : null}
+              {f.working ? <i className="fas fa-briefcase mt-1"/> : null}
+            </span>
             <i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
                style={{cursor: "pointer"}}/>
           </div>
