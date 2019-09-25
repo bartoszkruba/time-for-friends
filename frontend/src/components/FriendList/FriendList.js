@@ -1,8 +1,10 @@
 import React, {Component, Fragment} from 'react';
 import {Link, Redirect} from "react-router-dom";
-import SearchBar from "./SearchBar/SearchBar";
 import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
 import moment from 'moment-timezone'
+
+import Clock from "./Clock/Clock";
+import SearchBar from "./SearchBar/SearchBar";
 
 import graphqlService from "../../graphql/graphqlService";
 
@@ -23,10 +25,11 @@ export default class FriendList extends Component {
       betweenSwitch: false,
       sorting: "First Name",
       sortingSwitch: false,
-      sortingSwitchLabel: "First Name"
+      sortingSwitchLabel: "First Name",
+      analogClockSwitch: false
     },
     redirect: "",
-    friends: []
+    friends: [],
   };
 
   async componentDidMount() {
@@ -105,9 +108,13 @@ export default class FriendList extends Component {
         }
 
         friend.currentTime = m.format(timeFormat);
+
+        friend.hour = m.hours();
+        friend.minute = m.minutes();
+
         friend.currentDate = m.format(dateFormat);
 
-        const currentMinute = m.hours() * 60 + m.minutes();
+        const currentMinute = friend.hour * 60 + friend.minute;
 
         if ((friend.workMarks.to > friend.workMarks.from &&
           currentMinute >= friend.workMarks.from &&
@@ -190,6 +197,8 @@ export default class FriendList extends Component {
     const searchBar = {...this.state.searchBar};
     if (e.target.name === "betweenSwitch") {
       searchBar.betweenSwitch = !searchBar.betweenSwitch;
+    } else if (e.target.name === "analogClockSwitch") {
+      searchBar.analogClockSwitch = !searchBar.analogClockSwitch;
     } else {
       searchBar[e.target.name] = e.target.value;
     }
@@ -267,21 +276,14 @@ export default class FriendList extends Component {
               </span>
               </Link>
             </h1>
-          </div>
-          <div className="col-md-3 text-right">
-            <h2>{f.currentTime}</h2>
-          </div>
-          <div className="col-md-1"/>
-        </div>
-        <div className="row">
-          <div className="col-md-1"/>
-          <div className="col-md-5">
             <h6 style={{fontWeight: "normal"}}>{f.city}, {f.country}</h6>
             {f.working ? <i className="fas fa-briefcase mt-1"/> : null}
             {f.sleeping ? <i className="fas fa-bed mt-1"/> : null}
           </div>
-          <div className="col-md-5 text-right">
-            <h5>{f.currentDate}</h5>
+          <div className="col-md-3 text-md-right">
+            {state.searchBar.analogClockSwitch ? <Clock hour={f.hour} minute={f.minute}/> :
+              <h2>{f.currentTime ? f.currentTime : "-"}</h2>}
+            <h5>{f.currentDate ? f.currentDate : "-"}</h5>
             <i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
                style={{cursor: "pointer"}}/>
           </div>
@@ -349,6 +351,7 @@ export default class FriendList extends Component {
           sortingChanged={this.sortingChangeHandler}
           sorting={state.searchBar.sorting}
           betweenSwtich={state.searchBar.betweenSwitch}
+          analogClockSwitch={state.analogClockSwitch}
           range={state.searchBar.range}
           firstName={state.searchBar.firstName}
           lastName={state.searchBar.lastName}/>
