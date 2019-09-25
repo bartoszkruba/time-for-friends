@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from 'reactstrap';
+import {Collapse, Nav, Navbar, NavbarToggler, NavItem, NavLink} from 'reactstrap';
 import {Link} from "react-router-dom";
 import 'flag-icon-css/css/flag-icon.min.css'
 
@@ -52,13 +52,11 @@ export default class Navigation extends Component {
     return (
       <div>
         <Navbar className="App-Navbar" color="info" light expand="md" style={{padding: "15px"}}>
-          <NavbarBrand>
-            <Link to="/" className="nav-link text-white">
+          <Link to="/" className="nav-link text-white">
             <span className="Nav-Item">
               <b>Time For Friends</b>
             </span>
-            </Link>
-          </NavbarBrand>
+          </Link>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
             </Nav>
