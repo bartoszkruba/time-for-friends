@@ -22,8 +22,6 @@ module.exports.friend = async ({_id}) => {
 
 module.exports.addFriend = async ({friendInput}, req) => {
 
-  console.log(friendInput);
-
   const user = await checkIfAuthenticated(req);
   validateNewFriend(friendInput);
 

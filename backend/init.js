@@ -126,7 +126,7 @@ const countries = [
   "Argentina",
   "Peru",
   "Venezuela",
-  "America",
+  "United State",
   "Cuba",
   "Australia",
   "New Zealand",
