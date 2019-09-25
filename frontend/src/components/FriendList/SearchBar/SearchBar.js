@@ -89,8 +89,7 @@ export default class SearchBar extends Component {
         <div className="col-md-5 mt-1">
           <h4 className="mr-4" style={{display: "inline"}}>{text.analogClock}</h4>
           <CustomInput inline checked={props.analogClockSwitch} type="switch" id="analogClockSwitch"
-                       name="analogClockSwitch"
-                       onChange={props.formChanged}/>
+                       name="analogClockSwitch" onChange={props.formChanged}/>
         </div>
         <div className="col-md-1"/>
       </div>

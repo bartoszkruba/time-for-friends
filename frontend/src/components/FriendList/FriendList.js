@@ -197,6 +197,8 @@ export default class FriendList extends Component {
     const searchBar = {...this.state.searchBar};
     if (e.target.name === "betweenSwitch") {
       searchBar.betweenSwitch = !searchBar.betweenSwitch;
+    } else if (e.target.name === "analogClockSwitch") {
+      searchBar.analogClockSwitch = !searchBar.analogClockSwitch;
     } else {
       searchBar[e.target.name] = e.target.value;
     }
