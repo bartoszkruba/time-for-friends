@@ -138,6 +138,14 @@ button.page-link {
         margin-top: 45px;
     }
 
+    .Index-Jumbotron h1 {
+        font-size: 350%;
+    }
+
+    .Index-Jumbotron.jumbotron {
+        margin-bottom: 0;
+    }
+
     .Full-Height-In-Mobile {
         min-height: 89vh;
     }

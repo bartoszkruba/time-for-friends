@@ -25,7 +25,7 @@ const index = props => {
   }
 
   return <div className="container">
-    <Jumbotron className="Card Index-Jumbotron" style={{
+    <Jumbotron className="Index-Jumbotron" style={{
       backgroundColor: "rgba(0, 0, 0, 0.8)"
     }}>
       <h1 className="display-3">{text.welcome}</h1>
