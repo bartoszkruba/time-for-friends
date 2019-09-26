@@ -21,6 +21,7 @@ export default class App extends Component {
     loggedIn: true,
     redirect: "",
     showModal: false,
+    showLoadingBackdrop: false
   };
 
   async componentDidMount() {
@@ -35,6 +36,8 @@ export default class App extends Component {
 
   showModal = () => this.setState({showModal: true});
   closeModal = () => this.setState({showModal: false});
+  showLoadingBackdrop = () => this.setState({showLoadingBackdrop: true});
+  hideLoadingBackdrop = () => this.setState({showLoadingBackdrop: false});
 
   successfullRegisterHandler = (_id, email) => {
     this.redirect("/login")
@@ -69,35 +72,44 @@ export default class App extends Component {
   render() {
     const state = this.state;
 
-    const register = () => <RegisterForm showModal={this.showModal}
-                                         language={state.language}
-                                         registerSuccessfull={this.successfullRegisterHandler}/>;
+    const register = () => <RegisterForm
+      showModal={this.showModal}
+      language={state.language}
+      registerSuccessfull={this.successfullRegisterHandler}/>;
 
-    const login = () => <LoginForm showModal={this.showModal}
-                                   language={state.language}
-                                   loginSuccessfull={this.successfullLoginHandler}/>;
+    const login = () => <LoginForm
+      showModal={this.showModal}
+      language={state.language}
+      loginSuccessfull={this.successfullLoginHandler}/>;
 
-    const index = () => <Index showModal={this.showModal}
-                               language={state.language}/>;
+    const index = () => <Index
+      showModal={this.showModal}
+      language={state.language}/>;
 
-    const newFriend = () => <NewFriendForm showModal={this.showModal} loggedIn={state.loggedIn}
-                                           language={state.language}
-                                           addedNewFriend={this.createdNewFriendHandler}/>;
+    const newFriend = () => <NewFriendForm
+      showLoading={this.showLoadingBackdrop}
+      hideLoading={this.hideLoadingBackdrop}
+      showModal={this.showModal} loggedIn={state.loggedIn}
+      language={state.language}
+      addedNewFriend={this.createdNewFriendHandler}/>;
 
-    const friendList = () => <FriendList showModal={this.showModal}
-                                         language={state.language}
-                                         loggedIn={state.loggedIn}/>;
+    const friendList = () => <FriendList
+      showModal={this.showModal}
+      language={state.language}
+      loggedIn={state.loggedIn}/>;
 
-    const friend = ({match}) => <Friend showModal={this.showModal}
-                                        language={state.language}
-                                        _id={match.params.id}/>;
+    const friend = ({match}) => <Friend
+      showModal={this.showModal}
+      language={state.language}
+      _id={match.params.id}/>;
 
-    const mapComponent = () => <MapComponent showModal={this.showModal}
-                                             language={state.language}
-                                             loggedIn={state.loggedIn}/>;
+    const mapComponent = () => <MapComponent
+      showModal={this.showModal}
+      language={state.language}
+      loggedIn={state.loggedIn}/>;
 
     return <Router>
-      <LoadingBackdrop/>
+      <LoadingBackdrop show={state.showLoadingBackdrop}/>
       {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
 
       <div className="App">

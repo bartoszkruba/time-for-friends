@@ -11,8 +11,17 @@ export default class LoadingBackdrop extends Component {
       width: "100vw",
       height: "100vh",
       backgroundColor: "rgba(0,0,0, 0.6)",
-      zIndex: "500"
-    };
+      zIndex: "500",
+      "animation-name": "fadeInOpacity",
+      "animation-iteration-count": "1",
+      "animation-timing-funcation": "ease-in",
+      "animation-duration": "0.25s",
+      transition: "opacity 0.25s linear"
+  };
+
+    if (!this.props.show) {
+      backdropStyles.display = "none";
+    }
 
     const spinnerContainerStyles = {
       width: "10rem",
