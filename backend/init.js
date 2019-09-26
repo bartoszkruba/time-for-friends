@@ -213,7 +213,9 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
     const user = await User({email: "test@email.com", password}).save();
 
     console.log('Adding mock friends...');
-    for (let i = 0; i < 2; i++) {
+
+    // This loop is here so I can easy add more friends to database for testing purpose
+    for (let i = 0; i < 1; i++) {
       await addMockFriends(user);
     }
     await user.save();
@@ -223,7 +225,6 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
     console.log(e);
   }
 })();
-
 
 sleep = ms => new Promise((resolve => setTimeout(resolve, ms)));
 
@@ -246,28 +247,19 @@ const addMockFriends = async user => {
 
     let geocodeResponse;
 
+    let coordinates;
     try {
       geocodeResponse = await geosearch(cities[i] + " " + countries[i]);
+      coordinates = {
+        lat: geocodeResponse[0].lat,
+        lng: geocodeResponse[0].lon
+      };
     } catch (e) {
       console.log('Could not find coordinates for: ' + cities[i] + " " + countries[i]);
-      const friend = await Friend({
-        firstName: persons[i].firstName,
-        lastName: persons[i].lastName,
-        city: cities[i],
-        country: countries[i],
-        timezone: timezone._id,
-        user: user._id,
-        workMarks: {
-          from: 420,
-          to: 960
-        },
-        sleepMarks: {
-          from: 1320,
-          to: 360
-        }
-      }).save();
-      user.friends.push(friend._id);
-      continue;
+      coordinates = {
+        lat: "0",
+        lng: "0"
+      };
     }
 
     // const geocodeResponse = await geocoder.geocode(cities[i] + " " + countries[i]);
@@ -277,8 +269,7 @@ const addMockFriends = async user => {
       lastName: persons[i].lastName,
       city: cities[i],
       country: countries[i],
-      lat: geocodeResponse[0].lat,
-      lng: geocodeResponse[0].lon,
+      ...coordinates,
       timezone: timezone._id,
       user: user._id,
       workMarks: {

@@ -1,4 +1,5 @@
 const validator = require('validator');
+const geosearch = require('../../nominatim/nominatim');
 
 const {getCoordinatesForName} = require('../../geocode/geocode');
 const Friend = require('../../models/Friend');
@@ -26,7 +27,23 @@ module.exports.addFriend = async ({friendInput}, req) => {
   validateNewFriend(friendInput);
 
   const timezone = await getTimezone(friendInput.timezone);
-  const coordinates = await getCoordinatesForName(friendInput.city + " " + friendInput.country);
+
+  let geocodeResponse;
+
+  let coordinates;
+  try {
+    geocodeResponse = await geosearch(friendInput.country + " " + friendInput.city);
+    coordinates = {
+      lat: geocodeResponse[0].lat,
+      lng: geocodeResponse[0].lon
+    };
+  } catch (e) {
+    coordinates = {
+      lat: "0",
+      lng: "0"
+    };
+  }
+
   const friend = await Friend({
     ...friendInput,
     ...coordinates,
