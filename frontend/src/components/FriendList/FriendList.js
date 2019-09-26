@@ -165,7 +165,7 @@ export default class FriendList extends Component {
           query.sort = "currentTime";
       }
 
-      if (state.range && state.range.from && state.range.to && state.betweenSwitch) {
+      if (state.betweenSwitch && state.range && state.range.from && state.range.to) {
         query.from = moment(state.range.from).format("YYYYMMDDHHmmss");
         query.to = moment(state.range.to).format("YYYYMMDDHHmmss");
       }
@@ -184,7 +184,7 @@ export default class FriendList extends Component {
       const currentPage = this.state.page;
       const maxPage = Math.ceil((((this.state.count - 1) < 1) ? 1 : (this.state.count - 1)) / 10);
       if (currentPage > maxPage) {
-        this.requestFriends(currentPage - 1)
+        this.requestFriends(maxPage)
       } else {
         this.requestFriends(currentPage)
       }
