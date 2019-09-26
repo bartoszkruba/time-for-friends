@@ -141,5 +141,9 @@ button.page-link {
     .Full-Height-In-Mobile {
         min-height: 89vh;
     }
+
+    .disabled-in-mobile {
+        display: none;
+    }
 }
 

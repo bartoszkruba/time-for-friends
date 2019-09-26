@@ -214,8 +214,8 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
 
     console.log('Adding mock friends...');
 
-    // This loop is here so I can easy add more friends to database for testing purpose
-    for (let i = 0; i < 1; i++) {
+    // This loop is here so I can easy add more friends to database for testing purposes
+    for (let i = 0; i < 2; i++) {
       await addMockFriends(user);
     }
     await user.save();
@@ -249,7 +249,7 @@ const addMockFriends = async user => {
 
     let coordinates;
     try {
-      geocodeResponse = await geosearch(cities[i] + " " + countries[i]);
+      geocodeResponse = await geosearch(cities[i] + ", " + countries[i]);
       coordinates = {
         lat: geocodeResponse[0].lat,
         lng: geocodeResponse[0].lon
