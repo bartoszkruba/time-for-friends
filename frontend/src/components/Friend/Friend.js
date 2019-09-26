@@ -53,36 +53,39 @@ export default class Friend extends Component {
 
       await this.setState(state);
 
-      let timeFormat;
-      let dateFormat;
-
-      // eslint-disable-next-line
-      switch (this.props.language) {
-        case "se":
-          timeFormat = "HH:mm:ss";
-          dateFormat = "DD.MM.YYYY";
-          break;
-        case "us":
-          timeFormat = "hh:mm:ss A";
-          dateFormat = "MM.DD.YYYY";
-          break;
-      }
-
       this._isMounted = true;
-
-      while (this._isMounted) {
-        const m = moment.tz(this.state.timezone.name);
-        this.setState({currentTime: m.format(timeFormat)});
-        this.setState({currentDate: m.format(dateFormat)});
-
-        await this.sleep(500);
-      }
+      this.calculateTimes();
 
     } catch (e) {
       console.log(e);
       this.props.showModal();
     }
   }
+
+  calculateTimes = async () => {
+    let timeFormat;
+    let dateFormat;
+
+    // eslint-disable-next-line
+    switch (this.props.language) {
+      case "se":
+        timeFormat = "HH:mm:ss";
+        dateFormat = "DD.MM.YYYY";
+        break;
+      case "us":
+        timeFormat = "hh:mm:ss A";
+        dateFormat = "MM.DD.YYYY";
+        break;
+    }
+
+    while (this._isMounted) {
+      const m = moment.tz(this.state.timezone.name);
+      this.setState({currentTime: m.format(timeFormat)});
+      this.setState({currentDate: m.format(dateFormat)});
+
+      await this.sleep(500);
+    }
+  };
 
   componentWillUnmount() {
     this._isMounted = false;
