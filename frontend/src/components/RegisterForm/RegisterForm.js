@@ -30,9 +30,11 @@ export default class RegisterForm extends Component {
 
   submitHandler = async e => {
     if (this.validateInputs()) {
+      this.props.showLoading();
       try {
         const response = await graphqlService.register(this.state.email, this.state.password);
         this.setState({email: "", password: "", repeatPassword: ""});
+        this.props.hideLoading();
         this.props.registerSuccessfull(response.data._id, response.data.email);
       } catch (e) {
         if (e.networkError.result) {
@@ -53,6 +55,7 @@ export default class RegisterForm extends Component {
           }
           this.setState({validation})
         }
+        this.props.hideLoading();
       }
     }
   };
