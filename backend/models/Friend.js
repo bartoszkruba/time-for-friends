@@ -21,11 +21,11 @@ const FriendSchema = Schema({
   },
   lat: {
     type: String,
-    required: true
+    required: false
   },
   lng: {
     type: String,
-    required: true
+    required: false
   },
   emails: [
     {

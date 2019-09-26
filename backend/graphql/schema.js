@@ -19,8 +19,8 @@ module.exports = buildSchema(`
       lastName: String!
       city: String!
       country: String!
-      lat: String!
-      lng: String!
+      lat: String
+      lng: String
       emails: [String]
       phoneNumbers: [String]
       timezone: Timezone
