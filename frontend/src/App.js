@@ -11,6 +11,7 @@ import NewFriendForm from "./components/NewFriendForm/NewFriendForm";
 import FriendList from "./components/FriendList/FriendList";
 import Friend from "./components/Friend/Friend";
 import MapComponent from "./components/Map/Map";
+import LoadingBackdrop from "./components/LoadingBackdrop/LoadingBackdrop";
 import graphqlService from "./graphql/graphqlService";
 
 export default class App extends Component {
@@ -95,35 +96,32 @@ export default class App extends Component {
                                              language={state.language}
                                              loggedIn={state.loggedIn}/>;
 
-    return (
-      <Router>
+    return <Router>
+      <LoadingBackdrop/>
+      {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
 
-        {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
-
-        <div className="App">
-          <Modal isOpen={state.showModal} toggle={this.toggle} className={this.props.className}>
-            <ModalHeader toggle={this.toggle}>Something Went Wrong!</ModalHeader>
-            <ModalBody>
-              Please refresh site and try again.
-            </ModalBody>
-            <ModalFooter>
-              <Button color="info" onClick={this.closeModal}>Close</Button>{' '}
-            </ModalFooter>
-          </Modal>
-          <Navbar language={this.state.language} switchLanguage={this.switchLanguageHandler}
-                  loggedIn={state.loggedIn} logout={this.logoutHandler}/>
-          <div className="top-margin">
-            <Route path="/" exact component={index}/>
-            <Route path="/register/" exact component={register}/>
-            <Route path="/login/" exact component={login}/>
-            <Route path="/new-friend" exact component={newFriend}/>
-            <Route path="/friends" exact component={friendList}/>
-            <Route path="/friend/:id" exact component={friend}/>
-            <Route path="/map" exact component={mapComponent}/>
-          </div>
+      <div className="App">
+        <Modal isOpen={state.showModal} toggle={this.toggle} className={this.props.className}>
+          <ModalHeader toggle={this.toggle}>Something Went Wrong!</ModalHeader>
+          <ModalBody>
+            Please refresh site and try again.
+          </ModalBody>
+          <ModalFooter>
+            <Button color="info" onClick={this.closeModal}>Close</Button>{' '}
+          </ModalFooter>
+        </Modal>
+        <Navbar language={this.state.language} switchLanguage={this.switchLanguageHandler}
+                loggedIn={state.loggedIn} logout={this.logoutHandler}/>
+        <div className="top-margin">
+          <Route path="/" exact component={index}/>
+          <Route path="/register/" exact component={register}/>
+          <Route path="/login/" exact component={login}/>
+          <Route path="/new-friend" exact component={newFriend}/>
+          <Route path="/friends" exact component={friendList}/>
+          <Route path="/friend/:id" exact component={friend}/>
+          <Route path="/map" exact component={mapComponent}/>
         </div>
-      </Router>
-
-    );
+      </div>
+    </Router>;
   }
 };
