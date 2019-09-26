@@ -4,6 +4,8 @@ import validator from 'validator';
 import '../../App.css'
 import graphqlService from "../../graphql/graphqlService";
 
+import LoadingBackdrop from "../LoadingBackdrop/LoadingBackdrop";
+
 export default class RegisterForm extends Component {
   state = {
     email: "",
@@ -13,7 +15,8 @@ export default class RegisterForm extends Component {
       email: "",
       password: "",
       repeatPassword: ""
-    }
+    },
+    showLoadingBackdrop: false
   };
 
   keyDownHandler = e => {
@@ -30,11 +33,17 @@ export default class RegisterForm extends Component {
 
   submitHandler = async e => {
     if (this.validateInputs()) {
-      this.props.showLoading();
+
+      // Setting loading backdrop in parent will cause
+      // whole component to unmount and mount again
+      // which will lead to a lot ot trouble
+      // the only working solutions is to duplicate LoadingBackdrop in this component
+      // and set state here
+      await this.setState({showLoadingBackdrop: true});
       try {
         const response = await graphqlService.register(this.state.email, this.state.password);
         this.setState({email: "", password: "", repeatPassword: ""});
-        this.props.hideLoading();
+        await this.setState({showLoadingBackdrop: false});
         this.props.registerSuccessfull(response.data._id, response.data.email);
       } catch (e) {
         if (e.networkError.result) {
@@ -55,7 +64,7 @@ export default class RegisterForm extends Component {
           }
           this.setState({validation})
         }
-        this.props.hideLoading();
+        await this.setState({showLoadingBackdrop: false});
       }
     }
   };
@@ -116,6 +125,7 @@ export default class RegisterForm extends Component {
     }
 
     return <div className="container Card align-self-center top-margin Full-Height-In-Mobile">
+      <LoadingBackdrop show={this.state.showLoadingBackdrop}/>
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8">

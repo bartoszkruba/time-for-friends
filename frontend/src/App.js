@@ -73,8 +73,6 @@ export default class App extends Component {
     const state = this.state;
 
     const register = () => <RegisterForm
-      showLoading={this.showLoadingBackdrop}
-      hideLoading={this.hideLoadingBackdrop}
       showModal={this.showModal}
       language={state.language}
       registerSuccessfull={this.successfullRegisterHandler}/>;

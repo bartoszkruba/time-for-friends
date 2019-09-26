@@ -5,6 +5,8 @@ export default class LoadingBackdrop extends Component {
 
   render() {
     const backdropStyles = {
+      top: "0",
+      right: "0",
       margin: "0",
       padding: "0",
       position: "fixed",
@@ -17,7 +19,7 @@ export default class LoadingBackdrop extends Component {
       animationTimingFunction: "ease-in",
       animationDuration: "0.25s",
       transition: "opacity 0.25s linear"
-  };
+    };
 
     if (!this.props.show) {
       backdropStyles.display = "none";
