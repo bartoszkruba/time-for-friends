@@ -12,10 +12,10 @@ export default class LoadingBackdrop extends Component {
       height: "100vh",
       backgroundColor: "rgba(0,0,0, 0.6)",
       zIndex: "500",
-      "animation-name": "fadeInOpacity",
-      "animation-iteration-count": "1",
-      "animation-timing-funcation": "ease-in",
-      "animation-duration": "0.25s",
+      animationName: "fadeInOpacity",
+      animationIterationCount: "1",
+      animationTimingFunction: "ease-in",
+      animationDuration: "0.25s",
       transition: "opacity 0.25s linear"
   };
 
