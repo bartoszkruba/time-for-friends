@@ -32,7 +32,7 @@ app.use('/graphql', graphqlHttp({
   graphiql: true,
   // Handling GraphQL errors
   customFormatErrorFn(err) {
-    console.log(err);
+    // console.log(err);
     if (!err.originalError) return err;
     const message = err.message || 'An error occurred.';
     const code = err.originalError.code || 500;

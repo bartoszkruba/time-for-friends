@@ -9,7 +9,7 @@ const User = require('./models/User');
 const Friend = require('./models/Friend');
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost/time_for_friends';
-const GEOCODE_KEY = process.env.GEOCODE_API_KEY || null;
+// const GEOCODE_KEY = process.env.GEOCODE_API_KEY || null;
 
 const timezones = [
   "Asia/Tokyo",
@@ -182,10 +182,10 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
   {"firstName": "Montgomery", "lastName": "Di Giacomettino"}];
 
 (async () => {
-  if (!GEOCODE_KEY) {
-    console.log('Cannot initialize data without geocode api key');
-    return;
-  }
+  // if (!GEOCODE_KEY) {
+  //   console.log('Cannot initialize data without geocode api key');
+  //   return;
+  // }
 
   try {
     console.log('Connecting to database...');
