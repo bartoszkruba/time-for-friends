@@ -39,7 +39,7 @@ export default class RegisterForm extends Component {
       // which will lead to a lot ot trouble
       // the only working solutions is to duplicate LoadingBackdrop in this component
       // and set state here
-      await this.setState({showLoadingBackdrop: true});
+      this.setState({showLoadingBackdrop: true});
       try {
         const response = await graphqlService.register(this.state.email, this.state.password);
         this.setState({email: "", password: "", repeatPassword: ""});
