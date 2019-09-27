@@ -1,6 +1,6 @@
 const Timezone = require('../../models/Timezone');
-const fetch = require("node-fetch");
 const cities = require('cities.json');
+const tzLookup = require('tz-lookup');
 
 module.exports.timezones = async () => await Timezone.find({});
 
@@ -13,18 +13,8 @@ module.exports.cityTimezone = async ({country, city}) => {
   });
 
   if (found) {
-
-    const params = new URLSearchParams({
-      lat: found.lat,
-      lng: found.lng,
-      username: "nawajo"
-    });
-
-    const ENDPOINT = `http://api.geonames.org/timezoneJSON?${params.toString()}`;
     try {
-      const payload = await fetch(ENDPOINT).then(res => res.json());
-      console.log(payload);
-      return payload.timezoneId ? payload.timezoneId : "" ;
+      return tzLookup(found.lat, found.lng)
     } catch (e) {
       console.log(e);
       return "";
