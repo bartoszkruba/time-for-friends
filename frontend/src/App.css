@@ -151,6 +151,7 @@ button.page-link {
     }
 
     .Index-Jumbotron.jumbotron {
+        overflow: hidden;
         margin-bottom: 0;
     }
 

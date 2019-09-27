@@ -208,7 +208,7 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
       await saveTimezone(name);
     }
 
-    console.log("Creating test account: email - test@email.com, password: password1234");
+    console.log("Creating test account");
     password = await bcrypt.hash("password1234", 12);
     const user = await User({email: "test@email.com", password}).save();
 
@@ -220,7 +220,7 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
     }
     await user.save();
     console.log('done');
-    return;
+    console.log('Test Account: email - test@email.com, password: password1234');
   } catch (e) {
     console.log(e);
   }
@@ -242,7 +242,7 @@ const addMockFriends = async user => {
       console.log(timezones[i])
     }
 
-    console.log('Adding friend ' + i + ": " + persons[i].firstName + " " + persons[i].lastName +
+    console.log('Adding friend ' + i + ": " + persons[i].firstName + " " + persons[i].lastName + ", " +
       cities[i] + " " + countries[i] + "...");
 
     let geocodeResponse;
