@@ -165,7 +165,7 @@ export default class FriendList extends Component {
           query.sort = "currentTime";
       }
 
-      if (state.range && state.range.from && state.range.to && state.betweenSwitch) {
+      if (state.betweenSwitch && state.range && state.range.from && state.range.to) {
         query.from = moment(state.range.from).format("YYYYMMDDHHmmss");
         query.to = moment(state.range.to).format("YYYYMMDDHHmmss");
       }
@@ -184,7 +184,7 @@ export default class FriendList extends Component {
       const currentPage = this.state.page;
       const maxPage = Math.ceil((((this.state.count - 1) < 1) ? 1 : (this.state.count - 1)) / 10);
       if (currentPage > maxPage) {
-        this.requestFriends(currentPage - 1)
+        this.requestFriends(maxPage)
       } else {
         this.requestFriends(currentPage)
       }
@@ -231,9 +231,20 @@ export default class FriendList extends Component {
     const maxPage = Math.ceil(((this.state.count === 0) ? 1 : this.state.count) / 10);
     for (let i = currentPage - 3; i <= (currentPage + 3); i++) {
       if (i < 1 || i > maxPage) continue;
-      const activeClass = i === this.state.page ? "active-link" : "";
+
+      const classes = [];
+      classes.push("ml-1");
+      classes.push("mr-1");
+
+
+      if (i === this.state.page) {
+        classes.push("active-link");
+      } else if ((i !== currentPage - 1) && (i !== currentPage + 1)) {
+        classes.push("disabled-in-mobile")
+      }
+
       pages.push(
-        <PaginationItem className={"ml-1 mr-1 " + activeClass} key={i} active={i === this.state.page}>
+        <PaginationItem className={classes.join(" ")} key={i} active={i === this.state.page}>
           <PaginationLink onClick={e => this.requestFriends(i)}>
             {i}
           </PaginationLink>
@@ -271,19 +282,25 @@ export default class FriendList extends Component {
           <div className="col-md-7">
             <h1>
               <Link style={{textDecoration: "none"}} className="text-white" to={"friend/" + f._id}>
-              <span className="Tile-Header">
-              {f.firstName} {f.lastName}
-              </span>
+                <span className="Tile-Header">{f.firstName} {f.lastName}</span>
               </Link>
             </h1>
             <h6 style={{fontWeight: "normal"}}>{f.city}, {f.country}</h6>
-            {f.working ? <i className="fas fa-briefcase mt-1"/> : null}
-            {f.sleeping ? <i className="fas fa-bed mt-1"/> : null}
           </div>
           <div className="col-md-3 text-md-right">
             {state.searchBar.analogClockSwitch ? <Clock hour={f.hour} minute={f.minute}/> :
-              <h2>{f.currentTime ? f.currentTime : "-"}</h2>}
+              (<h2>{f.currentTime ? f.currentTime : "-"}</h2>)}
             <h5>{f.currentDate ? f.currentDate : "-"}</h5>
+          </div>
+          <div className="col-md-1"/>
+        </div>
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-10 d-flex justify-content-between">
+            <span>
+            {f.sleeping ? <i className="fas fa-bed mt-1"/> : null}
+              {f.working ? <i className="fas fa-briefcase mt-1"/> : null}
+            </span>
             <i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
                style={{cursor: "pointer"}}/>
           </div>

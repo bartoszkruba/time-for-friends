@@ -124,3 +124,43 @@ button.page-link {
     color: white;
 }
 
+@keyframes fadeInOpacity {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 500px) {
+    .top-margin {
+        margin-top: 0;
+    }
+
+    .App {
+        padding-bottom: 0;
+    }
+
+    .Index-Jumbotron {
+        margin-top: 45px;
+    }
+
+    .Index-Jumbotron h1 {
+        font-size: 350%;
+    }
+
+    .Index-Jumbotron.jumbotron {
+        overflow: hidden;
+        margin-bottom: 0;
+    }
+
+    .Full-Height-In-Mobile {
+        min-height: 89vh;
+    }
+
+    .disabled-in-mobile {
+        display: none;
+    }
+}
+

@@ -8,8 +8,8 @@ export default ({hour, minute}) => {
 
   const hourPointerContainerStyles = {
     position: "absolute",
-    width: "90px",
-    height: "90px",
+    width: "70px",
+    height: "70px",
     borderRadius: "100%",
     border: "7px solid transparent",
     transform: `rotate(${hourRotation}deg)`
@@ -17,14 +17,14 @@ export default ({hour, minute}) => {
 
   const minutePointerContainerStyles = {
     position: "absolute",
-    width: "90px",
-    height: "90px",
+    width: "70px",
+    height: "70px",
     borderRadius: "100%",
     border: "7px solid transparent",
     transform: `rotate(${minuteRotation}deg)`
   };
 
-  return <div className="Clock ml-md-auto mb-3" style={{width: "90px", height: "90px"}}>
+  return <div className="Clock ml-md-auto mb-3" style={{width: "70px", height: "70px"}}>
     <span className="ClockContainer">
       <div className="MiddlePointContainer">
         <div className="MiddlePoint"/>

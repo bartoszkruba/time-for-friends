@@ -246,6 +246,7 @@ export default class NewFriendForm extends PureComponent {
   };
 
   submitHandler = async e => {
+    this.props.showLoading();
     const form = {...this.state.form};
 
     if (form.sleepHoursSwitch) {
@@ -259,7 +260,7 @@ export default class NewFriendForm extends PureComponent {
     if (form.workHoursSwitch) {
       form.worksFrom = this.state.workHours.from % 1440;
       form.worksTo = this.state.workHours.to % 1440
-    }else{
+    } else {
       form.worksFrom = -1;
       form.worksTo = -1;
     }
@@ -270,9 +271,11 @@ export default class NewFriendForm extends PureComponent {
         emails: form.enteredEmails,
         phoneNumbers: form.enteredPhoneNumbers
       });
+      this.props.hideLoading();
       this.props.addedNewFriend()
     } catch (e) {
       console.log(e);
+      this.props.hideLoading();
       this.props.showModal();
     }
   };

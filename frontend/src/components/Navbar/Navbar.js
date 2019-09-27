@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {Collapse, Nav, Navbar, NavbarToggler, NavItem, NavLink,} from 'reactstrap';
+import {Collapse, Nav, Navbar, NavbarToggler, NavItem, NavLink} from 'reactstrap';
 import {Link} from "react-router-dom";
 import 'flag-icon-css/css/flag-icon.min.css'
 
