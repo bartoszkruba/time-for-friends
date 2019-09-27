@@ -113,10 +113,12 @@ export default class NewFriendForm extends PureComponent {
   };
 
   inputChangeHandler = async e => {
+    const name = e.target.name;
     const form = {...this.state.form};
-    form[e.target.name] = e.target.value;
+    form[name] = e.target.value;
     await this.setState({form});
     this.validateForm();
+    if (name === "city" || name === "country") this.getTimezone();
   };
 
   switchChangeHandler = e => {
@@ -277,6 +279,22 @@ export default class NewFriendForm extends PureComponent {
       console.log(e);
       this.props.hideLoading();
       this.props.showModal();
+    }
+  };
+
+  getTimezone = async () => {
+    let country;
+    if (this.state.form.country === "---") country = "";
+    else country = countries.find(c => c.name === this.state.form.country).code;
+    try {
+      const response = await graphqlService.cityTimezone(this.state.form.city, country);
+      if (response.data.cityTimezone !== "") {
+        const form = {...this.state.form};
+        form.timezone = response.data.cityTimezone;
+        this.setState({form})
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 

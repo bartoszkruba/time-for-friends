@@ -20,6 +20,12 @@ export default {
           }
       }
   `,
+
+  cityTimezone: gql`
+      query cityTimezone($city: String!, $country: String!){
+          cityTimezone(city: $city, country: $country)
+      }
+  `,
   friend: gql`
       query friend($_id: ID!){
           friend(_id: $_id) {
