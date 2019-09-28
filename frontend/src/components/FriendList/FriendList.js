@@ -362,7 +362,6 @@ export default class FriendList extends Component {
           <div className="col-md-1"/>
         </div>
         <SearchBar
-          language={this.props.language}
           rangeChanged={this.rangeChangedHandler}
           formChanged={this.searchBarChangedHandler}
           sortingChanged={this.sortingChangeHandler}

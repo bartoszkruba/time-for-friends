@@ -70,7 +70,7 @@ export default class Friend extends Component {
     let dateFormat;
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         timeFormat = "HH:mm:ss";
         dateFormat = "DD.MM.YYYY";
@@ -100,7 +100,7 @@ export default class Friend extends Component {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.timezone = "Tidszon";
         text.currentTime = "Nuvarande Klockan";

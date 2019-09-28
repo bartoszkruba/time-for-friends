@@ -3,14 +3,17 @@ import {CustomInput, FormGroup, Input} from "reactstrap";
 import 'rc-slider/assets/index.css';
 import {Range} from 'rc-slider';
 import moment from 'moment-timezone';
+import LanguageContext from "../../../context/languageContext";
 
 export default class SearchBar extends Component {
+
+  static contextType = LanguageContext;
 
   formatTime = value => {
     let format;
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         format = "DD.MM.YYYY, HH:mm";
         break;
@@ -27,7 +30,7 @@ export default class SearchBar extends Component {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.header = "Filtrera Dina Kontakter";
         text.firstNamePlaceholder = "Förnamn";
