@@ -1,6 +1,15 @@
 # Time For Friends
 School project
 
+"Time For Friends" is a web application that allows you to track your friends local time live.
+
+#### Tech stack:  
+- MongoDB 
+- Node.js
+- Express.js 
+- GraphQL 
+- React.js
+
 
 ## Backend
 
@@ -33,13 +42,6 @@ MongoDB URI (default mongodb://localhost/time_for_friends)
 MONGO_URI=YOUR_URI node run start
 `
 
-Geocode API key (server won't run without this variable)  
-
-`
-GEOCODE_API_KEY=YOU_API_KEY npm start
-`
-
-
 
 ## Frontend
 
@@ -49,6 +51,7 @@ Backend URI (default http://localhost:8080/graphql)
 
 `
 REACT_APP_BACKEND_URI=YOUR_URI npm start`
+
 
 
 Google Maps API 
