@@ -103,7 +103,6 @@ export default class App extends Component {
 
     const friend = ({match}) => <Friend
       showModal={this.showModal}
-      language={state.language}
       _id={match.params.id}/>;
 
     const mapComponent = () => <MapComponent
