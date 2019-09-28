@@ -3,8 +3,11 @@ import {Collapse, Nav, Navbar, NavbarToggler, NavItem, NavLink} from 'reactstrap
 import {Link} from "react-router-dom";
 import 'flag-icon-css/css/flag-icon.min.css'
 
+import LanguageContext from "../../context/languageContext";
 
 export default class Navigation extends Component {
+  static contextType = LanguageContext;
+
   constructor(props) {
     super(props);
     this.toggle = this.toggle.bind(this);
@@ -29,7 +32,7 @@ export default class Navigation extends Component {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.signIn = "Logga In";
         text.signup = "Registrera Dig";
@@ -78,7 +81,7 @@ export default class Navigation extends Component {
               </Fragment> : <Fragment>
                 <NavItem>
                   <Link to="/map" className="nav-link text-white">
-                    <span className="Nav-Item">{text.map}</span>
+                    <span className="Na v-Item">{text.map}</span>
                   </Link>
                 </NavItem>
                 <NavItem>
@@ -98,7 +101,8 @@ export default class Navigation extends Component {
                 </NavItem>
               </Fragment>}
               <NavItem>
-                <span onClick={props.switchLanguage} className={"flag-icon ml-md-2 flag-icon-squared " + text.flagIcon}
+                <span onClick={this.context.switchLanguage}
+                      className={"flag-icon ml-md-2 flag-icon-squared " + text.flagIcon}
                       style={{"fontSize": "170%", cursor: "pointer", height: "100%"}}/>
               </NavItem>
             </Nav>
