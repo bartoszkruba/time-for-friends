@@ -8,6 +8,7 @@ import moment from 'moment-timezone';
 import countries from './countries';
 import LanguageContext from "../../context/languageContext";
 
+import findTimezone from "./findTimezone";
 import graphqlService from "../../graphql/graphqlService";
 
 export default class NewFriendForm extends PureComponent {
@@ -289,16 +290,9 @@ export default class NewFriendForm extends PureComponent {
     let country;
     if (this.state.form.country === "---") country = "";
     else country = countries.find(c => c.name === this.state.form.country).code;
-    try {
-      const response = await graphqlService.cityTimezone(this.state.form.city, country);
-      if (response.data.cityTimezone !== "") {
-        const form = {...this.state.form};
-        form.timezone = response.data.cityTimezone;
-        this.setState({form})
-      }
-    } catch (e) {
-      console.log(e);
-    }
+
+    const timezone = findTimezone(this.state.form.city, country);
+    if (timezone) this.setState({form: {...this.state.form, timezone}});
   };
 
   render() {

@@ -14,9 +14,9 @@ export default (city, country) => {
       return tzLookup(found.lat, found.lng)
     } catch (e) {
       console.log(e);
-      return "";
+      return null;
     }
   } else {
-    return ""
+    return null
   }
 }
