@@ -5,11 +5,14 @@ import validator from 'validator';
 import 'rc-slider/assets/index.css';
 import {Range} from 'rc-slider';
 import moment from 'moment-timezone';
-import countries from './countries'
+import countries from './countries';
+import LanguageContext from "../../context/languageContext";
 
 import graphqlService from "../../graphql/graphqlService";
 
 export default class NewFriendForm extends PureComponent {
+
+  static contextType = LanguageContext;
 
   state = {
     redirect: "",
@@ -52,7 +55,7 @@ export default class NewFriendForm extends PureComponent {
     }
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         this.setState({
           workHours: {fromLabel: "07:00", toLabel: "16:00", from: 420, to: 960},
@@ -198,7 +201,7 @@ export default class NewFriendForm extends PureComponent {
     let format;
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         format = "HH:mm";
         break;
@@ -228,7 +231,7 @@ export default class NewFriendForm extends PureComponent {
     let format;
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.conntext.language) {
       case "se":
         format = "HH:mm";
         break;
@@ -308,7 +311,7 @@ export default class NewFriendForm extends PureComponent {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.header = "Lägg Till Ny Kontakt";
         text.firstNameLabel = "Förnamn";

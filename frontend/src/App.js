@@ -90,7 +90,6 @@ export default class App extends Component {
       showLoading={this.showLoadingBackdrop}
       hideLoading={this.hideLoadingBackdrop}
       showModal={this.showModal} loggedIn={state.loggedIn}
-      language={state.language}
       addedNewFriend={this.createdNewFriendHandler}/>;
 
     const friendList = () => <FriendList
