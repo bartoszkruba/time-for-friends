@@ -103,7 +103,6 @@ export default class App extends Component {
 
     const mapComponent = () => <MapComponent
       showModal={this.showModal}
-      language={state.language}
       loggedIn={state.loggedIn}/>;
 
     return <LanguageContext.Provider value={{

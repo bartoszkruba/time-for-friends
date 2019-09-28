@@ -2,8 +2,11 @@ import React, {Component} from 'react';
 import GoogleMapReact from 'google-map-react';
 import Marker from "./Marker/Marker";
 import graphqlService from "../../graphql/graphqlService";
+import LanguageContext from "../../context/languageContext";
 
 export default class MapComponent extends Component {
+  static contextType = LanguageContext;
+
   state = {
     friends: [],
     center: {
@@ -28,7 +31,7 @@ export default class MapComponent extends Component {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.header = "Karta";
         break;
