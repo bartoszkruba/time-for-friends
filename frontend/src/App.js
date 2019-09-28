@@ -98,7 +98,6 @@ export default class App extends Component {
 
     const friendList = () => <FriendList
       showModal={this.showModal}
-      language={state.language}
       loggedIn={state.loggedIn}/>;
 
     const friend = ({match}) => <Friend
