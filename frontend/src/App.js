@@ -85,9 +85,7 @@ export default class App extends Component {
       language={state.language}
       loginSuccessfull={this.successfullLoginHandler}/>;
 
-    const index = () => <Index
-      showModal={this.showModal}
-      language={state.language}/>;
+    const index = () => <Index/>;
 
     const newFriend = () => <NewFriendForm
       showLoading={this.showLoadingBackdrop}
