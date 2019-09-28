@@ -3,10 +3,13 @@ import {Alert, Button, FormGroup, Input, Label} from 'reactstrap';
 import validator from 'validator';
 import '../../App.css'
 import graphqlService from "../../graphql/graphqlService";
-
+import LanguageContext from "../../context/languageContext";
 import LoadingBackdrop from "../LoadingBackdrop/LoadingBackdrop";
 
 export default class RegisterForm extends Component {
+
+  static contextType = LanguageContext;
+
   state = {
     email: "",
     password: "",
@@ -54,7 +57,7 @@ export default class RegisterForm extends Component {
         } else {
           let validation;
           // eslint-disable-next-line
-          switch (this.props.language) {
+          switch (this.context.language) {
             case "se":
               validation = {email: "Något har blivit fel, försök igen", password: "", repeatPassword: ""};
               break;
@@ -80,7 +83,7 @@ export default class RegisterForm extends Component {
       dataIsCorrect = false;
 
       // eslint-disable-next-line
-      switch (this.props.language) {
+      switch (this.context.language) {
         case "se":
           validation.password = "Lösenordet måste vara minst fem tecken lång och endast innehålla bokstäver och siffror";
           break;
@@ -107,7 +110,7 @@ export default class RegisterForm extends Component {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.header = "Registrera Nytt Konto";
         text.emailLabel = "E-Post";
