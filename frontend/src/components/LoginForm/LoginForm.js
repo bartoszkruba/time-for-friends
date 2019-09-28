@@ -3,8 +3,11 @@ import {Alert, Button, FormGroup, Input, Label} from "reactstrap";
 import validator from 'validator';
 import graphqlService from "../../graphql/graphqlService";
 import LoadingBackdrop from "../LoadingBackdrop/LoadingBackdrop";
+import LanguageContext from "../../context/languageContext";
 
 export default class LoginForm extends Component {
+
+  static contextType = LanguageContext;
 
   state = {
     email: "",
@@ -56,7 +59,7 @@ export default class LoginForm extends Component {
           let errorMessage;
 
           // eslint-disable-next-line
-          switch (this.props.language) {
+          switch (this.context.language) {
             case "se":
               errorMessage = "Något har blivit fel, försök igen";
               break;
@@ -80,7 +83,7 @@ export default class LoginForm extends Component {
       let errorMessage;
 
       // eslint-disable-next-line
-      switch (this.props.language) {
+      switch (this.context.language) {
         case "se":
           errorMessage = "Ogiltig Lösenord";
           break;
@@ -108,7 +111,7 @@ export default class LoginForm extends Component {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.header = "Logga In Till Ditt Konto";
         text.emailLabel = "E-Post";

@@ -82,7 +82,6 @@ export default class App extends Component {
       showLoading={this.showLoadingBackdrop}
       hideLoading={this.hideLoadingBackdrop}
       showModal={this.showModal}
-      language={state.language}
       loginSuccessfull={this.successfullLoginHandler}/>;
 
     const index = () => <Index/>;
