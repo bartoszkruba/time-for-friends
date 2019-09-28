@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
-import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 import './App.css';
 
 import Navbar from "./components/Navbar/Navbar";
@@ -14,6 +13,7 @@ import MapComponent from "./components/Map/Map";
 import LoadingBackdrop from "./components/LoadingBackdrop/LoadingBackdrop";
 import graphqlService from "./graphql/graphqlService";
 import LanguageContext from "./context/languageContext";
+import ErrorModal from "./components/ErrorModal/ErrorModal";
 
 export default class App extends Component {
 
@@ -111,17 +111,11 @@ export default class App extends Component {
       <Router>
         <LoadingBackdrop show={state.showLoadingBackdrop}/>
         {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
+        <ErrorModal
+          show={state.showModal}
+          close={this.closeModal}/>
 
         <div className="App">
-          <Modal isOpen={state.showModal} toggle={this.toggle} className={this.props.className}>
-            <ModalHeader toggle={this.toggle}>Something Went Wrong!</ModalHeader>
-            <ModalBody>
-              Please refresh site and try again.
-            </ModalBody>
-            <ModalFooter>
-              <Button color="info" onClick={this.closeModal}>Close</Button>{' '}
-            </ModalFooter>
-          </Modal>
           <Navbar loggedIn={state.loggedIn} logout={this.logoutHandler}/>
           <div className="top-margin">
             <Route path="/" exact component={index}/>
