@@ -3,12 +3,15 @@ import {Link, Redirect} from "react-router-dom";
 import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
 import moment from 'moment-timezone'
 
+import LanguageContext from "../../context/languageContext";
 import Clock from "./Clock/Clock";
 import SearchBar from "./SearchBar/SearchBar";
 
 import graphqlService from "../../graphql/graphqlService";
 
 export default class FriendList extends Component {
+
+  static contextType = LanguageContext;
 
   state = {
     count: 0,
@@ -86,7 +89,7 @@ export default class FriendList extends Component {
       let dateFormat;
 
       // eslint-disable-next-line
-      switch (this.props.language) {
+      switch (this.context.language) {
         case "se":
           timeFormat = 'HH:mm:ss';
           dateFormat = 'DD.MM.YYYY';
@@ -266,7 +269,7 @@ export default class FriendList extends Component {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.header = "Filtrera Dina Kontakter";
         break;
@@ -362,7 +365,6 @@ export default class FriendList extends Component {
           <div className="col-md-1"/>
         </div>
         <SearchBar
-          language={this.props.language}
           rangeChanged={this.rangeChangedHandler}
           formChanged={this.searchBarChangedHandler}
           sortingChanged={this.sortingChangeHandler}

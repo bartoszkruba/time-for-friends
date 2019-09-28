@@ -13,6 +13,7 @@ import Friend from "./components/Friend/Friend";
 import MapComponent from "./components/Map/Map";
 import LoadingBackdrop from "./components/LoadingBackdrop/LoadingBackdrop";
 import graphqlService from "./graphql/graphqlService";
+import LanguageContext from "./context/languageContext";
 
 export default class App extends Component {
 
@@ -81,61 +82,58 @@ export default class App extends Component {
       showLoading={this.showLoadingBackdrop}
       hideLoading={this.hideLoadingBackdrop}
       showModal={this.showModal}
-      language={state.language}
       loginSuccessfull={this.successfullLoginHandler}/>;
 
-    const index = () => <Index
-      showModal={this.showModal}
-      language={state.language}/>;
+    const index = () => <Index/>;
 
     const newFriend = () => <NewFriendForm
       showLoading={this.showLoadingBackdrop}
       hideLoading={this.hideLoadingBackdrop}
       showModal={this.showModal} loggedIn={state.loggedIn}
-      language={state.language}
       addedNewFriend={this.createdNewFriendHandler}/>;
 
     const friendList = () => <FriendList
       showModal={this.showModal}
-      language={state.language}
       loggedIn={state.loggedIn}/>;
 
     const friend = ({match}) => <Friend
       showModal={this.showModal}
-      language={state.language}
       _id={match.params.id}/>;
 
     const mapComponent = () => <MapComponent
       showModal={this.showModal}
-      language={state.language}
       loggedIn={state.loggedIn}/>;
 
-    return <Router>
-      <LoadingBackdrop show={state.showLoadingBackdrop}/>
-      {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
+    return <LanguageContext.Provider value={{
+      language: state.language,
+      switchLanguage: this.switchLanguageHandler
+    }}>
+      <Router>
+        <LoadingBackdrop show={state.showLoadingBackdrop}/>
+        {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
 
-      <div className="App">
-        <Modal isOpen={state.showModal} toggle={this.toggle} className={this.props.className}>
-          <ModalHeader toggle={this.toggle}>Something Went Wrong!</ModalHeader>
-          <ModalBody>
-            Please refresh site and try again.
-          </ModalBody>
-          <ModalFooter>
-            <Button color="info" onClick={this.closeModal}>Close</Button>{' '}
-          </ModalFooter>
-        </Modal>
-        <Navbar language={this.state.language} switchLanguage={this.switchLanguageHandler}
-                loggedIn={state.loggedIn} logout={this.logoutHandler}/>
-        <div className="top-margin">
-          <Route path="/" exact component={index}/>
-          <Route path="/register/" exact component={register}/>
-          <Route path="/login/" exact component={login}/>
-          <Route path="/new-friend" exact component={newFriend}/>
-          <Route path="/friends" exact component={friendList}/>
-          <Route path="/friend/:id" exact component={friend}/>
-          <Route path="/map" exact component={mapComponent}/>
+        <div className="App">
+          <Modal isOpen={state.showModal} toggle={this.toggle} className={this.props.className}>
+            <ModalHeader toggle={this.toggle}>Something Went Wrong!</ModalHeader>
+            <ModalBody>
+              Please refresh site and try again.
+            </ModalBody>
+            <ModalFooter>
+              <Button color="info" onClick={this.closeModal}>Close</Button>{' '}
+            </ModalFooter>
+          </Modal>
+          <Navbar loggedIn={state.loggedIn} logout={this.logoutHandler}/>
+          <div className="top-margin">
+            <Route path="/" exact component={index}/>
+            <Route path="/register/" exact component={register}/>
+            <Route path="/login/" exact component={login}/>
+            <Route path="/new-friend" exact component={newFriend}/>
+            <Route path="/friends" exact component={friendList}/>
+            <Route path="/friend/:id" exact component={friend}/>
+            <Route path="/map" exact component={mapComponent}/>
+          </div>
         </div>
-      </div>
-    </Router>;
+      </Router>
+    </LanguageContext.Provider>;
   }
 };

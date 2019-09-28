@@ -1,8 +1,11 @@
 import React, {Component, Fragment} from 'react';
 import moment from 'moment-timezone'
 import graphqlService from "../../graphql/graphqlService";
+import LanguageContext from "../../context/languageContext";
 
 export default class Friend extends Component {
+
+  static contextType = LanguageContext;
 
   state = {
     firstName: "John",
@@ -28,7 +31,7 @@ export default class Friend extends Component {
 
       let hourFormat;
       // eslint-disable-next-line
-      switch (this.props.language) {
+      switch (this.context.language) {
         case "se":
           hourFormat = "HH:mm";
           break;
@@ -67,7 +70,7 @@ export default class Friend extends Component {
     let dateFormat;
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         timeFormat = "HH:mm:ss";
         dateFormat = "DD.MM.YYYY";
@@ -97,7 +100,7 @@ export default class Friend extends Component {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.timezone = "Tidszon";
         text.currentTime = "Nuvarande Klockan";
