@@ -42,6 +42,24 @@ MongoDB URI (default mongodb://localhost/time_for_friends)
 MONGO_URI=YOUR_URI node run start
 `
 
+### Dockerizing backend:
+To create docker image for backend app run following commands:
+```
+cd backend
+docker build -t <your tag> .
+```
+
+Then you can run your image with following command:
+
+```
+docker run -e MONGO_URI=<your database URI> -p 8080:8080 -d <your tag>
+```
+
+You can link created container with existing mongodb container on your machine:
+```
+docker run --link <your mongodb container>:mongodb -e MONGO_URI='mongodb://mongodb/time_for_friends' -p 8080:8080 -d <your_tag>
+```
+
 
 ## Frontend
 
@@ -53,12 +71,13 @@ Backend URI (default http://localhost:8080/graphql)
 REACT_APP_BACKEND_URI=YOUR_URI npm start`
 
 
-
 Google Maps API 
 
 `
 REACT_APP_GOOGLE_MAPS_API_KEY=YOUR_API_KEY npm start
 `
+
+You can also link created container to existing mongodbconatainer 
 
 
 
