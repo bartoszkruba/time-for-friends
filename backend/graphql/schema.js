@@ -78,6 +78,7 @@ module.exports = buildSchema(`
    type RootQuery {
      login(email: String! password: String!): AuthData!
      timezones: [Timezone]!
+     cityTimezone(city: String! country: String!): String!
      friends(friendQuery: FriendQuery): FriendList!
      allFriends: [Friend]!
      friend(_id: ID!): Friend!

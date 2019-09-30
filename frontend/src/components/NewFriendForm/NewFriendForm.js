@@ -5,11 +5,15 @@ import validator from 'validator';
 import 'rc-slider/assets/index.css';
 import {Range} from 'rc-slider';
 import moment from 'moment-timezone';
-import countries from './countries'
+import countries from './countries';
+import LanguageContext from "../../context/languageContext";
 
+import findTimezone from "./findTimezone";
 import graphqlService from "../../graphql/graphqlService";
 
 export default class NewFriendForm extends PureComponent {
+
+  static contextType = LanguageContext;
 
   state = {
     redirect: "",
@@ -52,7 +56,7 @@ export default class NewFriendForm extends PureComponent {
     }
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         this.setState({
           workHours: {fromLabel: "07:00", toLabel: "16:00", from: 420, to: 960},
@@ -113,10 +117,12 @@ export default class NewFriendForm extends PureComponent {
   };
 
   inputChangeHandler = async e => {
+    const name = e.target.name;
     const form = {...this.state.form};
-    form[e.target.name] = e.target.value;
+    form[name] = e.target.value;
     await this.setState({form});
     this.validateForm();
+    if (name === "city" || name === "country") this.getTimezone();
   };
 
   switchChangeHandler = e => {
@@ -196,7 +202,7 @@ export default class NewFriendForm extends PureComponent {
     let format;
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         format = "HH:mm";
         break;
@@ -226,7 +232,7 @@ export default class NewFriendForm extends PureComponent {
     let format;
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.conntext.language) {
       case "se":
         format = "HH:mm";
         break;
@@ -246,6 +252,7 @@ export default class NewFriendForm extends PureComponent {
   };
 
   submitHandler = async e => {
+    this.props.showLoading();
     const form = {...this.state.form};
 
     if (form.sleepHoursSwitch) {
@@ -259,7 +266,7 @@ export default class NewFriendForm extends PureComponent {
     if (form.workHoursSwitch) {
       form.worksFrom = this.state.workHours.from % 1440;
       form.worksTo = this.state.workHours.to % 1440
-    }else{
+    } else {
       form.worksFrom = -1;
       form.worksTo = -1;
     }
@@ -270,11 +277,22 @@ export default class NewFriendForm extends PureComponent {
         emails: form.enteredEmails,
         phoneNumbers: form.enteredPhoneNumbers
       });
+      this.props.hideLoading();
       this.props.addedNewFriend()
     } catch (e) {
       console.log(e);
+      this.props.hideLoading();
       this.props.showModal();
     }
+  };
+
+  getTimezone = async () => {
+    let country;
+    if (this.state.form.country === "---") country = "";
+    else country = countries.find(c => c.name === this.state.form.country).code;
+
+    const timezone = findTimezone(this.state.form.city, country);
+    if (timezone) this.setState({form: {...this.state.form, timezone}});
   };
 
   render() {
@@ -287,7 +305,7 @@ export default class NewFriendForm extends PureComponent {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.header = "Lägg Till Ny Kontakt";
         text.firstNameLabel = "Förnamn";

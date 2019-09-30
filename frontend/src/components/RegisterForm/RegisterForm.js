@@ -3,8 +3,13 @@ import {Alert, Button, FormGroup, Input, Label} from 'reactstrap';
 import validator from 'validator';
 import '../../App.css'
 import graphqlService from "../../graphql/graphqlService";
+import LanguageContext from "../../context/languageContext";
+import LoadingBackdrop from "../LoadingBackdrop/LoadingBackdrop";
 
 export default class RegisterForm extends Component {
+
+  static contextType = LanguageContext;
+
   state = {
     email: "",
     password: "",
@@ -13,7 +18,8 @@ export default class RegisterForm extends Component {
       email: "",
       password: "",
       repeatPassword: ""
-    }
+    },
+    showLoadingBackdrop: false
   };
 
   keyDownHandler = e => {
@@ -30,9 +36,17 @@ export default class RegisterForm extends Component {
 
   submitHandler = async e => {
     if (this.validateInputs()) {
+
+      // Setting loading backdrop in parent will cause
+      // whole component to unmount and mount again
+      // which will lead to a lot ot trouble
+      // the only working solutions is to duplicate LoadingBackdrop in this component
+      // and set state here
+      this.setState({showLoadingBackdrop: true});
       try {
         const response = await graphqlService.register(this.state.email, this.state.password);
         this.setState({email: "", password: "", repeatPassword: ""});
+        await this.setState({showLoadingBackdrop: false});
         this.props.registerSuccessfull(response.data._id, response.data.email);
       } catch (e) {
         if (e.networkError.result) {
@@ -43,7 +57,7 @@ export default class RegisterForm extends Component {
         } else {
           let validation;
           // eslint-disable-next-line
-          switch (this.props.language) {
+          switch (this.context.language) {
             case "se":
               validation = {email: "Något har blivit fel, försök igen", password: "", repeatPassword: ""};
               break;
@@ -53,6 +67,7 @@ export default class RegisterForm extends Component {
           }
           this.setState({validation})
         }
+        await this.setState({showLoadingBackdrop: false});
       }
     }
   };
@@ -68,7 +83,7 @@ export default class RegisterForm extends Component {
       dataIsCorrect = false;
 
       // eslint-disable-next-line
-      switch (this.props.language) {
+      switch (this.context.language) {
         case "se":
           validation.password = "Lösenordet måste vara minst fem tecken lång och endast innehålla bokstäver och siffror";
           break;
@@ -95,7 +110,7 @@ export default class RegisterForm extends Component {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.header = "Registrera Nytt Konto";
         text.emailLabel = "E-Post";
@@ -112,7 +127,8 @@ export default class RegisterForm extends Component {
         break;
     }
 
-    return <div className="container Card align-self-center top-margin">
+    return <div className="container Card align-self-center top-margin Full-Height-In-Mobile">
+      <LoadingBackdrop show={this.state.showLoadingBackdrop}/>
       <div className="row">
         <div className="col-md-2"/>
         <div className="col-md-8">

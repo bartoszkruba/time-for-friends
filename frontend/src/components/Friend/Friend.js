@@ -1,8 +1,11 @@
 import React, {Component, Fragment} from 'react';
 import moment from 'moment-timezone'
 import graphqlService from "../../graphql/graphqlService";
+import LanguageContext from "../../context/languageContext";
 
 export default class Friend extends Component {
+
+  static contextType = LanguageContext;
 
   state = {
     firstName: "John",
@@ -16,19 +19,19 @@ export default class Friend extends Component {
     phoneNumbers: [],
     currentTime: "",
     currentDate: "",
-    worksBetween: "07:00 - 16:00",
-    sleepsBetween: "22:00 - 06:00"
   };
 
   sleep = ms => new Promise((resolve => setTimeout(resolve, ms)));
 
   async componentDidMount() {
+
     try {
       const response = await graphqlService.friend(this.props._id);
+      const state = {...response.data.friend};
 
       let hourFormat;
       // eslint-disable-next-line
-      switch (this.props.language) {
+      switch (this.context.language) {
         case "se":
           hourFormat = "HH:mm";
           break;
@@ -37,62 +40,55 @@ export default class Friend extends Component {
           break;
       }
 
-      const worksFrom = moment.utc()
-        .hour(~~(response.data.friend.workMarks.from / 60))
-        .minute(response.data.friend.workMarks.from % 60)
-        .format(hourFormat);
-      const worksTo = moment.utc()
-        .hours(~~(response.data.friend.workMarks.to / 60))
-        .minutes(response.data.friend.workMarks.to % 60)
-        .format(hourFormat);
-
-      const sleepsFrom = moment.utc()
-        .hour(~~(response.data.friend.sleepMarks.from / 60))
-        .minute(response.data.friend.sleepMarks.from % 60)
-        .format(hourFormat);
-      const sleepsTo = moment.utc()
-        .hours(~~(response.data.friend.sleepMarks.to / 60))
-        .minutes(response.data.friend.sleepMarks.to % 60)
-        .format(hourFormat);
-
-      await this.setState({
-        ...response.data.friend,
-        worksBetween: worksFrom + " - " + worksTo,
-        sleepsBetween: sleepsFrom + " - " + sleepsTo
-      });
-
-
-      let timeFormat;
-      let dateFormat;
-
-
-      // eslint-disable-next-line
-      switch (this.props.language) {
-        case "se":
-          timeFormat = "HH:mm:ss";
-          dateFormat = "DD.MM.YYYY";
-          break;
-        case "us":
-          timeFormat = "hh:mm:ss A";
-          dateFormat = "MM.DD.YYYY";
-          break;
+      const workMarks = response.data.friend.workMarks;
+      if (workMarks && workMarks.from >= 0 && workMarks.to >= 0) {
+        const worksFrom = moment.utc().hour(~~(workMarks.from / 60)).minute(workMarks.from % 60).format(hourFormat);
+        const worksTo = moment.utc().hour(~~(workMarks.to / 60)).minute(workMarks.to % 60).format(hourFormat);
+        state.worksBetween = worksFrom + " - " + worksTo;
       }
+
+      const sleepMarks = response.data.friend.sleepMarks;
+      if (sleepMarks && sleepMarks.from >= 0 && sleepMarks.to >= 0) {
+        const sleepsFrom = moment.utc().hour(~~(sleepMarks.from / 60)).minute(sleepMarks.from % 60).format(hourFormat);
+        const sleepsTo = moment.utc().hour(~~(sleepMarks.to / 60)).minute(sleepMarks.to % 60).format(hourFormat);
+        state.sleepsBetween = sleepsFrom + " - " + sleepsTo
+      }
+
+      await this.setState(state);
 
       this._isMounted = true;
-
-      while (this._isMounted) {
-        const m = moment.tz(this.state.timezone.name);
-        this.setState({currentTime: m.format(timeFormat)});
-        this.setState({currentDate: m.format(dateFormat)});
-
-        await this.sleep(500);
-      }
+      this.calculateTimes();
 
     } catch (e) {
       console.log(e);
       this.props.showModal();
     }
   }
+
+  calculateTimes = async () => {
+    let timeFormat;
+    let dateFormat;
+
+    // eslint-disable-next-line
+    switch (this.context.language) {
+      case "se":
+        timeFormat = "HH:mm:ss";
+        dateFormat = "DD.MM.YYYY";
+        break;
+      case "us":
+        timeFormat = "hh:mm:ss A";
+        dateFormat = "MM.DD.YYYY";
+        break;
+    }
+
+    while (this._isMounted) {
+      const m = moment.tz(this.state.timezone.name);
+      this.setState({currentTime: m.format(timeFormat)});
+      this.setState({currentDate: m.format(dateFormat)});
+
+      await this.sleep(500);
+    }
+  };
 
   componentWillUnmount() {
     this._isMounted = false;
@@ -104,7 +100,7 @@ export default class Friend extends Component {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.timezone = "Tidszon";
         text.currentTime = "Nuvarande Klockan";
@@ -197,34 +193,38 @@ export default class Friend extends Component {
         </div>
         <div className="col-md-1"/>
       </div>
-      <div className="row mt-4">
-        <div className="col-md-1"/>
-        <div className="col-md-8">
-          <h2>{text.worksBetween}</h2>
+      {state.worksBetween && <Fragment>
+        <div className="row mt-4">
+          <div className="col-md-1"/>
+          <div className="col-md-8">
+            <h2>{text.worksBetween}</h2>
+          </div>
+          <div className="col-md-1"/>
         </div>
-        <div className="col-md-1"/>
-      </div>
-      <div className="row">
-        <div className="col-md-1"/>
-        <div className="col-md-8">
-          <p>{state.worksBetween}</p>
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-8">
+            <p>{state.worksBetween}</p>
+          </div>
+          <div className="col-md-1"/>
         </div>
-        <div className="col-md-1"/>
-      </div>
-      <div className="row mt-4">
-        <div className="col-md-1"/>
-        <div className="col-md-8">
-          <h2>{text.sleepsBetween}</h2>
+      </Fragment>}
+      {state.sleepsBetween && <Fragment>
+        <div className="row mt-4">
+          <div className="col-md-1"/>
+          <div className="col-md-8">
+            <h2>{text.sleepsBetween}</h2>
+          </div>
+          <div className="col-md-1"/>
         </div>
-        <div className="col-md-1"/>
-      </div>
-      <div className="row">
-        <div className="col-md-1"/>
-        <div className="col-md-8">
-          <p>{state.sleepsBetween}</p>
+        <div className="row">
+          <div className="col-md-1"/>
+          <div className="col-md-8">
+            <p>{state.sleepsBetween}</p>
+          </div>
+          <div className="col-md-1"/>
         </div>
-        <div className="col-md-1"/>
-      </div>
+      </Fragment>}
       <div className="row">
         <div className="col-md-1"/>
         <div className="col-md-8">

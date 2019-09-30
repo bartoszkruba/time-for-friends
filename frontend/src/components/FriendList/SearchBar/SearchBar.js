@@ -3,14 +3,17 @@ import {CustomInput, FormGroup, Input} from "reactstrap";
 import 'rc-slider/assets/index.css';
 import {Range} from 'rc-slider';
 import moment from 'moment-timezone';
+import LanguageContext from "../../../context/languageContext";
 
 export default class SearchBar extends Component {
+
+  static contextType = LanguageContext;
 
   formatTime = value => {
     let format;
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         format = "DD.MM.YYYY, HH:mm";
         break;
@@ -27,7 +30,7 @@ export default class SearchBar extends Component {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.header = "Filtrera Dina Kontakter";
         text.firstNamePlaceholder = "Förnamn";
@@ -40,6 +43,7 @@ export default class SearchBar extends Component {
         text.optionCurrentTime = "Nuvarande Tid";
         text.betweenSwitchFrom = "Från:";
         text.betweenSwitchTo = "Till:";
+        text.analogClock = "Analog Klocka";
         break;
       case "us":
         text.firstNamePlaceholder = "First Name";
@@ -52,6 +56,7 @@ export default class SearchBar extends Component {
         text.optionCurrentTime = "Current Time";
         text.betweenSwitchFrom = "From";
         text.betweenSwitchTo = "To";
+        text.analogClock = "Analog Clock";
         break;
     }
 
@@ -72,9 +77,9 @@ export default class SearchBar extends Component {
         </div>
         <div className="col-md-1"/>
       </div>
-      <div className="row mt-3">
+      <div className="row">
         <div className="col-md-1"/>
-        <div className="col-md-5 mt-1">
+        <div className="col-md-5 mt-4">
           <h4 className="mr-4" style={{display: "inline"}}>{text.sortBy}</h4>
           <Input className="mt-2" type="select" value={props.sorting} name="sorting"
                  onChange={props.formChanged}>
@@ -84,7 +89,16 @@ export default class SearchBar extends Component {
             <option>{text.optionCurrentTime}</option>
           </Input>
         </div>
-        <div className="col-md-5 mt-1">
+        <div className="col-md-5 mt-4">
+          <h4 className="mr-4" style={{display: "inline"}}>{text.analogClock}</h4>
+          <CustomInput inline checked={props.analogClockSwitch} type="switch" id="analogClockSwitch"
+                       name="analogClockSwitch" onChange={props.formChanged}/>
+        </div>
+        <div className="col-md-1"/>
+      </div>
+      <div className="row mt-4">
+        <div className="col-md-1"/>
+        <div className="col-md-10 mt-1">
           <h4 className="mr-4" style={{display: "inline"}}>{text.timePicker}</h4>
           <CustomInput inline checked={props.betweenSwtich} type="switch" id="betweenSwitch" name="betweenSwitch"
                        onChange={props.formChanged}/>

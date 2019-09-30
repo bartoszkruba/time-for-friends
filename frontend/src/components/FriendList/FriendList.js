@@ -1,12 +1,17 @@
 import React, {Component, Fragment} from 'react';
 import {Link, Redirect} from "react-router-dom";
-import SearchBar from "./SearchBar/SearchBar";
 import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
 import moment from 'moment-timezone'
+
+import LanguageContext from "../../context/languageContext";
+import Clock from "./Clock/Clock";
+import SearchBar from "./SearchBar/SearchBar";
 
 import graphqlService from "../../graphql/graphqlService";
 
 export default class FriendList extends Component {
+
+  static contextType = LanguageContext;
 
   state = {
     count: 0,
@@ -23,10 +28,11 @@ export default class FriendList extends Component {
       betweenSwitch: false,
       sorting: "First Name",
       sortingSwitch: false,
-      sortingSwitchLabel: "First Name"
+      sortingSwitchLabel: "First Name",
+      analogClockSwitch: false
     },
     redirect: "",
-    friends: []
+    friends: [],
   };
 
   async componentDidMount() {
@@ -83,7 +89,7 @@ export default class FriendList extends Component {
       let dateFormat;
 
       // eslint-disable-next-line
-      switch (this.props.language) {
+      switch (this.context.language) {
         case "se":
           timeFormat = 'HH:mm:ss';
           dateFormat = 'DD.MM.YYYY';
@@ -105,9 +111,13 @@ export default class FriendList extends Component {
         }
 
         friend.currentTime = m.format(timeFormat);
+
+        friend.hour = m.hours();
+        friend.minute = m.minutes();
+
         friend.currentDate = m.format(dateFormat);
 
-        const currentMinute = m.hours() * 60 + m.minutes();
+        const currentMinute = friend.hour * 60 + friend.minute;
 
         if ((friend.workMarks.to > friend.workMarks.from &&
           currentMinute >= friend.workMarks.from &&
@@ -158,7 +168,7 @@ export default class FriendList extends Component {
           query.sort = "currentTime";
       }
 
-      if (state.range && state.range.from && state.range.to && state.betweenSwitch) {
+      if (state.betweenSwitch && state.range && state.range.from && state.range.to) {
         query.from = moment(state.range.from).format("YYYYMMDDHHmmss");
         query.to = moment(state.range.to).format("YYYYMMDDHHmmss");
       }
@@ -177,7 +187,7 @@ export default class FriendList extends Component {
       const currentPage = this.state.page;
       const maxPage = Math.ceil((((this.state.count - 1) < 1) ? 1 : (this.state.count - 1)) / 10);
       if (currentPage > maxPage) {
-        this.requestFriends(currentPage - 1)
+        this.requestFriends(maxPage)
       } else {
         this.requestFriends(currentPage)
       }
@@ -190,6 +200,8 @@ export default class FriendList extends Component {
     const searchBar = {...this.state.searchBar};
     if (e.target.name === "betweenSwitch") {
       searchBar.betweenSwitch = !searchBar.betweenSwitch;
+    } else if (e.target.name === "analogClockSwitch") {
+      searchBar.analogClockSwitch = !searchBar.analogClockSwitch;
     } else {
       searchBar[e.target.name] = e.target.value;
     }
@@ -222,9 +234,20 @@ export default class FriendList extends Component {
     const maxPage = Math.ceil(((this.state.count === 0) ? 1 : this.state.count) / 10);
     for (let i = currentPage - 3; i <= (currentPage + 3); i++) {
       if (i < 1 || i > maxPage) continue;
-      const activeClass = i === this.state.page ? "active-link" : "";
+
+      const classes = [];
+      classes.push("ml-1");
+      classes.push("mr-1");
+
+
+      if (i === this.state.page) {
+        classes.push("active-link");
+      } else if ((i !== currentPage - 1) && (i !== currentPage + 1)) {
+        classes.push("disabled-in-mobile")
+      }
+
       pages.push(
-        <PaginationItem className={"ml-1 mr-1 " + activeClass} key={i} active={i === this.state.page}>
+        <PaginationItem className={classes.join(" ")} key={i} active={i === this.state.page}>
           <PaginationLink onClick={e => this.requestFriends(i)}>
             {i}
           </PaginationLink>
@@ -246,7 +269,7 @@ export default class FriendList extends Component {
     const text = {};
 
     // eslint-disable-next-line
-    switch (this.props.language) {
+    switch (this.context.language) {
       case "se":
         text.header = "Filtrera Dina Kontakter";
         break;
@@ -262,26 +285,25 @@ export default class FriendList extends Component {
           <div className="col-md-7">
             <h1>
               <Link style={{textDecoration: "none"}} className="text-white" to={"friend/" + f._id}>
-              <span className="Tile-Header">
-              {f.firstName} {f.lastName}
-              </span>
+                <span className="Tile-Header">{f.firstName} {f.lastName}</span>
               </Link>
             </h1>
+            <h6 style={{fontWeight: "normal"}}>{f.city}, {f.country}</h6>
           </div>
-          <div className="col-md-3 text-right">
-            <h2>{f.currentTime}</h2>
+          <div className="col-md-3 text-md-right">
+            {state.searchBar.analogClockSwitch ? <Clock hour={f.hour} minute={f.minute}/> :
+              (<h2>{f.currentTime ? f.currentTime : "-"}</h2>)}
+            <h5>{f.currentDate ? f.currentDate : "-"}</h5>
           </div>
           <div className="col-md-1"/>
         </div>
         <div className="row">
           <div className="col-md-1"/>
-          <div className="col-md-5">
-            <h6 style={{fontWeight: "normal"}}>{f.city}, {f.country}</h6>
-            {f.working ? <i className="fas fa-briefcase mt-1"/> : null}
+          <div className="col-md-10 d-flex justify-content-between">
+            <span>
             {f.sleeping ? <i className="fas fa-bed mt-1"/> : null}
-          </div>
-          <div className="col-md-5 text-right">
-            <h5>{f.currentDate}</h5>
+              {f.working ? <i className="fas fa-briefcase mt-1"/> : null}
+            </span>
             <i onClick={e => this.deleteFriendHandler(f._id)} className="Delete-Icon fas fa-trash"
                style={{cursor: "pointer"}}/>
           </div>
@@ -343,12 +365,12 @@ export default class FriendList extends Component {
           <div className="col-md-1"/>
         </div>
         <SearchBar
-          language={this.props.language}
           rangeChanged={this.rangeChangedHandler}
           formChanged={this.searchBarChangedHandler}
           sortingChanged={this.sortingChangeHandler}
           sorting={state.searchBar.sorting}
           betweenSwtich={state.searchBar.betweenSwitch}
+          analogClockSwitch={state.analogClockSwitch}
           range={state.searchBar.range}
           firstName={state.searchBar.firstName}
           lastName={state.searchBar.lastName}/>

@@ -14,6 +14,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "cities.json": "^1.1.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-graphql": "^0.9.0",
@@ -23,8 +24,10 @@
     "moment-timezone": "^0.5.26",
     "mongoose": "^5.7.0",
     "morgan": "^1.9.1",
+    "node-fetch": "^2.6.0",
     "node-geocoder": "^3.24.0",
     "nodemon": "^1.19.2",
+    "tz-lookup": "^6.1.24",
     "validator": "^11.1.0"
   }
 }

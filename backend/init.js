@@ -2,13 +2,14 @@ const moment = require('moment-timezone');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const NodeGeocoder = require('node-geocoder');
+const geosearch = require('./nominatim/nominatim');
 
 const Timezone = require('./models/Timezone');
 const User = require('./models/User');
 const Friend = require('./models/Friend');
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost/time_for_friends';
-const GEOCODE_KEY = process.env.GEOCODE_API_KEY || null;
+// const GEOCODE_KEY = process.env.GEOCODE_API_KEY || null;
 
 const timezones = [
   "Asia/Tokyo",
@@ -126,7 +127,7 @@ const countries = [
   "Argentina",
   "Peru",
   "Venezuela",
-  "America",
+  "United State",
   "Cuba",
   "Australia",
   "New Zealand",
@@ -181,10 +182,10 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
   {"firstName": "Montgomery", "lastName": "Di Giacomettino"}];
 
 (async () => {
-  if (!GEOCODE_KEY) {
-    console.log('Cannot initialize data without geocode api key');
-    return;
-  }
+  // if (!GEOCODE_KEY) {
+  //   console.log('Cannot initialize data without geocode api key');
+  //   return;
+  // }
 
   try {
     console.log('Connecting to database...');
@@ -207,62 +208,80 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
       await saveTimezone(name);
     }
 
-    console.log("Creating test account: email - test@email.com, password: password1234");
+    console.log("Creating test account");
     password = await bcrypt.hash("password1234", 12);
     const user = await User({email: "test@email.com", password}).save();
 
     console.log('Adding mock friends...');
+
+    // This loop is here so I can easy add more friends to database for testing purposes
     for (let i = 0; i < 1; i++) {
       await addMockFriends(user);
     }
     await user.save();
     console.log('done');
-    return;
+    console.log('Test Account: email - test@email.com, password: password1234');
   } catch (e) {
     console.log(e);
   }
 })();
 
+sleep = ms => new Promise((resolve => setTimeout(resolve, ms)));
 
 const addMockFriends = async user => {
-  try {
-    let options = {
-      provider: "google",
-      apiKey: GEOCODE_KEY,
-    };
+  // let options = {
+  //   provider: "google",
+  //   apiKey: GEOCODE_KEY,
+  // };
+  //
+  // let geocoder = NodeGeocoder(options);
 
-    let geocoder = NodeGeocoder(options);
-
-    for (let i = 0; i < countries.length; i++) {
-      const timezone = await Timezone.findOne({name: timezones[i]});
-      if (!timezone) {
-        console.log(timezones[i])
-      }
-
-      const geocodeResponse = await geocoder.geocode(cities[i] + " " + countries[i]);
-
-      const friend = await Friend({
-        firstName: persons[i].firstName,
-        lastName: persons[i].lastName,
-        city: cities[i],
-        country: countries[i],
-        lat: geocodeResponse[0].latitude,
-        lng: geocodeResponse[0].longitude,
-        timezone: timezone._id,
-        user: user._id,
-        workMarks: {
-          from: 420,
-          to: 960
-        },
-        sleepMarks: {
-          from: 1320,
-          to: 360
-        }
-      }).save();
-      user.friends.push(friend._id);
+  for (let i = 0; i < countries.length; i++) {
+    const timezone = await Timezone.findOne({name: timezones[i]});
+    if (!timezone) {
+      console.log(timezones[i])
     }
-  } catch (e) {
-    console.log(e);
+
+    console.log('Adding friend ' + i + ": " + persons[i].firstName + " " + persons[i].lastName + ", " +
+      cities[i] + " " + countries[i] + "...");
+
+    let geocodeResponse;
+
+    let coordinates;
+    try {
+      geocodeResponse = await geosearch(cities[i] + ", " + countries[i]);
+      coordinates = {
+        lat: geocodeResponse[0].lat,
+        lng: geocodeResponse[0].lon
+      };
+    } catch (e) {
+      console.log('Could not find coordinates for: ' + cities[i] + " " + countries[i]);
+      coordinates = {
+        lat: "0",
+        lng: "0"
+      };
+    }
+
+    // const geocodeResponse = await geocoder.geocode(cities[i] + " " + countries[i]);
+
+    const friend = await Friend({
+      firstName: persons[i].firstName,
+      lastName: persons[i].lastName,
+      city: cities[i],
+      country: countries[i],
+      ...coordinates,
+      timezone: timezone._id,
+      user: user._id,
+      workMarks: {
+        from: 420,
+        to: 960
+      },
+      sleepMarks: {
+        from: 1320,
+        to: 360
+      }
+    }).save();
+    user.friends.push(friend._id);
   }
 };
 

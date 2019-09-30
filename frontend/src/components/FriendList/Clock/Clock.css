@@ -1,0 +1,62 @@
+.Clock {
+    padding: 0 !important;
+    background-color: transparent;
+}
+
+.ClockBorder {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    border: 2.5px solid white;
+}
+
+.MiddlePointContainer {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    border: 7px solid transparent;
+}
+
+.MiddlePoint {
+
+    bottom: 25.5px;
+    left: 25.5px;
+    position: absolute;
+    background-color: white;
+    padding: 2.5px 2.5px;
+    height: 0;
+    width: 0;
+    border-radius: 100%
+}
+
+.ClockContainer {
+    position: relative;
+    width: 70px;
+    height: 70px;
+}
+
+.MinutePointer {
+    bottom: 25.5px;
+    left: 25.5px;
+    position: absolute;
+    background-color: white;
+    padding: 16.5px 2px;
+    height: 0;
+    width: 0;
+    border-radius: 10% 10% 15% 15%;
+}
+
+.HourPointer {
+    bottom: 25.5px;
+    left: 25.5px;
+    position: absolute;
+    background-color: white;
+    padding: 13.5px 2px;
+    height: 0;
+    width: 0;
+    border-radius: 10% 10% 15% 15%;
+}
+
+

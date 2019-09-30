@@ -21,7 +21,6 @@ module.exports.register = async ({userInput}) => {
 module.exports.login = async ({email, password}) => {
   const user = await User.findOne({email});
   if (!user) {
-    console.log('user not found');
     const err = new Error('User not found.');
     err.code = 401;
     throw err;
@@ -29,7 +28,6 @@ module.exports.login = async ({email, password}) => {
 
   const isEqual = await bcrypt.compare(password, user.password);
   if (!isEqual) {
-    console.log('incorrect password');
     const err = new Error("Password is incorrect.");
     err.code = 401;
     throw err;

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
-import {Button, Modal, ModalBody, ModalFooter, ModalHeader} from 'reactstrap';
 import './App.css';
 
 import Navbar from "./components/Navbar/Navbar";
@@ -11,7 +10,10 @@ import NewFriendForm from "./components/NewFriendForm/NewFriendForm";
 import FriendList from "./components/FriendList/FriendList";
 import Friend from "./components/Friend/Friend";
 import MapComponent from "./components/Map/Map";
+import LoadingBackdrop from "./components/LoadingBackdrop/LoadingBackdrop";
 import graphqlService from "./graphql/graphqlService";
+import LanguageContext from "./context/languageContext";
+import ErrorModal from "./components/ErrorModal/ErrorModal";
 
 export default class App extends Component {
 
@@ -20,6 +22,7 @@ export default class App extends Component {
     loggedIn: true,
     redirect: "",
     showModal: false,
+    showLoadingBackdrop: false
   };
 
   async componentDidMount() {
@@ -34,6 +37,8 @@ export default class App extends Component {
 
   showModal = () => this.setState({showModal: true});
   closeModal = () => this.setState({showModal: false});
+  showLoadingBackdrop = () => this.setState({showLoadingBackdrop: true});
+  hideLoadingBackdrop = () => this.setState({showLoadingBackdrop: false});
 
   successfullRegisterHandler = (_id, email) => {
     this.redirect("/login")
@@ -68,50 +73,50 @@ export default class App extends Component {
   render() {
     const state = this.state;
 
-    const register = () => <RegisterForm showModal={this.showModal}
-                                         language={state.language}
-                                         registerSuccessfull={this.successfullRegisterHandler}/>;
+    const register = () => <RegisterForm
+      showModal={this.showModal}
+      language={state.language}
+      registerSuccessfull={this.successfullRegisterHandler}/>;
 
-    const login = () => <LoginForm showModal={this.showModal}
-                                   language={state.language}
-                                   loginSuccessfull={this.successfullLoginHandler}/>;
+    const login = () => <LoginForm
+      showLoading={this.showLoadingBackdrop}
+      hideLoading={this.hideLoadingBackdrop}
+      showModal={this.showModal}
+      loginSuccessfull={this.successfullLoginHandler}/>;
 
-    const index = () => <Index showModal={this.showModal}
-                               language={state.language}/>;
+    const index = () => <Index/>;
 
-    const newFriend = () => <NewFriendForm showModal={this.showModal} loggedIn={state.loggedIn}
-                                           language={state.language}
-                                           addedNewFriend={this.createdNewFriendHandler}/>;
+    const newFriend = () => <NewFriendForm
+      showLoading={this.showLoadingBackdrop}
+      hideLoading={this.hideLoadingBackdrop}
+      showModal={this.showModal} loggedIn={state.loggedIn}
+      addedNewFriend={this.createdNewFriendHandler}/>;
 
-    const friendList = () => <FriendList showModal={this.showModal}
-                                         language={state.language}
-                                         loggedIn={state.loggedIn}/>;
+    const friendList = () => <FriendList
+      showModal={this.showModal}
+      loggedIn={state.loggedIn}/>;
 
-    const friend = ({match}) => <Friend showModal={this.showModal}
-                                        language={state.language}
-                                        _id={match.params.id}/>;
+    const friend = ({match}) => <Friend
+      showModal={this.showModal}
+      _id={match.params.id}/>;
 
-    const mapComponent = () => <MapComponent showModal={this.showModal}
-                                             language={state.language}
-                                             loggedIn={state.loggedIn}/>;
+    const mapComponent = () => <MapComponent
+      showModal={this.showModal}
+      loggedIn={state.loggedIn}/>;
 
-    return (
+    return <LanguageContext.Provider value={{
+      language: state.language,
+      switchLanguage: this.switchLanguageHandler
+    }}>
       <Router>
-
+        <LoadingBackdrop show={state.showLoadingBackdrop}/>
         {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
+        <ErrorModal
+          show={state.showModal}
+          close={this.closeModal}/>
 
         <div className="App">
-          <Modal isOpen={state.showModal} toggle={this.toggle} className={this.props.className}>
-            <ModalHeader toggle={this.toggle}>Something Went Wrong!</ModalHeader>
-            <ModalBody>
-              Please refresh site and try again.
-            </ModalBody>
-            <ModalFooter>
-              <Button color="info" onClick={this.closeModal}>Close</Button>{' '}
-            </ModalFooter>
-          </Modal>
-          <Navbar language={this.state.language} switchLanguage={this.switchLanguageHandler}
-                  loggedIn={state.loggedIn} logout={this.logoutHandler}/>
+          <Navbar loggedIn={state.loggedIn} logout={this.logoutHandler}/>
           <div className="top-margin">
             <Route path="/" exact component={index}/>
             <Route path="/register/" exact component={register}/>
@@ -123,7 +128,6 @@ export default class App extends Component {
           </div>
         </div>
       </Router>
-
-    );
+    </LanguageContext.Provider>;
   }
 };

@@ -1,10 +1,7 @@
-const Timezone = require('../../models/Timezone');
-const cities = require('cities.json');
-const tzLookup = require('tz-lookup');
+import tzLookup from 'tz-lookup'
+import cities from 'cities.json'
 
-module.exports.timezones = async () => await Timezone.find({});
-
-module.exports.cityTimezone = async ({country, city}) => {
+export default (city, country) => {
   let cityRegex = new RegExp(city, "i");
   let countryRegex = new RegExp(country, "i");
 
@@ -17,10 +14,9 @@ module.exports.cityTimezone = async ({country, city}) => {
       return tzLookup(found.lat, found.lng)
     } catch (e) {
       console.log(e);
-      return "";
+      return null;
     }
   } else {
-    return ""
+    return null
   }
-};
-
+}
