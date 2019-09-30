@@ -79,6 +79,20 @@ REACT_APP_GOOGLE_MAPS_API_KEY=YOUR_API_KEY npm start
 
 You can also link created container to existing mongodbconatainer 
 
+#### Pushing image to dockerhub:
+Login to your dockerhub account:
+```
+docker login
+```
+Tag your image:
+```
+docker tag <image id> <repository name>:latest
+```
+Push image to dockerhub:
+```
+docker push <repository name>
+```
+
 
 
 
