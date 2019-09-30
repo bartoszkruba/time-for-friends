@@ -86,7 +86,7 @@ module.exports.deleteFriend = async ({_id}, req) => {
 
 module.exports.allFriends = async (props, req) => {
   const user = await checkIfAuthenticated(req);
-  return await Friend.find({user: user._id});
+  return await Friend.find({user: user._id}).populate('timezone');
 };
 
 module.exports.friends = async ({friendQuery}, req) => {

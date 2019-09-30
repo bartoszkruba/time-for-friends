@@ -43,6 +43,8 @@ export default class MapComponent extends Component {
     const markers = this.state.friends.map(f => <Marker
       key={f._id}
       name={f.firstName + " " + f.lastName}
+      location={f.city + ", " + f.country}
+      timezone={f.timezone.name}
       lat={f.lat}
       lng={f.lng}
       color="blue"
