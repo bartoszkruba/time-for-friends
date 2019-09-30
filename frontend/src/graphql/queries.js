@@ -56,8 +56,13 @@ export default {
               _id
               firstName
               lastName
+              city
+              country
               lat
               lng
+              timezone {
+                  name
+              }
           }
       }
   `,
