@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
 const moment = require('moment-timezone');
+const initData = require('./init-script');
 
 const graphqlSchema = require('./graphql/schema');
 const graphqlRootResolver = require('./graphql/resolvers/resolversRoot');
@@ -44,6 +45,9 @@ app.use('/graphql', graphqlHttp({
 // Starting server
 (async () => {
   try {
+
+    await initData();
+
     // if (!GEOCODE_API_KEY) {
     //   console.log("Cannot start server without geocode api key");
     //   return
