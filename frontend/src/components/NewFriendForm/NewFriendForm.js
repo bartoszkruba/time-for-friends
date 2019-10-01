@@ -232,7 +232,7 @@ export default class NewFriendForm extends PureComponent {
     let format;
 
     // eslint-disable-next-line
-    switch (this.conntext.language) {
+    switch (this.context.language) {
       case "se":
         format = "HH:mm";
         break;
