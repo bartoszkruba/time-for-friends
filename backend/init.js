@@ -224,6 +224,7 @@ const persons = [{"firstName": "Carmina", "lastName": "Cossans"},
   } catch (e) {
     console.log(e);
   }
+  return mongoose.disconnect();
 })();
 
 sleep = ms => new Promise((resolve => setTimeout(resolve, ms)));
@@ -283,6 +284,7 @@ const addMockFriends = async user => {
     }).save();
     user.friends.push(friend._id);
   }
+  return Promise.resolve();
 };
 
 const saveTimezone = async name => {
