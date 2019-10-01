@@ -40,7 +40,7 @@ export default class Marker extends Component {
 
   render() {
     const props = this.props;
-    const text = `${props.name}\n` + `${props.location}\n` + this.state.time;
+    const text = props.name + '\n' + props.location + '\n' + this.state.time;
 
     return <div className="marker"
                 style={{backgroundColor: props.color, cursor: 'pointer'}}

@@ -101,9 +101,39 @@ Google Maps API
 `
 REACT_APP_GOOGLE_MAPS_API_KEY=YOUR_API_KEY npm start
 `
- 
 
+### Dockerizing frontend:
 
+Navigate to frontend folder
+
+```
+cd frontend
+```
+
+Edit *Dockerfile* and add ENV variables for backend URI and Gogle Maps API Key
+
+To create Docker image run:
+```
+docker build -t <your tag> .
+```
+Then you can run your container with following command:
+```
+docker run -p 80:80 -d <your tag>
+```
+
+#### Pushing image to dockerhub:
+Login to your dockerhub account:
+```
+docker login
+```
+Tag your image:
+```
+docker tag <image id> <repository name>:latest
+```
+Push image to dockerhub:
+```
+docker push <repository name>
+```
 
 
 
