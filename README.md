@@ -13,34 +13,45 @@ School project
 
 ## Backend
 
+Docker image for backend application can be found on [DockerHub](https://cloud.docker.com/u/nawajo/repository/docker/nawajo/time_for_friends)
+
 ### Running backend
 
 Cleanup database and generate test data:  
-`
-npm run init`
+```
+npm run init
+```
 
 Start server in development setup (with nodemon):
   
-`
-npm run dev`  
+```
+npm run dev
+```
 
 Start server in production setup (without nodemon):
   
-`
-npm run start`
+```
+npm run start
+```
 
 ### Environment Variables (Terminal command for Linux machine):
 
 Server port (default 8080):
   
-`
-PORT=YOUR_PORT node run start `
+```
+PORT=YOUR_PORT npm run start 
+```
 
 MongoDB URI (default mongodb://localhost/time_for_friends)  
 
-`
-MONGO_URI=YOUR_URI node run start
-`
+```
+MONGO_URI=YOUR_URI npm run start
+```
+
+Data initialization - should init-data script be run on server start (default false)  
+```
+INIT_DATA=true npm run dev
+```
 
 ### Dockerizing backend:
 To create docker image for backend app run following commands:
@@ -60,6 +71,20 @@ You can link created container with existing mongodb container on your machine:
 docker run --link <your mongodb container>:mongodb -e MONGO_URI='mongodb://mongodb/time_for_friends' -p 8080:8080 -d <your_tag>
 ```
 
+#### Pushing image to dockerhub:
+Login to your dockerhub account:
+```
+docker login
+```
+Tag your image:
+```
+docker tag <image id> <repository name>:latest
+```
+Push image to dockerhub:
+```
+docker push <repository name>
+```
+
 
 ## Frontend
 
@@ -76,22 +101,9 @@ Google Maps API
 `
 REACT_APP_GOOGLE_MAPS_API_KEY=YOUR_API_KEY npm start
 `
+ 
 
-You can also link created container to existing mongodbconatainer 
 
-#### Pushing image to dockerhub:
-Login to your dockerhub account:
-```
-docker login
-```
-Tag your image:
-```
-docker tag <image id> <repository name>:latest
-```
-Push image to dockerhub:
-```
-docker push <repository name>
-```
 
 
 
