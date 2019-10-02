@@ -73,11 +73,11 @@ li.active-link button.page-link {
     padding-bottom: 5px;
 }
 
-.Nav-Item:hover,
-.Nav-Item:active {
+.nav-link:hover,
+.nav-link:active {
     transition: color 0.2s;
-    border-bottom: 1px solid;
-    color: #CFD8DC;
+    border-bottom: 2px solid !important;
+    color: #CFD8DC !important;
 }
 
 .Delete-Icon:hover,
@@ -164,3 +164,10 @@ button.page-link {
     }
 }
 
+@media (min-width: 500px) {
+    .nav-link.active {
+        transition: color 0.2s;
+        border-bottom: 2px solid !important;
+        color: #CFD8DC !important;
+    }
+}
