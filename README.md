@@ -15,7 +15,7 @@ School project
 
 Docker image for backend application can be found on [DockerHub](https://cloud.docker.com/u/nawajo/repository/docker/nawajo/time_for_friends)
 
-### Running backend
+### Running backend:
 
 Cleanup database and generate test data:  
 ```
@@ -34,27 +34,27 @@ Start server in production setup (without nodemon):
 npm run start
 ```
 
-### Environment Variables (Terminal command for Linux machine):
+### Environment Variables (Terminal commands for Linux machine):
 
 Server port (default 8080):
   
 ```
-PORT=YOUR_PORT npm run start 
+PORT=<your port> npm run start 
 ```
 
 MongoDB URI (default mongodb://localhost/time_for_friends)  
 
 ```
-MONGO_URI=YOUR_URI npm run start
+MONGO_URI=<your uri> npm run start
 ```
 
-Data initialization - should init-data script be run on server start (default false)  
+Data initialization - should 'init-data' script run at server start (default false)  
 ```
 INIT_DATA=true npm run dev
 ```
 
 ### Dockerizing backend:
-To create docker image for backend app run following commands:
+To create docker image for backend run following commands:
 ```
 cd backend
 docker build -t <your tag> .
@@ -88,19 +88,32 @@ docker push <repository name>
 
 ## Frontend
 
+### Running frontend:
+
+Start development server:  
+```
+npm start
+```
+
+Build application for production:  
+```
+npm run build
+```
+
 ### Environment Variables (Terminal commands for Linux machine):  
 
 Backend URI (default http://localhost:8080/graphql)  
 
-`
-REACT_APP_BACKEND_URI=YOUR_URI npm start`
+```
+REACT_APP_BACKEND_URI=<your backend uri> npm start
+```
 
 
-Google Maps API 
+Google Maps API (map will not work without this variable)
 
-`
-REACT_APP_GOOGLE_MAPS_API_KEY=YOUR_API_KEY npm start
-`
+```
+REACT_APP_GOOGLE_MAPS_API_KEY=<your api key> npm start
+```
 
 ### Dockerizing frontend:
 
