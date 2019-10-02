@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import {Collapse, Nav, Navbar, NavbarToggler, NavItem, NavLink} from 'reactstrap';
-import {Link} from "react-router-dom";
+import {NavLink as RouterLink} from "react-router-dom";
 import 'flag-icon-css/css/flag-icon.min.css'
 
 import LanguageContext from "../../context/languageContext";
@@ -55,11 +55,11 @@ export default class Navigation extends Component {
     return (
       <div>
         <Navbar className="App-Navbar" color="info" light expand="md" style={{padding: "15px"}}>
-          <Link to="/" className="nav-link text-white">
+          <RouterLink exact to="/" className="nav-link text-white">
             <span className="Nav-Item">
               <b>Time For Friends</b>
             </span>
-          </Link>
+          </RouterLink>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
             </Nav>
@@ -69,30 +69,30 @@ export default class Navigation extends Component {
             <Nav className="ml-auto" navbar>
               {!this.props.loggedIn ? <Fragment>
                 <NavItem>
-                  <Link to="/login" className="nav-link text-white">
+                  <RouterLink exact to="/login" className="nav-link text-white">
                     <span className="Nav-Item">{text.signIn}</span>
-                  </Link>
+                  </RouterLink>
                 </NavItem>
                 <NavItem>
-                  <Link to="/register" className=" nav-link text-white">
+                  <RouterLink exact to="/register" className=" nav-link text-white">
                     <span className="Nav-Item">{text.signup}</span>
-                  </Link>
+                  </RouterLink>
                 </NavItem>
               </Fragment> : <Fragment>
                 <NavItem>
-                  <Link to="/map" className="nav-link text-white">
+                  <RouterLink exact to="/map" className="nav-link text-white">
                     <span className="Na v-Item">{text.map}</span>
-                  </Link>
+                  </RouterLink>
                 </NavItem>
                 <NavItem>
-                  <Link to="/friends" className="nav-link text-white">
+                  <RouterLink exact to="/friends" className="nav-link text-white">
                     <span className="Nav-Item">{text.myContacts}</span>
-                  </Link>
+                  </RouterLink>
                 </NavItem>
                 <NavItem>
-                  <Link to="/new-friend" className="nav-link text-white">
+                  <RouterLink exact to="/new-friend" className="nav-link text-white">
                     <span className="Nav-Item">{text.addContact}</span>
-                  </Link>
+                  </RouterLink>
                 </NavItem>
                 <NavItem>
                   <NavLink onClick={props.logout} style={style} className="text-white">
