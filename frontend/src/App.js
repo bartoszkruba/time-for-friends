@@ -67,7 +67,7 @@ export default class App extends Component {
 
   redirect = page => {
     this.setState({redirect: page});
-    this.setState({redirect: ""});
+    // this.setState({redirect: ""});
   };
 
   render() {
@@ -87,12 +87,15 @@ export default class App extends Component {
     const index = () => <Index/>;
 
     const newFriend = () => <NewFriendForm
+      loggedIn={state.loggedIn}
+      redirect={this.redirect}
       showLoading={this.showLoadingBackdrop}
       hideLoading={this.hideLoadingBackdrop}
-      showModal={this.showModal} loggedIn={state.loggedIn}
+      showModal={this.showModal}
       addedNewFriend={this.createdNewFriendHandler}/>;
 
     const friendList = () => <FriendList
+      redirect={this.redirect}
       showModal={this.showModal}
       loggedIn={state.loggedIn}/>;
 
@@ -101,6 +104,7 @@ export default class App extends Component {
       _id={match.params.id}/>;
 
     const mapComponent = () => <MapComponent
+      redirect={this.redirect}
       showModal={this.showModal}
       loggedIn={state.loggedIn}/>;
 

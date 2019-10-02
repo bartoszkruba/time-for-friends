@@ -1,5 +1,4 @@
 import React, {Fragment, PureComponent} from 'react'
-import {Redirect} from "react-router-dom";
 import {Button, CustomInput, FormGroup, Input, InputGroup, InputGroupAddon, Label} from "reactstrap";
 import validator from 'validator';
 import 'rc-slider/assets/index.css';
@@ -16,7 +15,6 @@ export default class NewFriendForm extends PureComponent {
   static contextType = LanguageContext;
 
   state = {
-    redirect: "",
     countries,
     timezones: [],
     form: {
@@ -52,7 +50,7 @@ export default class NewFriendForm extends PureComponent {
   // load timezones on mount
   async componentDidMount() {
     if (!this.props.loggedIn) {
-      return this.setState({redirect: "/login"});
+      return this.props.redirect("/login")
     }
 
     // eslint-disable-next-line
@@ -368,7 +366,6 @@ export default class NewFriendForm extends PureComponent {
 
     return <Fragment>
       <div className="container Card">
-        {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
         <div className="row">
           <div className="col-md-1"/>
           <div className="col-md-10">
