@@ -33,6 +33,12 @@ Start server in production setup (without nodemon):
 npm run start
 ```
 
+Run through docker (from existing dockerimage on DockerHub):
+
+```
+docker run -e INIT_DATA=true -e MONGO_URI=<your databse uri> -p 8080:<your choosen port> -d nawajo/time_for_friends
+```
+
 ### Environment Variables (Terminal commands for Linux machine):
 
 Server port (default 8080):
