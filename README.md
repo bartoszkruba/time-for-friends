@@ -39,7 +39,7 @@ Run through docker (from existing dockerimage on DockerHub):
 docker run -e INIT_DATA=true -e MONGO_URI=<your databse uri> -p 8080:<your choosen port> -d nawajo/time_for_friends
 ```
 
-### Environment Variables (Terminal commands for Linux machine):
+### Environment Variables (terminal commands for Linux machine):
 
 Server port (default 8080):
   
@@ -105,7 +105,7 @@ Build application for production:
 npm run build
 ```
 
-### Environment Variables (Terminal commands for Linux machine):  
+### Environment Variables (terminal commands for Linux machine):  
 
 Backend URI (default http://localhost:8080/graphql)  
 
