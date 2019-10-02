@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {Pagination, PaginationItem, PaginationLink} from 'reactstrap';
 import moment from 'moment-timezone'
 
@@ -31,14 +31,13 @@ export default class FriendList extends Component {
       sortingSwitchLabel: "First Name",
       analogClockSwitch: false
     },
-    redirect: "",
     friends: [],
   };
 
   async componentDidMount() {
     if (!this.props.isLoggedIn) {
       if (!this.props.loggedIn) {
-        return this.setState({redirect: "/login"});
+        return this.props.redirect("/login");
       }
     }
     this._isMounted = true;
@@ -356,7 +355,6 @@ export default class FriendList extends Component {
 
     return <Fragment>
       <div className="container Card">
-        {state.redirect !== "" ? <Redirect to={state.redirect}/> : null}
         <div className="row mb-2">
           <div className="col-md-1"/>
           <div className="col-md-10">

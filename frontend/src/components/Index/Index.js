@@ -35,9 +35,9 @@ export default class Index extends Component {
         <p className="lead">{text.lead}</p>
         <hr className="my-2"/>
         <p className="lead">
-          <Link to="/register">
+          {!this.props.loggedIn && <Link to="/register">
             <Button color="info" size="lg" className="m-auto">{text.button}</Button>
-          </Link>
+          </Link>}
         </p>
       </Jumbotron>
     </div>
