@@ -84,7 +84,8 @@ export default class App extends Component {
       showModal={this.showModal}
       loginSuccessfull={this.successfullLoginHandler}/>;
 
-    const index = () => <Index/>;
+    const index = () => <Index
+      loggedIn={state.loggedIn}/>;
 
     const newFriend = () => <NewFriendForm
       loggedIn={state.loggedIn}
