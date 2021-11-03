@@ -28,6 +28,6 @@
     "node-geocoder": "^3.24.0",
     "nodemon": "^1.19.2",
     "tz-lookup": "^6.1.24",
-    "validator": "^11.1.0"
+    "validator": "^13.7.0"
   }
 }
