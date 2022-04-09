@@ -20,7 +20,7 @@
     "express-graphql": "^0.9.0",
     "graphql": "^14.5.4",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.26",
     "mongoose": "^5.7.0",
     "morgan": "^1.9.1",
